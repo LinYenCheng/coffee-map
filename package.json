@@ -3,14 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "react-scripts": "0.8.4"
+    "react-scripts": "0.8.4",
+    "redux-devtools": "^3.3.2"
   },
   "dependencies": {
-    "leaflet": "^1.0.2",
-    "react": "^15.4.1",
+    "leaflet": "^1.0.3",
+    "react": "^15.4.2",
     "react-autocomplete": "^1.4.0",
-    "react-dom": "^15.4.1",
-    "react-leaflet": "^1.0.2"
+    "react-dom": "^15.4.2",
+    "react-leaflet": "^1.0.2",
+    "react-leaflet-markercluster": "^1.0.7",
+    "react-redux": "^5.0.2",
+    "redux": "^3.6.0"
   },
   "scripts": {
     "start": "react-scripts start",

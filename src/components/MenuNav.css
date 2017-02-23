@@ -1,0 +1,160 @@
+nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 270px;
+    bottom: 0;
+    z-index: 500;
+    pointer-events: none;
+}
+
+nav::before {
+    content: '';
+    position: absolute;
+    border-right: 1px solid rgba(41, 37, 47, .05);
+    top: 0;
+    bottom: 0;
+    left: -10px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    transform: rotateY(90deg);
+    transition: transform 350ms;
+    transform-origin: 0 0;
+    transition-delay: 200ms;
+}
+
+nav ul {
+    padding-left: 18px;
+    position: absolute;
+    margin-top: 10px;
+    left: -500px;
+    pointer-events: all;
+}
+
+nav li {
+    display: block;
+    overflow: hidden;
+    font-family: 'Microsoft JhengHei', Helvetica, sans-serif;
+    font-weight: 200;
+    font-size: 26px;
+    line-height: 36px;
+    opacity: 0;
+    padding: 5px 0;
+    width: 220px;
+    transform: rotateY(90deg) rotateZ(-15deg);
+    transition: transform 350ms, opacity 250ms;
+    transform-origin: 0 0;
+}
+
+nav li a {
+    color: rgb(41, 37, 47);
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+}
+
+nav li a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 220px;
+    bottom: 0;
+    height: 2px;
+    opacity: 0.5;
+    background: linear-gradient(to right, rgba(199, 25, 60, .4), rgba(199, 25, 60, .8));
+    transform: translateX(-220px);
+    transition: all 200ms 50ms;
+}
+
+@keyframes wind {
+    0%, 100% {
+        transform: none;
+    }
+    20% {
+        transform: rotateX(5deg) rotateY(8deg);
+    }
+    40% {
+        transform: rotateX(-2deg);
+    }
+    60% {
+        transform: rotateY(-3deg) rotateX(7deg);
+    }
+    80% {
+        transform: rotateY(-4deg) rotateX(2deg);
+    }
+}
+
+
+/*relative不會影響其他元素位置 並受到top left right bottom 控制*/
+
+
+/*div 向左浮動排列 也就是不會換行*/
+
+.wrap {
+    display: inline-block;
+    position: relative;
+    padding-left: 12px;
+    width: 80%;
+    top: 10%;
+    /*用margin 位移沒有覆蓋堆疊的問題但會影響其他元素位置*/
+    /*absolute從最近一個有 "position: relative" 的 parent node 也就是.wrap開始算*/
+}
+
+.wrap label {
+    position: relative;
+    float: left;
+    top: 5px;
+    left: 5px;
+}
+
+.wrap .li-word {
+    margin: 0 auto;
+    float: left;
+    width: 30%;
+}
+
+.wrap input {
+    position: absolute;
+    left: -9999px;
+}
+
+
+/*設定 block 寬高*/
+
+.slider-v3 {
+    position: relative;
+    display: block;
+    width: 2em;
+    height: 1em;
+    cursor: pointer;
+    border-radius: 0.5em;
+    transition: 350ms;
+    background: #ddd;
+}
+
+.slider-v3::after {
+    position: absolute;
+    content: '';
+    /*白色圓圈長寬*/
+    width: 0.5em;
+    height: 0.5em;
+    /*白色圓圈跟邊界的距離*/
+    top: 0.25em;
+    left: 0.25em;
+    border-radius: 1em;
+    transition: width 200ms ease-out, height 300ms 50ms ease-in, top 300ms 50ms ease-in, left 250ms 50ms ease-in, background 300ms ease-in, box-shadow 300ms ease-in;
+    background: #f2f2f2;
+    box-shadow: 0 0 0 1.5em #f2f2f2 inset;
+}
+
+.wrap input:checked+.slider-v3::after {
+    /*綠色拉長的圓*/
+    width: 1.2em;
+    height: 1em;
+    top: 0;
+    /*綠色拉長的圓按下後移動距離*/
+    left: 0.8em;
+    background: #4c6;
+    box-shadow: 0 0 0 0 #f2f2f2 inset;
+}

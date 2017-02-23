@@ -1,7 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Layout from './Layout';
+import {render} from 'react-dom';
+import Layout from './containers/Layout';
 import './index.css';
+import {createStore} from 'redux'
+import {Provider} from 'react-redux'
+import reducer from './reducers'
 
-ReactDOM.render(
-    <Layout/>, document.getElementById('root'));
+const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+
+render(
+    <Provider store={store}>
+    <Layout/>
+</Provider>, document.getElementById('root'));
