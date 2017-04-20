@@ -1,25 +1,24 @@
-import React, {Component} from 'react';
-import './MenuBtn.css';
+import React from 'react';
+import PropTypes from 'prop-types';
+import '../styles/MenuBtn.css';
 
-class MenuBtn extends Component {
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
+const MenuBtn = props => (
+  <button
+    id="menu-button" role="button" onClick={(e) => {
+      const clickButton = props.toggleMenu;
+      e.preventDefault();
+      clickButton();
     }
+    }
+  >
+    <div className="hamburger">
+      <div className="inner" />
+    </div>
+  </button>
+);
 
-    handleClick() {
-        this.props.onChange();
-    }
-
-    render() {
-        return (
-            <div id="menu-button" role="button" onClick={this.handleClick}>
-                <div className="hamburger">
-                    <div className="inner"></div>
-                </div>
-            </div>
-        );
-    }
-}
+MenuBtn.propTypes = {
+  toggleMenu: PropTypes.func.isRequired,
+};
 
 export default MenuBtn;

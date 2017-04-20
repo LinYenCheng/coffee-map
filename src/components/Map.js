@@ -1,66 +1,74 @@
 import React from 'react';
-import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
-import './Map.css';
+import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
+import PropTypes from 'prop-types';
+import '../styles/Map.css';
 
 // Create your own class, extending from the Marker class.
 class PopupMarker extends Marker {
-    componentDidMount() {
-        // Call the Marker class componentDidMount (to make sure everything behaves as normal)
-        super.componentDidMount();
+  componentDidMount() {
+    // Call the Marker class componentDidMount (to make sure everything behaves as normal)
+    super.componentDidMount();
 
-        // Access the marker element and open the popup.
-        this.leafletElement.openPopup();
-    }
-    componentWillUpdate(prevProps,prevState){
-      this.leafletElement.openPopup();
-    }
+    // Access the marker element and open the popup.
+    this.leafletElement.openPopup();
+  }
+  componentWillUpdate() {
+    this.leafletElement.openPopup();
+  }
 }
 
-class SimpleExample extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            lat: 24.8,
-            lng: 121.023,
-            zoom: 14
-        };
+const SimpleExample = ({ isMenuOpen, toggleMenu, item, items }) => {
+  const positionMarker = [
+    parseFloat(item.latitude),
+    parseFloat(item.longitude),
+  ];
+  const position = [24.8, 121.023];
+  const isUrl = !!(item.url);
+  let popmarker = null;
+  if (item.latitude) {
+    if (isUrl) {
+      popmarker = (<PopupMarker position={positionMarker}>
+        <Popup>
+          <div>
+            <span>{item.name}<br /> {item.address}<br />
+            </span>
+            <a href={item.url}>粉絲專頁</a>
+          </div>
+        </Popup>
+      </PopupMarker>);
+    } else {
+      popmarker = (<PopupMarker position={positionMarker}>
+        <Popup>
+          <div>
+            <span>{item.name}<br /> {item.address}<br />
+            </span>
+            <br />
+          </div>
+        </Popup>
+      </PopupMarker>);
     }
+  }
+  return (
+    <Map
+      center={item.latitude
+        ? positionMarker
+        : position} zoom={12} maxZoom={18} zoomControl={false} animate
+      onClick={() => { if (isMenuOpen) toggleMenu(); }}
+    >
+      <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+      {item.latitude && popmarker}
+      <MarkerClusterGroup
+        markers={items} wrapperOptions={{
+          enableDefaultStyle: true,
+        }}
+      />
+    </Map>
+  );
+};
 
-    render() {
-
-        const positionMarker = [
-            parseFloat(this.props.item.latitude),
-            parseFloat(this.props.item.longitude)
-        ];
-        const position = [this.state.lat, this.state.lng];
-        const isUrl = !!(this.props.item.url);
-        return (
-            <Map center={this.props.item.latitude
-                ? positionMarker
-                : position} zoom={this.state.zoom} zoomControl={false} animate={true}>
-                <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'/>
-                <PopupMarker position={this.props.item.latitude
-                    ? positionMarker
-                    : position}>
-                    <Popup>
-                        <div>
-                            <span>{this.props.item.name}<br/> {this.props.item.address}<br/>
-                            </span>
-                            {isUrl
-                                ? (
-                                    <a href={this.props.item.url}>粉絲專頁</a>
-                                )
-                                : (<br/>)}
-                        </div>
-                    </Popup>
-                </PopupMarker>
-                <MarkerClusterGroup markers={this.props.items} wrapperOptions={{
-                    enableDefaultStyle: true
-                }}/>
-            </Map>
-        );
-    }
-}
-
+SimpleExample.propTypes = {
+  isMenuOpen: PropTypes.bool.isRequired,
+  toggleMenu: PropTypes.func.isRequired,
+};
 export default SimpleExample;

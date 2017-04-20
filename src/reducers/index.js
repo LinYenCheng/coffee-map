@@ -1,12 +1,9 @@
-export default(state = 0, action) => {
-    switch (action.type) {
-        case 'INCREMENT':
-            return state + 1
-        case 'INCREMENT10':
-            return state + 10
-        case 'DECREMENT':
-            return state - 1
-        default:
-            return state
-    }
-}
+import { combineReducers } from 'redux';
+import stateChk from './stateChk';
+import isMenuOpen from './isMenuOpen';
+import item from './item';
+import items from './items';
+
+const mapApp = combineReducers({ stateChk, isMenuOpen, item, items });
+
+export default mapApp;
