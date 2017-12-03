@@ -10,6 +10,27 @@ import dataMockHsinchu from '../api/MockHsinchu';
 import dataMockTainan from '../api/MockTainan';
 import { toggleMenu } from '../actions';
 
+function getStars(num) {
+  switch (num) {
+    case 5:
+      return '★★★★★';
+      break;
+    case 4:
+      return '★★★★';
+      break;
+    case 3:
+      return '★★★';
+      break;
+    case 2:
+      return '★★';
+      break;
+    default:
+      return '★';
+      break;
+  }
+ 
+}
+
 class Layout extends Component {
   constructor(props) {
     super(props);
@@ -62,18 +83,23 @@ class Layout extends Component {
       ];
     } else {
       itemsCoffee = arrResult.map((item) => {
-        if (item.url) {
           return {
             lat: parseFloat(item.latitude),
             lng: parseFloat(item.longitude),
-            popup: `<div><span>${item.name}<br/>${item.address}<br/></span><a href=${item.url}>粉絲專頁</a><br/></div>`,
+            popup: `<div>
+            <span style=${{fontWeight:800, fontSize:'16px'}}>${item.name}</span><br /> 
+            <span>
+            ${item.address}<br />
+            ${item.wifi > 0?  `WIFI穩定: ${getStars(item.wifi)}`  : ''} ${item.wifi > 0?  '<br />'  : ''}
+            ${item.seat > 0?  `通常有位:  ${getStars(item.seat)}`  : ''} ${item.seat > 0?  '<br />'  : ''}
+            ${item.quiet > 0? `安靜程度:  ${getStars(item.quiet)}`  : ''} ${item.quiet > 0?  '<br />'  : ''}
+            ${item.tasty > 0? `咖啡好喝:  ${getStars(item.tasty)}`  : ''} ${item.tasty > 0?  '<br />'  : ''}
+            ${item.cheap > 0? `價格便宜:  ${getStars(item.cheap)}`  : ''} ${item.cheap > 0?  '<br />'  : ''}
+            ${item.music > 0? `裝潢音樂:  ${getStars(item.music)}`  : ''} ${item.music > 0?  '<br />'  : ''}
+            </span>
+            ${item.url?`<a href=${item.url}>粉絲專頁</a>`:''}
+          </div>`
           };
-        }
-        return {
-          lat: parseFloat(item.latitude),
-          lng: parseFloat(item.longitude),
-          popup: `<div><span>${item.name}<br/>${item.address}<br/></span></div>`,
-        };
       });
     }
     return (

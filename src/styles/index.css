@@ -20,3 +20,7 @@ body {
     height: 100%;
     background: white;
 }
+
+.leaflet-popup-content-wrapper {
+    min-width: 200px;
+}
