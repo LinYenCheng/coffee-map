@@ -79,7 +79,7 @@ class Layout extends Component {
     return (
       <div className="app">
         <div className={strClassMenuOpen}>
-          <div className="search-container">
+          <div className="search-container search__result">
             <Search stateChk={stateChk} onChange={this.handleSelect} />
             <button className="btn btnSearch">
               <svg viewBox="0 0 100 100">

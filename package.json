@@ -18,10 +18,11 @@
     "eslint-plugin-react": "^6.10.3",
     "html-webpack-plugin": "^2.28.0",
     "react-scripts": "0.8.4",
-    "redux-devtools": "^3.3.2"    
+    "redux-devtools": "^3.3.2"
   },
   "dependencies": {
     "leaflet": "^1.0.3",
+    "leaflet.markercluster": "^1.0.6",
     "prop-types": "^15.5.6",
     "react": "^15.4.2",
     "react-autocomplete": "^1.4.2",
@@ -30,9 +31,9 @@
     "react-leaflet-markercluster": "^1.0.7",
     "react-redux": "^5.0.2",
     "redux": "^3.6.0",
+    "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
-    "whatwg-fetch": "^2.0.3",
-    "redux-logger": "^3.0.1"
+    "whatwg-fetch": "^2.0.3"
   },
   "scripts": {
     "start": "react-scripts start",

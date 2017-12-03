@@ -14,18 +14,20 @@ const styles = {
 
   highlightedItem: {
     color: 'white',
-    background: 'hsl(200, 50%, 50%)',
     padding: '2px 6px',
     cursor: 'default',
   },
 
   menu: {
+    maxWidth: '300px',
     border: 'solid 1px #ccc',
   },
 };
 
 function matchCoffeeToTerm(poi, value) {
+  // console.log(poi)
   return (poi.name.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
+    poi.address.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
     poi.id.toLowerCase().indexOf(value.toLowerCase()) !== -1);
 }
 
@@ -83,15 +85,50 @@ class Search extends Component {
       value={this.state.value} inputProps={{
         name: 'Coffee',
         id: 'Coffee-autocomplete',
-      }} items={getCoffee(stateChk)} getItemValue={item => item.name}
-      shouldItemRender={matchCoffeeToTerm} sortItems={sortCoffees}
+      }} 
+      menuStyle={{
+        borderRadius: '3px',
+        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+        background: 'rgba(255, 255, 255, 0.9)',
+        padding: '2px 0',
+        fontSize: '90%',
+        position: 'fixed',
+        overflow: 'auto',
+        maxWidth: '360px',
+        maxHeight: 'calc( 100vh - 70px )'
+      }}
+      items={getCoffee(stateChk)} 
+      getItemValue={item => item.name}
+      shouldItemRender={matchCoffeeToTerm} 
+      sortItems={sortCoffees}
       onChange={(event, value) => this.setState({ value })}
-      onSelect={this.handleSelect} renderItem={(item, isHighlighted) => (
+      onSelect={this.handleSelect} 
+      renderItem={(item, isHighlighted) => (
         <div
+          className="card"
           style={isHighlighted
             ? styles.highlightedItem
             : styles.item} key={item.id}
-        >{item.name}</div>
+          onMouseOver={()=>{this.handleSelect('', item)}}
+        >
+        <h4>{item.name}</h4>
+        <ul>
+          <li>
+            <ol>
+            {item.limited_time === 'no' ? <li>無限時</li> : ''}
+              {item.socket !== '' || item.socket !== 'no' ? <li>插座</li> : ''}
+              {item.wifi > 3 ? <li>WIFI</li> : ''}
+              {item.quiet > 3 ? <li>較安靜</li> : ''}
+              {item.cheap > 3 ? <li>較便宜</li> : ''}
+            </ol>
+          </li>
+          <li>地址: {item.address}</li>
+          {item.open_time ? <li>營業時間: {item.open_time}</li> : ''}
+          <li>
+            <a href={item.url}>粉絲專頁</a>
+          </li>
+        </ul>
+        </div>
       )}
     />);
   }
