@@ -109,7 +109,6 @@ class Search extends Component {
           style={isHighlighted
             ? styles.highlightedItem
             : styles.item} key={item.id}
-          onMouseOver={()=>{this.handleSelect('', item)}}
         >
         <h4>{item.name}</h4>
         <ul>
