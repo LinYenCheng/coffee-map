@@ -1,137 +1,160 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+
 import Map from '../components/Map';
-import Search from '../components/Search';
+// import Search from '../components/Search';
 import MenuBtn from '../components/MenuBtn';
 import MenuNav from './MenuNav';
-import '../styles/Search.css';
-import dataMockTaipei from '../api/MockTaipei';
-import dataMockHsinchu from '../api/MockHsinchu';
-import dataMockTainan from '../api/MockTainan';
-import { toggleMenu } from '../actions';
 
-function getStars(num) {
-  switch (num) {
-    case 5:
-      return '★★★★★';
-      break;
-    case 4:
-      return '★★★★';
-      break;
-    case 3:
-      return '★★★';
-      break;
-    case 2:
-      return '★★';
-      break;
-    default:
-      return '★';
-      break;
+import '../styles/search.scss';
+import { toggleMenu, toggleCondition } from '../actions';
+import APICoffee from '../api/APICoffee';
+import SearchElastic from '../components/SearchElastic';
+
+
+function Layout({
+  isMenuOpen,
+  checkedCities,
+  checkedConditions,
+  toggleMenu,
+  toggleCondition,
+}) {
+  const [item, setItem] = useState({
+    name: '搜尋想去的咖啡店~',
+    address: '顯示地址及粉專',
+  });
+  const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const itemCoffee = item;
+  let itemsCoffee = items;
+  const strClassMenuOpen = isMenuOpen
+    ? 'menu-open'
+    : '';
+
+  let blockLoading = '';
+
+  function getStars(num) {
+    switch (num) {
+      case 5:
+        return '★★★★★';
+      case 4:
+        return '★★★★';
+      case 3:
+        return '★★★';
+      case 2:
+        return '★★';
+      default:
+        return '★';
+    }
   }
- 
-}
 
-class Layout extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      item: {
-        name: '搜尋想去的咖啡店~',
-        address: '顯示地址及粉專',
+  function handleHover(_item) {
+    if (item && _item && item.id !== _item.id) {
+      setItem(_item);
+    }
+  }
+
+  function handleSelect(_item) {
+    // console.log(_item);
+    if (item && _item && item.id !== _item.id) {
+      setItem(_item);
+    }
+    toggleCondition();
+  }
+
+  async function getCoffee(nowCheckedCities) {
+    setIsLoading(true);
+    console.log('loading');
+    const arrResult = await APICoffee.getCoffee(nowCheckedCities);
+    console.log('loading done');
+    setIsLoading(false);
+    setItems(arrResult);
+  }
+
+  useEffect(() => {
+    getCoffee(checkedCities);
+  }, [checkedCities]);
+
+  if (items.length === 0) {
+    itemsCoffee = [
+      {
+        lat: 24.8,
+        lng: 121.023,
+        popup: '<div><span>目前尚未選擇任何地點<br/>請按左方功能鍵進入選單選擇XD<br/></span></div>',
       },
-      items: [],
-      isMenuOpen: false,
-      stateChk: {
-        chkTaipei: false,
-        chkHsinchu: true,
-        chkTainan: false,
-      },
-    };
-    this.handleSelect = this.handleSelect.bind(this);
-  }
-
-  handleSelect(_item) {
-    this.setState(prevState => ({ item: _item, isMenuOpen: prevState.isMenuOpen }));
-  }
-
-  render() {
-    const { isMenuOpen, stateChk, toggleMenu } = this.props;
-    const itemCoffee = this.state.item;
-    let itemsCoffee = [];
-    const strClassMenuOpen = isMenuOpen
-      ? 'menu-open'
-      : '';
-    let arrResult = [];
-    arrResult.length = 0;
-    if (stateChk.chkTaipei) {
-      arrResult = arrResult.concat(dataMockTaipei);
-    }
-    if (stateChk.chkHsinchu) {
-      arrResult = arrResult.concat(dataMockHsinchu);
-    }
-    if (stateChk.chkTainan) {
-      arrResult = arrResult.concat(dataMockTainan);
-    }
-
-    if (arrResult.length === 0) {
-      itemsCoffee = [
-        {
-          lat: 24.8,
-          lng: 121.023,
-          popup: '<div><span>目前尚未選擇任何地點<br/>請按左方功能鍵進入選單選擇XD<br/></span></div>',
-        },
-      ];
-    } else {
-      itemsCoffee = arrResult.map((item) => {
-          return {
-            lat: parseFloat(item.latitude),
-            lng: parseFloat(item.longitude),
-            popup: `<div>
-            <span style=${{fontWeight:800, fontSize:'16px'}}>${item.name}</span><br /> 
+    ];
+  } else {
+    itemsCoffee = items.map((item) => {
+      return {
+        lat: parseFloat(item.latitude),
+        lng: parseFloat(item.longitude),
+        popup: `<div>
+            <span style=${{ fontWeight: 800, fontSize: '16px' }}>${item.name}</span><br /> 
             <span>
             ${item.address}<br />
-            ${item.wifi > 0?  `WIFI穩定: ${getStars(item.wifi)}`  : ''} ${item.wifi > 0?  '<br />'  : ''}
-            ${item.seat > 0?  `通常有位:  ${getStars(item.seat)}`  : ''} ${item.seat > 0?  '<br />'  : ''}
-            ${item.quiet > 0? `安靜程度:  ${getStars(item.quiet)}`  : ''} ${item.quiet > 0?  '<br />'  : ''}
-            ${item.tasty > 0? `咖啡好喝:  ${getStars(item.tasty)}`  : ''} ${item.tasty > 0?  '<br />'  : ''}
-            ${item.cheap > 0? `價格便宜:  ${getStars(item.cheap)}`  : ''} ${item.cheap > 0?  '<br />'  : ''}
-            ${item.music > 0? `裝潢音樂:  ${getStars(item.music)}`  : ''} ${item.music > 0?  '<br />'  : ''}
+            ${item.wifi > 0 ? `WIFI穩定: ${getStars(item.wifi)}` : ''} ${item.wifi > 0 ? '<br />' : ''}
+            ${item.seat > 0 ? `通常有位:  ${getStars(item.seat)}` : ''} ${item.seat > 0 ? '<br />' : ''}
+            ${item.quiet > 0 ? `安靜程度:  ${getStars(item.quiet)}` : ''} ${item.quiet > 0 ? '<br />' : ''}
+            ${item.tasty > 0 ? `咖啡好喝:  ${getStars(item.tasty)}` : ''} ${item.tasty > 0 ? '<br />' : ''}
+            ${item.cheap > 0 ? `價格便宜:  ${getStars(item.cheap)}` : ''} ${item.cheap > 0 ? '<br />' : ''}
+            ${item.music > 0 ? `裝潢音樂:  ${getStars(item.music)}` : ''} ${item.music > 0 ? '<br />' : ''}
             </span>
-            ${item.url?`<a href=${item.url}>粉絲專頁</a>`:''}
+            ${item.url ? `<a href=${item.url}>粉絲專頁</a>` : ''}
           </div>`
-          };
-      });
-    }
-    return (
-      <div className="app">
-        <div className={strClassMenuOpen}>
-          <div className="search-container search__result">
-            <Search stateChk={stateChk} onChange={this.handleSelect} />
-            <button className="btn btnSearch">
-              <svg viewBox="0 0 100 100">
-                <circle id="circle" cx="45" cy="45" r="30" />
-                <path id="line" d="M45,45 L100,100" />
-              </svg>
-            </button>
-          </div>
-          <MenuNav />
-          <MenuBtn toggleMenu={toggleMenu} />
+      };
+    });
+  }
+
+  if (isLoading) {
+    blockLoading = (
+      <div className="loading__overlay">
+        <div className="loading__content">
+          <div className="loader">Loading...</div>
         </div>
-        <Map
-          item={itemCoffee} items={itemsCoffee}
-          isMenuOpen={isMenuOpen} toggleMenu={toggleMenu}
-        />
       </div>
     );
   }
+
+  return (
+    <div className="app">
+      {blockLoading}
+      <div className={strClassMenuOpen}>
+        <div className="search-container">
+          {/* <Search items={items} onChange={handleSelect} /> */}
+          <SearchElastic
+            nowItem={item}
+            toggleCondition={toggleCondition}
+            checkedConditions={checkedConditions}
+            onChange={handleSelect}
+            onHover={handleHover}
+          />
+        </div>
+        <MenuNav toggleMenu={toggleMenu} />
+        <MenuBtn toggleMenu={toggleMenu} />
+      </div>
+      <Map
+        item={itemCoffee}
+        items={itemsCoffee}
+        isMenuOpen={isMenuOpen}
+        toggleMenu={toggleMenu}
+      />
+    </div>
+  );
 }
 
 function mapStateToProps(state) {
-  return { isMenuOpen: state.isMenuOpen, stateChk: state.stateChk };
+  return {
+    isMenuOpen: state.isMenuOpen,
+    checkedCities: state.checkedCities,
+    checkedConditions: state.checkedConditions,
+  };
 }
 
 const mapDispatchToProps = dispatch => ({
   //
+  toggleCondition: () => (
+    dispatch(toggleCondition())
+  ),
   toggleMenu: () => (
     dispatch(toggleMenu())
   ),

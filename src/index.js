@@ -6,11 +6,13 @@ import { Provider } from 'react-redux';
 import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import Layout from './containers/Layout';
-import './styles/index.css';
+
+import './styles/index.scss';
+
 import reducer from './reducers';
 
 const loggerMiddleware = createLogger();
-const middlewares = [loggerMiddleware, thunkMiddleware];
+const middlewares = process.env.NODE_ENV === 'development' ? [loggerMiddleware, thunkMiddleware] : [thunkMiddleware];
 const composeEnhancers =
   typeof window === 'object' &&
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?

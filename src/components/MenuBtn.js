@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../styles/MenuBtn.css';
+import '../styles/menu-btn.scss';
 
 const MenuBtn = props => (
   <button
-    id="menu-button" role="button" onClick={(e) => {
+    type="button"
+    id="menu-button"
+    onClick={(e) => {
       const clickButton = props.toggleMenu;
       e.preventDefault();
       clickButton();
-    }
-    }
+    }}
   >
     <div className="hamburger">
       <div className="inner" />

@@ -1,9 +1,7 @@
 const items = (state = [], action) => {
   switch (action.type) {
     case 'ALL_PLACE':
-      return [...state, {
-        test: test,
-      }];
+      return [...state];
     default:
       return state;
   }
