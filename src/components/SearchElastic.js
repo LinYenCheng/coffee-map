@@ -2,11 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import APICoffee from '../api/APICoffee';
 import { conditions } from '../config';
 
-function SearchElastic({
-  onChange, onHover,
-  checkedConditions, nowItem,
-  toggleCondition,
-}) {
+function SearchElastic({ onChange, onHover, checkedConditions, nowItem, toggleCondition }) {
   let blockCards = '';
   const inputEl = useRef(null);
   const [items, setItems] = useState([]);
@@ -65,11 +61,23 @@ function SearchElastic({
         role="presentation"
         key={item.id}
         className="card"
-        onClick={() => { setItems([]); onChange(item); inputEl.current.blur(); }}
-        onFocus={() => { onSelect(item); }}
-        onMouseOver={() => { onSelect(item); }}
-        onTouchMove={() => { onSelect(item); }}
-        onPointerOver={() => { onSelect(item); }}
+        onClick={() => {
+          setItems([]);
+          onChange(item);
+          inputEl.current.blur();
+        }}
+        onFocus={() => {
+          onSelect(item);
+        }}
+        onMouseOver={() => {
+          onSelect(item);
+        }}
+        onTouchMove={() => {
+          onSelect(item);
+        }}
+        onPointerOver={() => {
+          onSelect(item);
+        }}
       >
         <h4>{item.name}</h4>
         <ul>
@@ -106,11 +114,7 @@ function SearchElastic({
 
   if (strInput !== '' || strCheckedConditions !== '') {
     blockSearch = (
-      <button
-        type="button"
-        className="btn search__button"
-        onClick={clearSearch}
-      >
+      <button type="button" className="btn search__button" onClick={clearSearch}>
         <span>✕</span>
       </button>
     );
@@ -122,13 +126,13 @@ function SearchElastic({
         value={strInput}
         onChange={handleChange}
         ref={inputEl}
-        onClick={() => { searchWithKeyword(); }}
+        onClick={() => {
+          searchWithKeyword();
+        }}
         onKeyPress={handleKeyPress}
         placeholder={`${placeholderCondition}`}
       />
-      <div className="search__result">
-        {blockCards}
-      </div>
+      <div className="search__result">{blockCards}</div>
       {blockSearch}
     </form>
   );

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { cities } from '../config';
 
-const lunr = window.lunr;
+const { lunr } = window;
 const indexSearch = lunr(function () {
   this.field('name');
   this.field('address');
@@ -11,23 +11,24 @@ const indexSearch = lunr(function () {
   this.field('wifiGood');
 });
 
-const arrResultCities = cities.map((city) => {
+const arrResultCities = cities.map(city => {
   if (city.coffeeShops) {
     return city;
   }
-  return ({ ...city, coffeeShops: [] });
+  return { ...city, coffeeShops: [] };
 });
 
-
-const getShops = async (city) => {
-  const res = await axios.get(`https://cors-anywhere.herokuapp.com/https://cafenomad.tw/api/v1.2/cafes/${city.name}`);
+const getShops = async city => {
+  const res = await axios.get(
+    `https://cors-anywhere.herokuapp.com/https://cafenomad.tw/api/v1.2/cafes/${city.name}`
+  );
   if (res.data) {
-    res.data.forEach((shop) => {
+    res.data.forEach(shop => {
       indexSearch.add({
         ...shop,
         strSocket: shop && shop.socket === 'yes' ? '插座' : '',
         quietAways: shop && shop.quiet > 3 ? '安靜' : '',
-        wifiGood: shop && shop.wifi > 3 ? '網路' : '',
+        wifiGood: shop && shop.wifi > 3 ? '網路' : ''
       });
       // console.log({
       //   ...shop,
@@ -45,19 +46,21 @@ const getShops = async (city) => {
 };
 
 async function getCoffee(checkedCities) {
-  const coffeeShops = await Promise.all(checkedCities.map((isChecked, index) => {
-    if (isChecked && !arrResultCities[index].coffeeShops.length) {
-      // console.log('get', arrResultCities[index].name);
-      const res = getShops(arrResultCities[index]);
-      return res;
-    }
-    if (!isChecked) arrResultCities[index].checked = false;
-    if (isChecked) arrResultCities[index].checked = true;
-    return arrResultCities[index];
-  }));
+  const coffeeShops = await Promise.all(
+    checkedCities.map((isChecked, index) => {
+      if (isChecked && !arrResultCities[index].coffeeShops.length) {
+        // console.log('get', arrResultCities[index].name);
+        const res = getShops(arrResultCities[index]);
+        return res;
+      }
+      if (!isChecked) arrResultCities[index].checked = false;
+      if (isChecked) arrResultCities[index].checked = true;
+      return arrResultCities[index];
+    })
+  );
   let tempShops = [];
   // console.log(coffeeShops);
-  coffeeShops.forEach((coffeeShop) => {
+  coffeeShops.forEach(coffeeShop => {
     if (coffeeShop.checked) tempShops = tempShops.concat(coffeeShop.coffeeShops);
   });
   return tempShops;
@@ -73,7 +76,7 @@ async function searchWithKeyWord(keyWord) {
       let tempShops = [];
       arrResultCities
         .filter(city => city.checked)
-        .forEach((city) => {
+        .forEach(city => {
           tempShops = tempShops.concat(city.coffeeShops);
         });
       tempShops = tempShops.filter(coffeeShop => searchResults.indexOf(coffeeShop.id) !== -1);
@@ -85,7 +88,7 @@ async function searchWithKeyWord(keyWord) {
 
 const APICoffee = {
   getCoffee,
-  searchWithKeyWord,
+  searchWithKeyWord
 };
 
 export default APICoffee;

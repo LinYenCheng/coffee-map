@@ -1,5 +1,9 @@
 {
-  "extends": "airbnb",
+  "extends": [
+    "airbnb",
+    "prettier"
+  ],
+  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -7,7 +11,15 @@
     "sourceType": "module",
     "allowImportExportEverywhere": true
   },
+  "plugins": [
+    "prettier",
+    "react-hooks"
+  ],
   "rules": {
+    "prettier/prettier": [
+      "error"
+    ],
+    "react-hooks/rules-of-hooks": "error",
     "no-const-assign": "warn",
     "no-this-before-super": "warn",
     "no-undef": "warn",

@@ -11,25 +11,16 @@ import { toggleMenu, toggleCondition } from '../actions';
 import APICoffee from '../api/APICoffee';
 import SearchElastic from '../components/SearchElastic';
 
-
-function Layout({
-  isMenuOpen,
-  checkedCities,
-  checkedConditions,
-  toggleMenu,
-  toggleCondition,
-}) {
+function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, toggleCondition }) {
   const [item, setItem] = useState({
     name: '搜尋想去的咖啡店~',
-    address: '顯示地址及粉專',
+    address: '顯示地址及粉專'
   });
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const itemCoffee = item;
   let itemsCoffee = items;
-  const strClassMenuOpen = isMenuOpen
-    ? 'menu-open'
-    : '';
+  const strClassMenuOpen = isMenuOpen ? 'menu-open' : '';
 
   let blockLoading = '';
 
@@ -80,24 +71,36 @@ function Layout({
       {
         lat: 24.8,
         lng: 121.023,
-        popup: '<div><span>目前尚未選擇任何地點<br/>請按左方功能鍵進入選單選擇XD<br/></span></div>',
-      },
+        popup: '<div><span>目前尚未選擇任何地點<br/>請按左方功能鍵進入選單選擇XD<br/></span></div>'
+      }
     ];
   } else {
-    itemsCoffee = items.map((item) => {
+    itemsCoffee = items.map(nowItemCoffee => {
+      const {
+        latitude,
+        longitude,
+        name,
+        address,
+        wifi,
+        seat,
+        quiet,
+        tasty,
+        cheap,
+        music
+      } = nowItemCoffee;
       return {
-        lat: parseFloat(item.latitude),
-        lng: parseFloat(item.longitude),
+        lat: parseFloat(latitude),
+        lng: parseFloat(longitude),
         popup: `<div>
-            <span style=${{ fontWeight: 800, fontSize: '16px' }}>${item.name}</span><br /> 
+            <span style=${{ fontWeight: 800, fontSize: '16px' }}>${name}</span><br /> 
             <span>
-            ${item.address}<br />
-            ${item.wifi > 0 ? `WIFI穩定: ${getStars(item.wifi)}` : ''} ${item.wifi > 0 ? '<br />' : ''}
-            ${item.seat > 0 ? `通常有位:  ${getStars(item.seat)}` : ''} ${item.seat > 0 ? '<br />' : ''}
-            ${item.quiet > 0 ? `安靜程度:  ${getStars(item.quiet)}` : ''} ${item.quiet > 0 ? '<br />' : ''}
-            ${item.tasty > 0 ? `咖啡好喝:  ${getStars(item.tasty)}` : ''} ${item.tasty > 0 ? '<br />' : ''}
-            ${item.cheap > 0 ? `價格便宜:  ${getStars(item.cheap)}` : ''} ${item.cheap > 0 ? '<br />' : ''}
-            ${item.music > 0 ? `裝潢音樂:  ${getStars(item.music)}` : ''} ${item.music > 0 ? '<br />' : ''}
+            ${address}<br />
+            ${wifi > 0 ? `WIFI穩定: ${getStars(wifi)}` : ''} ${wifi > 0 ? '<br />' : ''}
+            ${seat > 0 ? `通常有位:  ${getStars(seat)}` : ''} ${seat > 0 ? '<br />' : ''}
+            ${quiet > 0 ? `安靜程度:  ${getStars(quiet)}` : ''} ${quiet > 0 ? '<br />' : ''}
+            ${tasty > 0 ? `咖啡好喝:  ${getStars(tasty)}` : ''} ${tasty > 0 ? '<br />' : ''}
+            ${cheap > 0 ? `價格便宜:  ${getStars(cheap)}` : ''} ${cheap > 0 ? '<br />' : ''}
+            ${music > 0 ? `裝潢音樂:  ${getStars(music)}` : ''} ${music > 0 ? '<br />' : ''}
             </span>
             ${item.url ? `<a href=${item.url}>粉絲專頁</a>` : ''}
           </div>`
@@ -132,12 +135,7 @@ function Layout({
         <MenuNav toggleMenu={toggleMenu} />
         <MenuBtn toggleMenu={toggleMenu} />
       </div>
-      <Map
-        item={itemCoffee}
-        items={itemsCoffee}
-        isMenuOpen={isMenuOpen}
-        toggleMenu={toggleMenu}
-      />
+      <Map item={itemCoffee} items={itemsCoffee} isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
     </div>
   );
 }
@@ -146,22 +144,21 @@ function mapStateToProps(state) {
   return {
     isMenuOpen: state.isMenuOpen,
     checkedCities: state.checkedCities,
-    checkedConditions: state.checkedConditions,
+    checkedConditions: state.checkedConditions
   };
 }
 
 const mapDispatchToProps = dispatch => ({
   //
-  toggleCondition: () => (
-    dispatch(toggleCondition())
-  ),
-  toggleMenu: () => (
-    dispatch(toggleMenu())
-  ),
+  toggleCondition: () => dispatch(toggleCondition()),
+  toggleMenu: () => dispatch(toggleMenu())
 });
 
 Layout.defaultProps = {
-  name: 'Gary',
+  name: 'Gary'
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Layout);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Layout);
