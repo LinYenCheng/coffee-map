@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import APICoffee from '../api/APICoffee';
 import { conditions } from '../config';
 
@@ -12,12 +12,14 @@ function SearchElastic({ onChange, onHover, checkedConditions, nowItem, toggleCo
     .map(condition => condition.displayName)
     .join(' ');
 
-  async function searchWithKeyword(e) {
-    if (e) e.preventDefault();
-    const result = await APICoffee.searchWithKeyWord(`${strCheckedConditions} ${strInput}`);
-    // console.log(result);
-    setItems(result);
-  }
+  const searchWithKeyword = useCallback(
+    async event => {
+      if (event) event.preventDefault();
+      const result = await APICoffee.searchWithKeyWord(`${strCheckedConditions} ${strInput}`);
+      setItems(result);
+    },
+    [strCheckedConditions, strInput]
+  );
 
   function handleChange(event) {
     setStrInput(event.target.value);
@@ -46,14 +48,13 @@ function SearchElastic({ onChange, onHover, checkedConditions, nowItem, toggleCo
     if (strInput === '') {
       searchWithKeyword();
     }
-  }, [strInput]);
+  }, [strInput, searchWithKeyword]);
 
   useEffect(() => {
     if (strCheckedConditions !== '') {
-      console.log(strCheckedConditions);
       searchWithKeyword();
     }
-  }, [strCheckedConditions]);
+  }, [strCheckedConditions, searchWithKeyword]);
 
   if (items.length) {
     blockCards = items.map(item => (
