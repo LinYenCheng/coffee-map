@@ -1,6 +1,7 @@
 {
   "name": "react-leaflet-map",
   "private": true,
+  "version": "1.0.0",
   "homepage": "http://linyencheng.github.io/coffee-map",
   "devDependencies": {
     "eslint-config-airbnb": "^18.1.0",
