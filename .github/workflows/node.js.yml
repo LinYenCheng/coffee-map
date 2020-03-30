@@ -26,6 +26,7 @@ jobs:
           npm install
           npm run generate
           npm run build
+          npm run postbuild
       - name: push
         uses: github-actions-x/commit@v2.5
         with:

@@ -30,11 +30,13 @@
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "shx": "^0.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && mv build docs || move build docs",
+    "build": "react-scripts build",
+    "postbuild": "shx rm -rf docs && shx cp -r build docs",
     "generate": "node ./src/generateJSON.js",
     "release": "standard-version",
     "test": "react-scripts test",
