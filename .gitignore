@@ -1,10 +1,4 @@
 /node_modules
-/build/*.json
-/build/*.ico
-/build/images/*.png
-/build/*.html
-/build/*.js
-/build/static/css/*.css
-/build/static/css/*.map
-/build/static/js/*.js
-/build/static/js/*.map
+/build/**/*
+/build/lib/*
+

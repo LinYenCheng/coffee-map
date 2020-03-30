@@ -3,7 +3,7 @@ import axios from 'axios';
 import { cities } from '../config';
 
 const { lunr } = window;
-const indexSearch = lunr(function () {
+const indexSearch = lunr(function() {
   this.field('name');
   this.field('address');
   this.field('strSocket');
@@ -19,9 +19,7 @@ const arrResultCities = cities.map(city => {
 });
 
 const getShops = async city => {
-  const res = await axios.get(
-    `https://cors-anywhere.herokuapp.com/https://cafenomad.tw/api/v1.2/cafes/${city.name}`
-  );
+  const res = await axios.get(`${process.env.PUBLIC_URL}/cafedata/${city.name}.json`);
   if (res.data) {
     res.data.forEach(shop => {
       indexSearch.add({

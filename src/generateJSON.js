@@ -1,3 +1,6 @@
+const fs = require('fs');
+const axios = require('axios');
+
 const cities = [
   {
     name: 'taipei',
@@ -86,22 +89,19 @@ const cities = [
   }
 ];
 
-const conditions = [
-  {
-    name: 'socket',
-    displayName: '插座',
-    checked: false
-  },
-  {
-    name: 'quiet',
-    displayName: '安靜',
-    checked: false
-  },
-  {
-    name: 'wifi',
-    displayName: '網路',
-    checked: false
-  }
-];
+function writeResToJOSON(res, fileName) {
+  const data = JSON.stringify(res.data);
+  fs.writeFileSync(`./public/cafedata/${fileName}.json`, data);
+}
 
-export { cities, conditions };
+const instance = axios.create({
+  baseURL: 'https://cafenomad.tw/api/v1.2',
+  timeout: 10000,
+  headers: { 'X-Custom-Header': 'foobar' }
+});
+
+cities.forEach(city => {
+  instance.get(`/cafes/${city.name}`).then(res => {
+    writeResToJOSON(res, city.name);
+  });
+});
