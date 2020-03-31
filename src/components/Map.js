@@ -28,22 +28,10 @@ const PopupMarker = props => {
   return <Marker ref={initMarker} {...props} />;
 };
 
-function SimpleExample({ isMenuOpen, toggleMenu, item, items }) {
-  const {
-    latitude,
-    longitude,
-    url,
-    name,
-    address,
-    wifi,
-    seat,
-    quiet,
-    tasty,
-    cheap,
-    music,
-  } = item;
+function SimpleExample({ position, isMenuOpen, toggleMenu, item, items }) {
+  const { latitude, longitude, url, name, address, wifi, seat, quiet, tasty, cheap, music } = item;
   const positionMarker = [parseFloat(latitude), parseFloat(longitude)];
-  const position = [24.8, 121.023];
+  // const position = [24.8, 121.023];
   const isUrl = !!url;
   let popMarker = null;
   const markers = items

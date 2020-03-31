@@ -5,7 +5,7 @@ import '../styles/menu-nav.scss';
 import { toggleCheck, toggleCondition } from '../actions';
 import { cities, conditions } from '../config';
 
-function MenuNav({ checkedCities, checkedConditions, dispatch, toggleMenu }) {
+function MenuNav({ setPosition, checkedCities, checkedConditions, dispatch, toggleMenu }) {
   const blockList = cities.map((city, index) => (
     <li className="nav__li" key={city.name}>
       <input
@@ -15,11 +15,14 @@ function MenuNav({ checkedCities, checkedConditions, dispatch, toggleMenu }) {
         onChange={() => {
           const tempCheckedCities = checkedCities.slice();
           tempCheckedCities[index] = !checkedCities[index];
+          if (!checkedCities[index]) setPosition([city.lat, city.lng]);
           dispatch(toggleCheck(tempCheckedCities));
           toggleMenu();
         }}
       />
-      <label htmlFor={city.name} className="nav__label" >{city.displayName}</label>
+      <label htmlFor={city.name} className="nav__label">
+        {city.displayName}
+      </label>
     </li>
   ));
   const blockConditionList = conditions.map((condition, index) => (
@@ -36,7 +39,9 @@ function MenuNav({ checkedCities, checkedConditions, dispatch, toggleMenu }) {
           toggleMenu();
         }}
       />
-      <label htmlFor={condition.name} className="nav__label nav__label--condition" >{condition.displayName}</label>
+      <label htmlFor={condition.name} className="nav__label nav__label--condition">
+        {condition.displayName}
+      </label>
     </li>
   ));
 
@@ -54,7 +59,7 @@ function MenuNav({ checkedCities, checkedConditions, dispatch, toggleMenu }) {
 function mapStateToProps(state) {
   return {
     checkedCities: state.checkedCities,
-    checkedConditions: state.checkedConditions,
+    checkedConditions: state.checkedConditions
   };
 }
 

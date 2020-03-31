@@ -16,6 +16,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
     name: '搜尋想去的咖啡店~',
     address: '顯示地址及粉專'
   });
+  const [position, setPosition] = useState({ lng: 121.5598, lat: 25.08 });
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const itemCoffee = item;
@@ -117,7 +118,6 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
       </div>
     );
   }
-
   return (
     <div className="app">
       {blockLoading}
@@ -132,10 +132,16 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
             onHover={handleHover}
           />
         </div>
-        <MenuNav toggleMenu={toggleMenu} />
+        <MenuNav toggleMenu={toggleMenu} setPosition={setPosition} />
         <MenuBtn toggleMenu={toggleMenu} />
       </div>
-      <Map item={itemCoffee} items={itemsCoffee} isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+      <Map
+        position={position}
+        item={itemCoffee}
+        items={itemsCoffee}
+        isMenuOpen={isMenuOpen}
+        toggleMenu={toggleMenu}
+      />
     </div>
   );
 }
@@ -158,7 +164,4 @@ Layout.defaultProps = {
   name: 'Gary'
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Layout);
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);
