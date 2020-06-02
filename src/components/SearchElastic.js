@@ -5,7 +5,10 @@ import { conditions } from '../config';
 function SearchElastic({ onChange, onHover, checkedConditions, nowItem, toggleCondition }) {
   let blockCards = '';
   const inputEl = useRef(null);
+  const intPageSize = 10;
+  const [page, setPage] = useState(1);
   const [items, setItems] = useState([]);
+  const [displayItems, setDisplayItems] = useState([]);
   const [strInput, setStrInput] = useState('');
   const strCheckedConditions = conditions
     .filter((condition, index) => checkedConditions[index])
@@ -44,6 +47,12 @@ function SearchElastic({ onChange, onHover, checkedConditions, nowItem, toggleCo
     setStrInput('');
   }
 
+  function handleScroll(e) {
+    if (e.target.scrollTop > e.target.clientHeight * page && items.length > intPageSize * page) {
+      setPage(page + 1);
+    }
+  }
+
   useEffect(() => {
     if (strInput === '') {
       searchWithKeyword();
@@ -56,8 +65,14 @@ function SearchElastic({ onChange, onHover, checkedConditions, nowItem, toggleCo
     }
   }, [strCheckedConditions, searchWithKeyword]);
 
-  if (items.length) {
-    blockCards = items.map(item => (
+  useEffect(() => {
+    if (items.length) {
+      setDisplayItems(items.slice(0, intPageSize * page));
+    }
+  }, [items, page]);
+
+  if (displayItems.length) {
+    blockCards = displayItems.map(item => (
       <div
         role="presentation"
         key={item.id}
@@ -133,7 +148,9 @@ function SearchElastic({ onChange, onHover, checkedConditions, nowItem, toggleCo
         onKeyPress={handleKeyPress}
         placeholder={`${placeholderCondition}`}
       />
-      <div className="search__result">{blockCards}</div>
+      <div className="search__result" onScroll={handleScroll}>
+        {blockCards}
+      </div>
       {blockSearch}
     </form>
   );
