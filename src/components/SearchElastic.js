@@ -45,6 +45,7 @@ function SearchElastic({ onChange, onHover, checkedConditions, nowItem, toggleCo
   function clearSearch() {
     toggleCondition();
     setStrInput('');
+    setDisplayItems([])
   }
 
   function handleScroll(e) {
