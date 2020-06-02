@@ -81,7 +81,7 @@ function SimpleExample({ position, isMenuOpen, toggleMenu, item, items }) {
   }
   return (
     <Map
-      center={latitude ? positionMarker : position}
+      center={position}
       zoom={12}
       maxZoom={18}
       zoomControl={false}

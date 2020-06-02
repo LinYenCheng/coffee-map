@@ -78,22 +78,21 @@ function SearchElastic({ onChange, onHover, checkedConditions, nowItem, toggleCo
         key={item.id}
         className="card"
         onClick={() => {
-          setItems([]);
-          onChange(item);
+          onSelect(item);
           inputEl.current.blur();
         }}
         onFocus={() => {
           onSelect(item);
         }}
-        onMouseOver={() => {
-          onSelect(item);
-        }}
+        // onMouseOver={() => {
+        //   onSelect(item);
+        // }}
         onTouchMove={() => {
           onSelect(item);
         }}
-        onPointerOver={() => {
-          onSelect(item);
-        }}
+        // onPointerOver={() => {
+        //   onSelect(item);
+        // }}
       >
         <h4>{item.name}</h4>
         <ul>
