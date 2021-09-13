@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6e2464efb44f4229d3b01d45446fa2d5",
+    "revision": "4cd20aeeddedc587871bc6fa794e2f95",
     "url": "/coffee-map/index.html"
   },
   {
@@ -8,12 +8,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/coffee-map/static/css/main.f9e66485.chunk.css"
   },
   {
-    "revision": "4b56e5e0ae62e22d7740",
-    "url": "/coffee-map/static/js/2.a4b59ba9.chunk.js"
+    "revision": "a69ded0bfcab60f9e58b",
+    "url": "/coffee-map/static/js/2.187f1ab2.chunk.js"
   },
   {
     "revision": "2054627819f249256fe231032405de50",
-    "url": "/coffee-map/static/js/2.a4b59ba9.chunk.js.LICENSE.txt"
+    "url": "/coffee-map/static/js/2.187f1ab2.chunk.js.LICENSE.txt"
   },
   {
     "revision": "11bc754a53a159ef729c",

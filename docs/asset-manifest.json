@@ -5,17 +5,17 @@
     "main.js.map": "/coffee-map/static/js/main.4d886888.chunk.js.map",
     "runtime-main.js": "/coffee-map/static/js/runtime-main.e8fb683e.js",
     "runtime-main.js.map": "/coffee-map/static/js/runtime-main.e8fb683e.js.map",
-    "static/js/2.a4b59ba9.chunk.js": "/coffee-map/static/js/2.a4b59ba9.chunk.js",
-    "static/js/2.a4b59ba9.chunk.js.map": "/coffee-map/static/js/2.a4b59ba9.chunk.js.map",
+    "static/js/2.187f1ab2.chunk.js": "/coffee-map/static/js/2.187f1ab2.chunk.js",
+    "static/js/2.187f1ab2.chunk.js.map": "/coffee-map/static/js/2.187f1ab2.chunk.js.map",
     "index.html": "/coffee-map/index.html",
-    "precache-manifest.3c9a9cba0243aceb6d321aee0bf6dec2.js": "/coffee-map/precache-manifest.3c9a9cba0243aceb6d321aee0bf6dec2.js",
+    "precache-manifest.6d104fbe4b6fcd1774d0f05af89adf5f.js": "/coffee-map/precache-manifest.6d104fbe4b6fcd1774d0f05af89adf5f.js",
     "service-worker.js": "/coffee-map/service-worker.js",
     "static/css/main.f9e66485.chunk.css.map": "/coffee-map/static/css/main.f9e66485.chunk.css.map",
-    "static/js/2.a4b59ba9.chunk.js.LICENSE.txt": "/coffee-map/static/js/2.a4b59ba9.chunk.js.LICENSE.txt"
+    "static/js/2.187f1ab2.chunk.js.LICENSE.txt": "/coffee-map/static/js/2.187f1ab2.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.e8fb683e.js",
-    "static/js/2.a4b59ba9.chunk.js",
+    "static/js/2.187f1ab2.chunk.js",
     "static/css/main.f9e66485.chunk.css",
     "static/js/main.4d886888.chunk.js"
   ]
