@@ -10,33 +10,35 @@ function Search({ items, onChange }) {
   const styles = {
     item: {
       padding: '2px 6px',
-      cursor: 'default',
+      cursor: 'default'
     },
 
     highlightedItem: {
       color: 'white',
       padding: '2px 6px',
-      cursor: 'default',
+      cursor: 'default'
     },
 
     menu: {
       maxWidth: '300px',
-      border: 'solid 1px #ccc',
-    },
+      border: 'solid 1px #ccc'
+    }
   };
 
   function matchCoffeeToTerm(poi, nowValue) {
-    return (poi.name.toLowerCase().indexOf(nowValue.toLowerCase()) !== -1
-      || poi.address.toLowerCase().indexOf(nowValue.toLowerCase()) !== -1
-      || poi.id.toLowerCase().indexOf(nowValue.toLowerCase()) !== -1)
-      || (nowValue === '插座' && poi.socket === 'yes');
+    return (
+      poi.name.toLowerCase().indexOf(nowValue.toLowerCase()) !== -1 ||
+      poi.address.toLowerCase().indexOf(nowValue.toLowerCase()) !== -1 ||
+      poi.id.toLowerCase().indexOf(nowValue.toLowerCase()) !== -1 ||
+      (nowValue === '插座' && poi.socket === 'yes')
+    );
   }
 
   function sortCoffees(a, b, nowValue) {
-    return (a.name.toLowerCase().indexOf(nowValue.toLowerCase())
-      > b.name.toLowerCase().indexOf(nowValue.toLowerCase())
+    return a.name.toLowerCase().indexOf(nowValue.toLowerCase()) >
+      b.name.toLowerCase().indexOf(nowValue.toLowerCase())
       ? 1
-      : -1);
+      : -1;
   }
 
   function handleSelect(nowValue, item) {
@@ -57,7 +59,7 @@ function Search({ items, onChange }) {
         inputProps={{
           name: 'Coffee',
           id: 'Coffee-autocomplete',
-          placeholder: '輸入店名、地址、插座',
+          placeholder: '輸入店名、地址、插座'
         }}
         menuStyle={{
           borderRadius: '3px',
@@ -68,20 +70,20 @@ function Search({ items, onChange }) {
           position: 'fixed',
           overflow: 'auto',
           maxWidth: isMobile ? '300px' : '360px',
-          maxHeight: 'calc( 100vh - 70px )',
+          maxHeight: 'calc( 100vh - 70px )'
         }}
         items={items}
         getItemValue={item => item.name}
         shouldItemRender={matchCoffeeToTerm}
         sortItems={sortCoffees}
-        onChange={(event, nowValue) => { setValue(nowValue); }}
+        onChange={(event, nowValue) => {
+          setValue(nowValue);
+        }}
         onSelect={handleSelect}
         renderItem={(item, isHighlighted) => (
           <div
             className="card"
-            style={isHighlighted
-              ? styles.highlightedItem
-              : styles.item}
+            style={isHighlighted ? styles.highlightedItem : styles.item}
             key={item.id}
           >
             <h4>{item.name}</h4>
@@ -115,7 +117,7 @@ function Search({ items, onChange }) {
 }
 
 Search.propTypes = {
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 export default Search;

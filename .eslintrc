@@ -13,7 +13,8 @@
   },
   "plugins": [
     "prettier",
-    "react-hooks"
+    "react-hooks",
+    "only-warn"
   ],
   "rules": {
     "prettier/prettier": [
@@ -36,10 +37,9 @@
         ]
       }
     ],
-    "linebreak-style": [
-      "error",
-      "windows"
-    ],
+    "linebreak-style": "off",
+    "react/prop-types": "off",
+    "react/jsx-props-no-spreading": "off",
     "jsx-a11y/anchor-is-valid": [
       "error",
       {

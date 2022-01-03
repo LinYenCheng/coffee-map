@@ -3,7 +3,7 @@ import axios from 'axios';
 import { cities } from '../config';
 
 const { lunr } = window;
-const indexSearch = lunr(function() {
+const indexSearch = lunr(function generateLunr() {
   this.field('name');
   this.field('address');
   this.field('strSocket');
@@ -19,7 +19,8 @@ const arrResultCities = cities.map(city => {
 });
 
 const getShops = async city => {
-  const res = await axios.get(`${process.env.PUBLIC_URL}/cafedata/${city.name}.json`);
+  const nowCity = { ...city };
+  const res = await axios.get(`${process.env.PUBLIC_URL}/cafedata/${nowCity.name}.json`);
   if (res.data) {
     res.data.forEach(shop => {
       indexSearch.add({
@@ -36,11 +37,11 @@ const getShops = async city => {
       // });
       // indexSearch.add(shop);
     });
-    city.coffeeShops = res.data;
-    city.checked = true;
-    return city;
+    nowCity.coffeeShops = res.data;
+    nowCity.checked = true;
+    return nowCity;
   }
-  return city;
+  return nowCity;
 };
 
 async function getCoffee(checkedCities) {
@@ -67,7 +68,7 @@ async function getCoffee(checkedCities) {
 async function searchWithKeyWord(keyWord) {
   let finalResult = [];
   if (keyWord.toString().trim() !== '') {
-    console.log(keyWord);
+    // console.log(keyWord);
     const results = await indexSearch.search(keyWord);
     if (results && results.length) {
       const searchResults = results.map(result => result.ref);
