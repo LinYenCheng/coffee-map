@@ -3,7 +3,7 @@ name: Node CI
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron: '1 12 * * *'
+    - cron: '1 12 * * 1'
   push:
     branches:
       - master
@@ -14,26 +14,35 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 12.x
+          - 14.x
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
       - name: generate new build
         run: |
           npm install
           npm run generate
           npm run build
           npm run postbuild
+
       - name: push
-        uses: github-actions-x/commit@v2.5
+        uses: github-actions-x/commit@v2.8
         with:
           github-token: ${{ secrets.TOKEN }}
           push-branch: 'master'
-          commit-message: 'publish with new data'
+          commit-message: 'chore: publish with new data'
           force-add: 'true'
           files: docs/
-          name: LinYenCheng
-          email: breaking0215@hotmail.com
+          name: Github Action
+          email: 41898282+github-actions[bot]@users.noreply.github.com
