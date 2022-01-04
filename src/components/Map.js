@@ -1,7 +1,6 @@
-/* eslint-disable */
-
+/* eslint-disable react/no-danger */
 import React from 'react';
-import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, useMapEvent } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import PropTypes from 'prop-types';
 
@@ -20,8 +19,8 @@ function getStars(num) {
   }
 }
 
-const PopupMarker = props => {
-  const initMarker = ref => {
+const PopupMarker = (props) => {
+  const initMarker = (ref) => {
     if (ref) {
       ref.leafletElement.openPopup();
     }
@@ -30,6 +29,14 @@ const PopupMarker = props => {
   return <Marker ref={initMarker} {...props} />;
 };
 
+function MyMap({ isMenuOpen, toggleMenu }) {
+  // eslint-disable-next-line no-unused-vars
+  const map = useMapEvent('click', () => {
+    if (isMenuOpen) toggleMenu();
+  });
+  return null;
+}
+
 function SimpleExample({ position, isMenuOpen, toggleMenu, item, items }) {
   const { latitude, longitude, url, name, address, wifi, seat, quiet, tasty, cheap, music } = item;
   const positionMarker = [parseFloat(latitude), parseFloat(longitude)];
@@ -37,7 +44,7 @@ function SimpleExample({ position, isMenuOpen, toggleMenu, item, items }) {
   const isUrl = !!url;
   let popMarker = null;
   const markers = items
-    .filter(nowItem => nowItem.lat)
+    .filter((nowItem) => nowItem.lat)
     .map((nowItem, index) => (
       <Marker
         key={`${nowItem.lat}${nowItem.lng}${index}`}
@@ -82,28 +89,20 @@ function SimpleExample({ position, isMenuOpen, toggleMenu, item, items }) {
     );
   }
   return (
-    <Map
-      center={position}
-      zoom={12}
-      maxZoom={18}
-      zoomControl={false}
-      animate
-      onClick={() => {
-        if (isMenuOpen) toggleMenu();
-      }}
-    >
+    <MapContainer center={position} zoom={12} maxZoom={18} zoomControl={false} animate>
+      <MyMap isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {latitude && popMarker}
       <MarkerClusterGroup>{markers}</MarkerClusterGroup>
-    </Map>
+    </MapContainer>
   );
 }
 
 SimpleExample.propTypes = {
   isMenuOpen: PropTypes.bool.isRequired,
-  toggleMenu: PropTypes.func.isRequired
+  toggleMenu: PropTypes.func.isRequired,
 };
 export default SimpleExample;

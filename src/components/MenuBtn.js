@@ -6,7 +6,7 @@ const MenuBtn = ({ toggleMenu }) => (
   <button
     type="button"
     id="menu-button"
-    onClick={e => {
+    onClick={(e) => {
       const clickButton = toggleMenu;
       e.preventDefault();
       clickButton();
@@ -19,7 +19,7 @@ const MenuBtn = ({ toggleMenu }) => (
 );
 
 MenuBtn.propTypes = {
-  toggleMenu: PropTypes.func.isRequired
+  toggleMenu: PropTypes.func.isRequired,
 };
 
 export default MenuBtn;

@@ -1,6 +1,6 @@
 import { cities } from '../config';
 
-const defaultCheckedCities = cities.map(city => city.checked);
+const defaultCheckedCities = cities.map((city) => city.checked);
 
 const checkedCities = (state = defaultCheckedCities, action) => {
   switch (action.type) {

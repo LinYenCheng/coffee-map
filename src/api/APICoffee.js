@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import axios from 'axios';
 
 import { cities } from '../config';
@@ -11,23 +12,22 @@ const indexSearch = lunr(function generateLunr() {
   this.field('wifiGood');
 });
 
-const arrResultCities = cities.map(city => {
+const arrResultCities = cities.map((city) => {
   if (city.coffeeShops) {
     return city;
   }
   return { ...city, coffeeShops: [] };
 });
 
-const getShops = async city => {
-  const nowCity = { ...city };
-  const res = await axios.get(`${process.env.PUBLIC_URL}/cafedata/${nowCity.name}.json`);
+const getShops = async (city) => {
+  const res = await axios.get(`${process.env.PUBLIC_URL}/cafedata/${city.name}.json`);
   if (res.data) {
-    res.data.forEach(shop => {
+    res.data.forEach((shop) => {
       indexSearch.add({
         ...shop,
         strSocket: shop && shop.socket === 'yes' ? '插座' : '',
         quietAways: shop && shop.quiet > 3 ? '安靜' : '',
-        wifiGood: shop && shop.wifi > 3 ? '網路' : ''
+        wifiGood: shop && shop.wifi > 3 ? '網路' : '',
       });
       // console.log({
       //   ...shop,
@@ -37,11 +37,11 @@ const getShops = async city => {
       // });
       // indexSearch.add(shop);
     });
-    nowCity.coffeeShops = res.data;
-    nowCity.checked = true;
-    return nowCity;
+    city.coffeeShops = res.data;
+    city.checked = true;
+    return city;
   }
-  return nowCity;
+  return city;
 };
 
 async function getCoffee(checkedCities) {
@@ -55,11 +55,11 @@ async function getCoffee(checkedCities) {
       if (!isChecked) arrResultCities[index].checked = false;
       if (isChecked) arrResultCities[index].checked = true;
       return arrResultCities[index];
-    })
+    }),
   );
   let tempShops = [];
   // console.log(coffeeShops);
-  coffeeShops.forEach(coffeeShop => {
+  coffeeShops.forEach((coffeeShop) => {
     if (coffeeShop.checked) tempShops = tempShops.concat(coffeeShop.coffeeShops);
   });
   return tempShops;
@@ -68,17 +68,17 @@ async function getCoffee(checkedCities) {
 async function searchWithKeyWord(keyWord) {
   let finalResult = [];
   if (keyWord.toString().trim() !== '') {
-    // console.log(keyWord);
     const results = await indexSearch.search(keyWord);
     if (results && results.length) {
-      const searchResults = results.map(result => result.ref);
+      const searchResults = results.map((result) => result.ref);
       let tempShops = [];
       arrResultCities
-        .filter(city => city.checked)
-        .forEach(city => {
+        .filter((city) => city.checked)
+        .forEach((city) => {
           tempShops = tempShops.concat(city.coffeeShops);
         });
-      tempShops = tempShops.filter(coffeeShop => searchResults.indexOf(coffeeShop.id) !== -1);
+      tempShops = tempShops.filter((coffeeShop) => searchResults.indexOf(coffeeShop.id) !== -1);
+
       finalResult = tempShops;
     }
   }
@@ -87,7 +87,7 @@ async function searchWithKeyWord(keyWord) {
 
 const APICoffee = {
   getCoffee,
-  searchWithKeyWord
+  searchWithKeyWord,
 };
 
 export default APICoffee;

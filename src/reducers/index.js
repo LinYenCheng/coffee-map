@@ -12,7 +12,7 @@ const mapApp = combineReducers({
   checkedConditions,
   isMenuOpen,
   item,
-  items
+  items,
 });
 
 export default mapApp;

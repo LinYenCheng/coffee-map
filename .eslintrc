@@ -1,62 +1,48 @@
 {
   "extends": [
     "airbnb",
+    "airbnb/hooks",
     "prettier"
   ],
-  "parser": "babel-eslint",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "sourceType": "module",
-    "allowImportExportEverywhere": true
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
   },
+  "parser": "babel-eslint",
   "plugins": [
     "prettier",
-    "react-hooks",
     "only-warn"
   ],
   "rules": {
+    "prefer-exponentiation-operator": "off",
+    "react/jsx-no-bind": "off",
+    "react/forbid-prop-types": "off",
+    "react/function-component-definition": "off",
+    "react/no-array-index-key": "off",
+    "react/prop-types": "off",
+    "react/jsx-props-no-spreading": "off",
     "prettier/prettier": [
       "error"
     ],
-    "react-hooks/rules-of-hooks": "error",
-    "no-const-assign": "warn",
-    "no-this-before-super": "warn",
-    "no-undef": "warn",
-    "no-unreachable": "warn",
-    "no-unused-vars": "warn",
-    "constructor-super": "warn",
-    "valid-typeof": "warn",
     "react/jsx-filename-extension": [
-      1,
+      "warn",
       {
         "extensions": [
           ".js",
           ".jsx"
         ]
       }
-    ],
-    "linebreak-style": "off",
-    "react/prop-types": "off",
-    "react/jsx-props-no-spreading": "off",
-    "jsx-a11y/anchor-is-valid": [
-      "error",
-      {
-        "components": [
-          "Link"
-        ],
-        "specialLink": [
-          "to"
-        ]
-      }
     ]
   },
-  "env": {
-    "browser": true,
-    "commonjs": true,
-    "jquery": true,
-    "es6": true,
-    "node": true
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": [
+          "node_modules",
+          "src/"
+        ]
+      }
+    }
   }
 }

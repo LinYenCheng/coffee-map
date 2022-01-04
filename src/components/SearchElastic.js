@@ -12,16 +12,16 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
   const [strInput, setStrInput] = useState('');
   const strCheckedConditions = conditions
     .filter((condition, index) => checkedConditions[index])
-    .map(condition => condition.displayName)
+    .map((condition) => condition.displayName)
     .join(' ');
 
   const searchWithKeyword = useCallback(
-    async event => {
+    async (event) => {
       if (event) event.preventDefault();
       const result = await APICoffee.searchWithKeyWord(`${strCheckedConditions} ${strInput}`);
       setItems(result);
     },
-    [strCheckedConditions, strInput]
+    [strCheckedConditions, strInput],
   );
 
   function handleChange(event) {
@@ -73,7 +73,7 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
   }, [items, page]);
 
   if (displayItems.length) {
-    blockCards = displayItems.map(item => (
+    blockCards = displayItems.map((item) => (
       <div
         role="presentation"
         key={item.id}
