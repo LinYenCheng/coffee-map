@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '../styles/menu-btn.scss';
 
-const MenuBtn = props => (
+const MenuBtn = ({ toggleMenu }) => (
   <button
     type="button"
     id="menu-button"
     onClick={(e) => {
-      const clickButton = props.toggleMenu;
+      const clickButton = toggleMenu;
       e.preventDefault();
       clickButton();
     }}

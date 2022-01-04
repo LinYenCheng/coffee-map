@@ -1,6 +1,6 @@
 import { conditions } from '../config';
 
-const defaultCheckedConditions = conditions.map(condition => condition.checked);
+const defaultCheckedConditions = conditions.map((condition) => condition.checked);
 
 const checkedConditions = (state = defaultCheckedConditions, action) => {
   switch (action.type) {

@@ -59,7 +59,7 @@ function MenuNav({ setPosition, checkedCities, checkedConditions, dispatch, togg
 function mapStateToProps(state) {
   return {
     checkedCities: state.checkedCities,
-    checkedConditions: state.checkedConditions
+    checkedConditions: state.checkedConditions,
   };
 }
 

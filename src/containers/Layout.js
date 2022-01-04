@@ -11,10 +11,11 @@ import { toggleMenu, toggleCondition } from '../actions';
 import APICoffee from '../api/APICoffee';
 import SearchElastic from '../components/SearchElastic';
 
+// eslint-disable-next-line no-shadow
 function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, toggleCondition }) {
   const [item, setItem] = useState({
     name: '搜尋想去的咖啡店~',
-    address: '顯示地址及粉專'
+    address: '顯示地址及粉專',
   });
   const [position, setPosition] = useState({ lng: 121.5598, lat: 25.08 });
   const [items, setItems] = useState([]);
@@ -56,9 +57,9 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
 
   async function getCoffee(nowCheckedCities) {
     setIsLoading(true);
-    console.log('loading');
+    // console.log('loading');
     const arrResult = await APICoffee.getCoffee(nowCheckedCities);
-    console.log('loading done');
+    // console.log('loading done');
     setIsLoading(false);
     setItems(arrResult);
   }
@@ -72,23 +73,13 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
       {
         lat: 24.8,
         lng: 121.023,
-        popup: '<div><span>目前尚未選擇任何地點<br/>請按左方功能鍵進入選單選擇XD<br/></span></div>'
-      }
+        popup: '<div><span>目前尚未選擇任何地點<br/>請按左方功能鍵進入選單選擇XD<br/></span></div>',
+      },
     ];
   } else {
-    itemsCoffee = items.map(nowItemCoffee => {
-      const {
-        latitude,
-        longitude,
-        name,
-        address,
-        wifi,
-        seat,
-        quiet,
-        tasty,
-        cheap,
-        music
-      } = nowItemCoffee;
+    itemsCoffee = items.map((nowItemCoffee) => {
+      const { latitude, longitude, name, address, wifi, seat, quiet, tasty, cheap, music } =
+        nowItemCoffee;
       return {
         lat: parseFloat(latitude),
         lng: parseFloat(longitude),
@@ -104,7 +95,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
             ${music > 0 ? `裝潢音樂:  ${getStars(music)}` : ''} ${music > 0 ? '<br />' : ''}
             </span>
             ${item.url ? `<a href=${item.url}>粉絲專頁</a>` : ''}
-          </div>`
+          </div>`,
       };
     });
   }
@@ -150,18 +141,18 @@ function mapStateToProps(state) {
   return {
     isMenuOpen: state.isMenuOpen,
     checkedCities: state.checkedCities,
-    checkedConditions: state.checkedConditions
+    checkedConditions: state.checkedConditions,
   };
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   //
   toggleCondition: () => dispatch(toggleCondition()),
-  toggleMenu: () => dispatch(toggleMenu())
+  toggleMenu: () => dispatch(toggleMenu()),
 });
 
 Layout.defaultProps = {
-  name: 'Gary'
+  name: 'Gary',
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);

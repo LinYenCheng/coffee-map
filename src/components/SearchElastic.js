@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import APICoffee from '../api/APICoffee';
 import { conditions } from '../config';
 
-function SearchElastic({ onChange, onHover, checkedConditions, nowItem, toggleCondition }) {
+function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition }) {
   let blockCards = '';
   const inputEl = useRef(null);
   const intPageSize = 10;
@@ -12,16 +12,16 @@ function SearchElastic({ onChange, onHover, checkedConditions, nowItem, toggleCo
   const [strInput, setStrInput] = useState('');
   const strCheckedConditions = conditions
     .filter((condition, index) => checkedConditions[index])
-    .map(condition => condition.displayName)
+    .map((condition) => condition.displayName)
     .join(' ');
 
   const searchWithKeyword = useCallback(
-    async event => {
+    async (event) => {
       if (event) event.preventDefault();
       const result = await APICoffee.searchWithKeyWord(`${strCheckedConditions} ${strInput}`);
       setItems(result);
     },
-    [strCheckedConditions, strInput]
+    [strCheckedConditions, strInput],
   );
 
   function handleChange(event) {
@@ -45,7 +45,7 @@ function SearchElastic({ onChange, onHover, checkedConditions, nowItem, toggleCo
   function clearSearch() {
     toggleCondition();
     setStrInput('');
-    setDisplayItems([])
+    setDisplayItems([]);
   }
 
   function handleScroll(e) {
@@ -73,7 +73,7 @@ function SearchElastic({ onChange, onHover, checkedConditions, nowItem, toggleCo
   }, [items, page]);
 
   if (displayItems.length) {
-    blockCards = displayItems.map(item => (
+    blockCards = displayItems.map((item) => (
       <div
         role="presentation"
         key={item.id}

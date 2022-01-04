@@ -26,17 +26,19 @@ function Search({ items, onChange }) {
   };
 
   function matchCoffeeToTerm(poi, nowValue) {
-    return (poi.name.toLowerCase().indexOf(nowValue.toLowerCase()) !== -1
-      || poi.address.toLowerCase().indexOf(nowValue.toLowerCase()) !== -1
-      || poi.id.toLowerCase().indexOf(nowValue.toLowerCase()) !== -1)
-      || (nowValue === '插座' && poi.socket === 'yes');
+    return (
+      poi.name.toLowerCase().indexOf(nowValue.toLowerCase()) !== -1 ||
+      poi.address.toLowerCase().indexOf(nowValue.toLowerCase()) !== -1 ||
+      poi.id.toLowerCase().indexOf(nowValue.toLowerCase()) !== -1 ||
+      (nowValue === '插座' && poi.socket === 'yes')
+    );
   }
 
   function sortCoffees(a, b, nowValue) {
-    return (a.name.toLowerCase().indexOf(nowValue.toLowerCase())
-      > b.name.toLowerCase().indexOf(nowValue.toLowerCase())
+    return a.name.toLowerCase().indexOf(nowValue.toLowerCase()) >
+      b.name.toLowerCase().indexOf(nowValue.toLowerCase())
       ? 1
-      : -1);
+      : -1;
   }
 
   function handleSelect(nowValue, item) {
@@ -71,17 +73,17 @@ function Search({ items, onChange }) {
           maxHeight: 'calc( 100vh - 70px )',
         }}
         items={items}
-        getItemValue={item => item.name}
+        getItemValue={(item) => item.name}
         shouldItemRender={matchCoffeeToTerm}
         sortItems={sortCoffees}
-        onChange={(event, nowValue) => { setValue(nowValue); }}
+        onChange={(event, nowValue) => {
+          setValue(nowValue);
+        }}
         onSelect={handleSelect}
         renderItem={(item, isHighlighted) => (
           <div
             className="card"
-            style={isHighlighted
-              ? styles.highlightedItem
-              : styles.item}
+            style={isHighlighted ? styles.highlightedItem : styles.item}
             key={item.id}
           >
             <h4>{item.name}</h4>
