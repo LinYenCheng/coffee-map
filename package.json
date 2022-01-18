@@ -4,6 +4,7 @@
   "version": "1.1.0",
   "homepage": "http://linyencheng.github.io/coffee-map",
   "devDependencies": {
+    "@vitejs/plugin-react": "^1.1.4",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -14,22 +15,21 @@
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^1.7.0",
     "prettier": "^2.5.1",
-    "react-error-overlay": "^6.0.9",
     "sass": "^1.45.2",
-    "standard-version": "^9.3.2"
+    "standard-version": "^9.3.2",
+    "vite": "^2.7.12"
   },
   "dependencies": {
+    "@vitejs/plugin-react-refresh": "^1.3.6",
     "axios": "^0.24.0",
     "leaflet": "^1.6.0",
     "leaflet.markercluster": "^1.4.1",
     "prop-types": "^15.8.0",
     "react": "^17.0.2",
-    "react-autocomplete": "^1.8.1",
     "react-dom": "^17.0.2",
     "react-leaflet": "^3.2.2",
     "react-leaflet-markercluster": "^3.0.0-rc1",
     "react-redux": "^7.2.6",
-    "react-scripts": "4.0.3",
     "redux": "^4.1.2",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.4.1",
@@ -37,18 +37,13 @@
   },
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "postbuild": "shx rm -rf docs && shx cp -r build docs",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "postbuild": "shx rm -rf docs && shx cp -r dist docs",
     "generate": "node ./src/generateJSON.js",
     "release": "standard-version",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "predeploy": "npm run build"
-  },
-  "resolutions": {
-    "//": "See https://github.com/facebook/create-react-app/issues/11773",
-    "react-error-overlay": "6.0.9"
   },
   "eslintConfig": {
     "extends": "react-app"
