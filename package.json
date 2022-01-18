@@ -4,6 +4,7 @@
   "version": "1.1.0",
   "homepage": "http://linyencheng.github.io/coffee-map",
   "devDependencies": {
+    "@vitejs/plugin-react": "^1.1.4",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -16,7 +17,6 @@
     "prettier": "^2.5.1",
     "sass": "^1.45.2",
     "standard-version": "^9.3.2",
-    "@vitejs/plugin-react": "1.1.1",
     "vite": "^2.7.12"
   },
   "dependencies": {
@@ -26,7 +26,6 @@
     "leaflet.markercluster": "^1.4.1",
     "prop-types": "^15.8.0",
     "react": "^17.0.2",
-    "react-autocomplete": "^1.8.1",
     "react-dom": "^17.0.2",
     "react-leaflet": "^3.2.2",
     "react-leaflet-markercluster": "^3.0.0-rc1",
