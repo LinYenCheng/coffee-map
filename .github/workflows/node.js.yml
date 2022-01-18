@@ -1,6 +1,9 @@
 name: Node CI
 
 on:
+  pull_request:
+    types:
+      - opened
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron: '1 12 * * 1'
