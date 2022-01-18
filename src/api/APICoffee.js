@@ -20,7 +20,7 @@ const arrResultCities = cities.map((city) => {
 });
 
 const getShops = async (city) => {
-  const res = await axios.get(`${process.env.PUBLIC_URL}/cafedata/${city.name}.json`);
+  const res = await axios.get(`/cafedata/${city.name}.json`);
   if (res.data) {
     res.data.forEach((shop) => {
       indexSearch.add({
