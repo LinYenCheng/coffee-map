@@ -9,7 +9,7 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
   const [page, setPage] = useState(1);
   const [items, setItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
-  const [strInput, setStrInput] = useState('');
+  const [strInput, setStrInput] = useState('網路');
   const strCheckedConditions = conditions
     .filter((condition, index) => checkedConditions[index])
     .map((condition) => condition.displayName)
@@ -55,14 +55,10 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
   }
 
   useEffect(() => {
-    if (strInput === '') {
-      searchWithKeyword();
-    }
-  }, [strInput, searchWithKeyword]);
-
-  useEffect(() => {
     if (strCheckedConditions !== '') {
-      searchWithKeyword();
+      setTimeout(() => {
+        searchWithKeyword();
+      }, 50);
     }
   }, [strCheckedConditions, searchWithKeyword]);
 
@@ -155,7 +151,7 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
         </form>
       </div>
       <div className="search__result row" onScroll={handleScroll}>
-        <div className="col">{blockCards}</div>
+        <div>{blockCards}</div>
       </div>
     </>
   );

@@ -118,7 +118,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
       </div>
       <div className="container-fluid pt-2 ">
         <div className="row">
-          <div className="col col-sm-12">
+          <div className="col-md-5 col-sm-12 result__container">
             {/* <Search items={items} onChange={handleSelect} /> */}
             <SearchElastic
               nowItem={item}
@@ -128,7 +128,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
               onHover={handleHover}
             />
           </div>
-          <div className="pb-1 col-7 col-sm">
+          <div className="pb-1 col-md-7 col-sm-12 map__container">
             <Map
               position={position}
               item={itemCoffee}
