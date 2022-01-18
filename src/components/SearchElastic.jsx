@@ -137,22 +137,27 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
   }
 
   return (
-    <form onSubmit={searchWithKeyword}>
-      <input
-        value={strInput}
-        onChange={handleChange}
-        ref={inputEl}
-        onClick={() => {
-          searchWithKeyword();
-        }}
-        onKeyPress={handleKeyPress}
-        placeholder={`${placeholderCondition}`}
-      />
-      <div className="search__result" onScroll={handleScroll}>
-        {blockCards}
+    <>
+      <div className="search-container">
+        <form onSubmit={searchWithKeyword}>
+          <input
+            value={strInput}
+            onChange={handleChange}
+            ref={inputEl}
+            onClick={() => {
+              searchWithKeyword();
+            }}
+            onKeyPress={handleKeyPress}
+            placeholder={`${placeholderCondition}`}
+          />
+
+          {blockSearch}
+        </form>
       </div>
-      {blockSearch}
-    </form>
+      <div className="search__result row" onScroll={handleScroll}>
+        <div className="col">{blockCards}</div>
+      </div>
+    </>
   );
 }
 

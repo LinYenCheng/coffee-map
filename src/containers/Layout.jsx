@@ -113,26 +113,32 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
     <div className="app">
       {blockLoading}
       <div className={strClassMenuOpen}>
-        <div className="search-container">
-          {/* <Search items={items} onChange={handleSelect} /> */}
-          <SearchElastic
-            nowItem={item}
-            toggleCondition={toggleCondition}
-            checkedConditions={checkedConditions}
-            onChange={handleSelect}
-            onHover={handleHover}
-          />
-        </div>
         <MenuNav toggleMenu={toggleMenu} setPosition={setPosition} />
         <MenuBtn toggleMenu={toggleMenu} />
       </div>
-      <Map
-        position={position}
-        item={itemCoffee}
-        items={itemsCoffee}
-        isMenuOpen={isMenuOpen}
-        toggleMenu={toggleMenu}
-      />
+      <div className="container-fluid pt-2 ">
+        <div className="row">
+          <div className="col col-sm-12">
+            {/* <Search items={items} onChange={handleSelect} /> */}
+            <SearchElastic
+              nowItem={item}
+              toggleCondition={toggleCondition}
+              checkedConditions={checkedConditions}
+              onChange={handleSelect}
+              onHover={handleHover}
+            />
+          </div>
+          <div className="pb-1 col-7 col-sm">
+            <Map
+              position={position}
+              item={itemCoffee}
+              items={itemsCoffee}
+              isMenuOpen={isMenuOpen}
+              toggleMenu={toggleMenu}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
