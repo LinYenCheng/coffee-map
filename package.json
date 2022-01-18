@@ -36,7 +36,6 @@
     "shx": "^0.3.3"
   },
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
