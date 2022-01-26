@@ -1,9 +1,12 @@
-name: Node CI
+name: schedule update data
 
 on:
-  pull_request:
-    types:
-      - opened
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: '1 12 * * 1'
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -32,3 +35,14 @@ jobs:
           npm run generate
           npm run build
           npm run postbuild
+
+      - name: push
+        uses: github-actions-x/commit@v2.8
+        with:
+          github-token: ${{ secrets.TOKEN }}
+          push-branch: 'master'
+          commit-message: 'chore: publish with new data'
+          force-add: 'true'
+          files: docs/
+          name: Github Action
+          email: 41898282+github-actions[bot]@users.noreply.github.com
