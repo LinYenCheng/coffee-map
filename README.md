@@ -6,3 +6,6 @@
 
 [1]: https://cafenomad.tw/developers/docs/v1.2
 [2]: https://www.wfublog.com/2018/11/js-cors-proxy.html
+
+### 開發環境
+* Node：v16
