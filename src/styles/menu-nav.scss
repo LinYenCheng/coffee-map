@@ -1,3 +1,15 @@
+// 按鈕效果(checked/hover)
+@mixin normal-btn-active-style {
+  background: #29252f;
+  border: 2px solid #29252f;
+  color: #fff;
+}
+@mixin condition-btn-active-style {
+  background: #E38B46;
+  border: 2px solid #E38B46;
+  color: #fff;
+}
+
 nav {
   position: absolute;
   top: 0;
@@ -88,10 +100,16 @@ nav::before {
     float: left;
     min-width: 80px;
     width: 30%;
+    &:hover {
+      @include normal-btn-active-style;
+    }
   }
 
   .nav__label--condition {
     border: 2px solid #E38B46;
+    &:hover {
+      @include condition-btn-active-style;
+    }
   }
 
   input {
@@ -100,14 +118,10 @@ nav::before {
   }
 
   input:checked+.nav__label {
-    background: #29252f;
-    border: 2px solid #29252f;
-    color: #fff;
+    @include normal-btn-active-style;
   }
 
   input:checked+.nav__label--condition {
-    background: #E38B46;
-    border: 2px solid #E38B46;
-    color: #fff;
+    @include condition-btn-active-style;
   }
 }
