@@ -44,7 +44,7 @@ const getShops = async (city) => {
   return city;
 };
 
-async function getCoffee(checkedCities) {
+async function getCoffee({ checkedCities, mapBounds }) {
   const coffeeShops = await Promise.all(
     checkedCities.map((isChecked, index) => {
       if (isChecked && !arrResultCities[index].coffeeShops.length) {
@@ -62,6 +62,17 @@ async function getCoffee(checkedCities) {
   coffeeShops.forEach((coffeeShop) => {
     if (coffeeShop.checked) tempShops = tempShops.concat(coffeeShop.coffeeShops);
   });
+  if (mapBounds !== false) {
+    tempShops = tempShops.filter(({ latitude, longitude }) => {
+      const lat = parseFloat(latitude);
+      const lng = parseFloat(longitude);
+      const { _southWest, _northEast } = mapBounds;
+      return (
+        lat > _southWest.lat && lat < _northEast.lat && lng > _southWest.lng && lat < _northEast.lat
+      );
+    });
+  }
+
   return tempShops;
 }
 
