@@ -146,15 +146,22 @@
   overflow: auto;
   max-height: calc(100vh - 65px - 1rem);
   top: 65px;
-  z-index: 99;
+  left: 1.5rem;
+  z-index: 500;
   width: 375px;
 
   @media screen and (max-width: 720px) {
+    left: auto;
     z-index: 499;
     width: calc(100vw - 1.5rem);
     transform: none;
     max-height: 45vh;
   }
+}
+
+.result__container > div.search__result.row > div {
+  padding-right: 0;
+  padding-left: 0;
 }
 
 .search__result::-webkit-scrollbar-track {

@@ -116,7 +116,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
         <MenuNav toggleMenu={toggleMenu} setPosition={setPosition} />
         <MenuBtn toggleMenu={toggleMenu} />
       </div>
-      <div className="container-fluid pt-2 ">
+      <div className="container-fluid">
         <div className="row">
           <div className="col-md-5 col-sm-12 result__container">
             {/* <Search items={items} onChange={handleSelect} /> */}
@@ -128,7 +128,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
               onHover={handleHover}
             />
           </div>
-          <div className="pb-1 col-md-7 col-sm-12 map__container">
+          <div className="pb-1 col-md-12 col-sm-12 map__container">
             <Map
               position={position}
               item={itemCoffee}
