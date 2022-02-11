@@ -19,6 +19,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
   });
   const [position, setPosition] = useState({ lng: 121.5598, lat: 25.08 });
   const [items, setItems] = useState([]);
+  const [displayItems, setDisplayItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const itemCoffee = item;
   let itemsCoffee = items;
@@ -76,29 +77,33 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
         popup: '<div><span>目前尚未選擇任何地點<br/>請按左方功能鍵進入選單選擇XD<br/></span></div>',
       },
     ];
+  } else if (displayItems.length === 0) {
+    itemsCoffee = items;
   } else {
-    itemsCoffee = items.map((nowItemCoffee) => {
-      const { latitude, longitude, name, address, wifi, seat, quiet, tasty, cheap, music } =
-        nowItemCoffee;
-      return {
-        lat: parseFloat(latitude),
-        lng: parseFloat(longitude),
-        popup: `<div>
-            <span style=${{ fontWeight: 800, fontSize: '16px' }}>${name}</span><br /> 
-            <span>
-            ${address}<br />
-            ${wifi > 0 ? `WIFI穩定: ${getStars(wifi)}` : ''} ${wifi > 0 ? '<br />' : ''}
-            ${seat > 0 ? `通常有位:  ${getStars(seat)}` : ''} ${seat > 0 ? '<br />' : ''}
-            ${quiet > 0 ? `安靜程度:  ${getStars(quiet)}` : ''} ${quiet > 0 ? '<br />' : ''}
-            ${tasty > 0 ? `咖啡好喝:  ${getStars(tasty)}` : ''} ${tasty > 0 ? '<br />' : ''}
-            ${cheap > 0 ? `價格便宜:  ${getStars(cheap)}` : ''} ${cheap > 0 ? '<br />' : ''}
-            ${music > 0 ? `裝潢音樂:  ${getStars(music)}` : ''} ${music > 0 ? '<br />' : ''}
-            </span>
-            ${item.url ? `<a href=${item.url}>粉絲專頁</a>` : ''}
-          </div>`,
-      };
-    });
+    itemsCoffee = displayItems;
   }
+
+  itemsCoffee = itemsCoffee.map((nowItemCoffee) => {
+    const { latitude, longitude, name, address, wifi, seat, quiet, tasty, cheap, music } =
+      nowItemCoffee;
+    return {
+      lat: parseFloat(latitude),
+      lng: parseFloat(longitude),
+      popup: `<div key="${name}">
+          <span style=${{ fontWeight: 800, fontSize: '16px' }}>${name}</span><br /> 
+          <span>
+          ${address}<br />
+          ${wifi > 0 ? `WIFI穩定: ${getStars(wifi)}` : ''} ${wifi > 0 ? '<br />' : ''}
+          ${seat > 0 ? `通常有位:  ${getStars(seat)}` : ''} ${seat > 0 ? '<br />' : ''}
+          ${quiet > 0 ? `安靜程度:  ${getStars(quiet)}` : ''} ${quiet > 0 ? '<br />' : ''}
+          ${tasty > 0 ? `咖啡好喝:  ${getStars(tasty)}` : ''} ${tasty > 0 ? '<br />' : ''}
+          ${cheap > 0 ? `價格便宜:  ${getStars(cheap)}` : ''} ${cheap > 0 ? '<br />' : ''}
+          ${music > 0 ? `裝潢音樂:  ${getStars(music)}` : ''} ${music > 0 ? '<br />' : ''}
+          </span>
+          ${item.url ? `<a href=${item.url}>粉絲專頁</a>` : ''}
+        </div>`,
+    };
+  });
 
   if (isLoading) {
     blockLoading = (
@@ -122,6 +127,8 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
             {/* <Search items={items} onChange={handleSelect} /> */}
             <SearchElastic
               nowItem={item}
+              displayItems={displayItems}
+              setDisplayItems={setDisplayItems}
               toggleCondition={toggleCondition}
               checkedConditions={checkedConditions}
               onChange={handleSelect}
