@@ -1,6 +1,6 @@
 /* eslint-disable react/no-danger */
 import React, { useState, useRef, useEffect } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, useMapEvent } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import PropTypes from 'prop-types';
 
@@ -66,15 +66,28 @@ const PopupMarker = ({ position, item, isActive, map }) => {
   );
 };
 
-function MyMap({ isMenuOpen, toggleMenu }) {
+function MyMapEvent({ isMenuOpen, toggleMenu, setMapBounds }) {
   // eslint-disable-next-line no-unused-vars
-  const map = useMapEvent('click', () => {
-    if (isMenuOpen) toggleMenu();
+
+  const map = useMapEvents({
+    click: () => {
+      if (isMenuOpen) toggleMenu();
+    },
+    // 移動完要可以顯示範圍內
+    moveend: () => {
+      const zoom = map.getZoom();
+      if (zoom > 15) {
+        const nowBounds = map.getBounds();
+        setMapBounds(nowBounds);
+      } else {
+        setMapBounds(false);
+      }
+    },
   });
   return null;
 }
 
-function SimpleExample({ position, isMenuOpen, toggleMenu, item, items }) {
+const CoffeeMap = React.memo(({ position, isMenuOpen, toggleMenu, item, items, setMapBounds }) => {
   const [map, setMap] = useState();
   const { latitude, longitude } = item;
   const positionMarker = [parseFloat(latitude), parseFloat(longitude)];
@@ -93,6 +106,14 @@ function SimpleExample({ position, isMenuOpen, toggleMenu, item, items }) {
       </Marker>
     ));
 
+  useEffect(() => {
+    if (map) {
+      const nowBounds = map.getBounds();
+      // console.log(nowBounds._northEast, nowBounds._southWest);
+      setMapBounds(nowBounds);
+    }
+  }, [map]);
+
   return (
     <MapContainer
       center={position}
@@ -102,7 +123,7 @@ function SimpleExample({ position, isMenuOpen, toggleMenu, item, items }) {
       animate
       whenCreated={setMap}
     >
-      <MyMap isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+      <MyMapEvent isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} setMapBounds={setMapBounds} />
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -119,10 +140,10 @@ function SimpleExample({ position, isMenuOpen, toggleMenu, item, items }) {
       <MarkerClusterGroup>{markers}</MarkerClusterGroup>
     </MapContainer>
   );
-}
+});
 
-SimpleExample.propTypes = {
+CoffeeMap.propTypes = {
   isMenuOpen: PropTypes.bool.isRequired,
   toggleMenu: PropTypes.func.isRequired,
 };
-export default SimpleExample;
+export default CoffeeMap;

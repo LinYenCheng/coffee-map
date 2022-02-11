@@ -17,10 +17,16 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
     name: '搜尋想去的咖啡店~',
     address: '顯示地址及粉專',
   });
+  // 地圖中心位置
   const [position, setPosition] = useState({ lng: 121.5598, lat: 25.08 });
+  // 所有項目
   const [items, setItems] = useState([]);
+  // 顯示的項目
   const [displayItems, setDisplayItems] = useState([]);
+  // 載入中
   const [isLoading, setIsLoading] = useState(true);
+  // 地圖顯示範圍
+  const [mapBounds, setMapBounds] = useState(false);
   const itemCoffee = item;
   let itemsCoffee = items;
   const strClassMenuOpen = isMenuOpen ? 'menu-open' : '';
@@ -56,18 +62,21 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
     toggleCondition();
   }
 
-  async function getCoffee(nowCheckedCities) {
+  async function getCoffee({ checkedCities, mapBounds }) {
     setIsLoading(true);
     // console.log('loading');
-    const arrResult = await APICoffee.getCoffee(nowCheckedCities);
+    const arrResult = await APICoffee.getCoffee({
+      checkedCities,
+      mapBounds,
+    });
     // console.log('loading done');
     setIsLoading(false);
     setItems(arrResult);
   }
 
   useEffect(() => {
-    getCoffee(checkedCities);
-  }, [checkedCities]);
+    getCoffee({ checkedCities, mapBounds });
+  }, [checkedCities, mapBounds]);
 
   if (items.length === 0) {
     itemsCoffee = [
@@ -142,6 +151,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
               items={itemsCoffee}
               isMenuOpen={isMenuOpen}
               toggleMenu={toggleMenu}
+              setMapBounds={setMapBounds}
             />
           </div>
         </div>
