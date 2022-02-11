@@ -38,6 +38,25 @@ html {
 // * {
 //   outline: 1px solid red;
 // }
+@media screen and (min-width: 720px) {
+  .container-fluid {
+    padding: 0 !important;
+    height: 100vh;
+
+    .row {
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+    }
+  }
+}
+
+.map__container {
+  height: 100vh;
+
+  .leaflet-container {
+    height: 100vh;
+  }
+}
 
 @media screen and (max-width: 720px) {
   .result__container {
