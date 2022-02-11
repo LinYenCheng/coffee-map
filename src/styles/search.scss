@@ -150,6 +150,13 @@
   z-index: 500;
   width: 375px;
 
+  .loadingMoreItems {
+    border-radius: 3px;
+    width: 100%;
+    border-bottom: 1px solid #cacaca;
+    outline: none;
+  }
+
   @media screen and (max-width: 720px) {
     left: auto;
     z-index: 499;
