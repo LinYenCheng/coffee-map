@@ -26,6 +26,11 @@ jobs:
             **/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
+      - name: lint js and jsx
+        run: |
+          npm install
+          npm run lint
+
       - name: generate new build
         run: |
           npm install
