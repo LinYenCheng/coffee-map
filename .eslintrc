@@ -11,8 +11,7 @@
   },
   "parser": "babel-eslint",
   "plugins": [
-    "prettier",
-    "only-warn"
+    "prettier"
   ],
   "rules": {
     "prefer-exponentiation-operator": "off",
