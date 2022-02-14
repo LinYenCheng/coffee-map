@@ -151,6 +151,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
               items={itemsCoffee}
               isMenuOpen={isMenuOpen}
               toggleMenu={toggleMenu}
+              mapBounds={mapBounds}
               setMapBounds={setMapBounds}
             />
           </div>
