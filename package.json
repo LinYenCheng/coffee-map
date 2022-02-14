@@ -1,11 +1,10 @@
 {
   "name": "react-leaflet-map",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "homepage": "http://linyencheng.github.io/coffee-map",
   "devDependencies": {
     "@vitejs/plugin-react": "^1.2.0",
-    
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.3.0",
