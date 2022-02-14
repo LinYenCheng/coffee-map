@@ -11,6 +11,18 @@ import { toggleMenu, toggleCondition } from '../actions';
 import APICoffee from '../api/APICoffee';
 import SearchElastic from '../components/SearchElastic';
 
+async function getCoffee({ checkedCities, mapBounds, setIsLoading, setItems }) {
+  setIsLoading(true);
+  // console.log('loading');
+  const arrResult = await APICoffee.getCoffee({
+    checkedCities,
+    mapBounds,
+  });
+  // console.log('loading done');
+  setIsLoading(false);
+  setItems(arrResult);
+}
+
 // eslint-disable-next-line no-shadow
 function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, toggleCondition }) {
   const [item, setItem] = useState({
@@ -62,20 +74,8 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
     toggleCondition();
   }
 
-  async function getCoffee({ checkedCities, mapBounds }) {
-    setIsLoading(true);
-    // console.log('loading');
-    const arrResult = await APICoffee.getCoffee({
-      checkedCities,
-      mapBounds,
-    });
-    // console.log('loading done');
-    setIsLoading(false);
-    setItems(arrResult);
-  }
-
   useEffect(() => {
-    getCoffee({ checkedCities, mapBounds });
+    getCoffee({ checkedCities, mapBounds, setIsLoading, setItems });
   }, [checkedCities, mapBounds]);
 
   if (items.length === 0) {

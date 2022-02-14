@@ -50,7 +50,7 @@ const CoffeeMap = React.memo(({ position, isMenuOpen, toggleMenu, item, items, s
       // console.log(nowBounds._northEast, nowBounds._southWest);
       setMapBounds(nowBounds);
     }
-  }, [map]);
+  }, [map, setMapBounds]);
 
   return (
     <MapContainer

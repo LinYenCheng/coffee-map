@@ -3,7 +3,7 @@ const item = (
     name: '搜尋想去的咖啡店~',
     address: '顯示地址及粉專',
   },
-  action,
+  action = '',
 ) => {
   switch (action.type) {
     case 'SELECT_PLACE':
