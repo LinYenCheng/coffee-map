@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Marker, Popup } from 'react-leaflet';
 
 function getStars(num) {
   switch (num) {

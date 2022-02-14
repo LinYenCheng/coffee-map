@@ -64,7 +64,7 @@ const SearchElastic = React.memo(
       if (items.length) {
         setDisplayItems(items.slice(0, intPageSize * page));
       }
-    }, [items, page]);
+    }, [items, page, setDisplayItems]);
 
     if (displayItems.length) {
       blockCards = displayItems.map((item, index) => {

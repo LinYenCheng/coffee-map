@@ -15,7 +15,7 @@ function MenuNav({ setPosition, checkedCities, checkedConditions, dispatch, togg
         onChange={() => {
           const tempCheckedCities = checkedCities.map(() => false);
           tempCheckedCities[index] = !checkedCities[index];
-          console.log(tempCheckedCities);
+          // console.log(tempCheckedCities);
           if (!checkedCities[index]) setPosition([city.lat, city.lng]);
           dispatch(toggleCheck(tempCheckedCities));
           toggleMenu();
