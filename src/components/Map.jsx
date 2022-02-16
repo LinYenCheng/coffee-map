@@ -72,7 +72,7 @@ const CoffeeMap = React.memo(
       <MapContainer
         center={position}
         zoom={14}
-        minZoom={12}
+        minZoom={10}
         maxZoom={18}
         zoomControl={false}
         animate
