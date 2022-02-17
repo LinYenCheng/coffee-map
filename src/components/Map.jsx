@@ -15,8 +15,8 @@ function CoffeeMapEvent({ isMenuOpen, toggleMenu, setMapBounds }) {
     moveend: () => {
       const zoom = map.getZoom();
       if (zoom > 14) {
-        const nowBounds = map.getBounds();
-        setMapBounds(nowBounds);
+        // const nowBounds = map.getBounds();
+        // setMapBounds(nowBounds);
       } else {
         setMapBounds(false);
       }

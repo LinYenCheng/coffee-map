@@ -17,7 +17,9 @@ function getStars(num) {
 }
 
 const PopupMarker = ({ position, item, isActive, map }) => {
-  const { url, name, address, wifi, seat, quiet, tasty, cheap, music } = item;
+  const nowItem = { ...item };
+  if (nowItem) nowItem.openTime = item.open_time;
+  const { url, name, address, wifi, seat, quiet, tasty, cheap, music, openTime, mrt } = nowItem;
   const [refReady, setRefReady] = useState(false);
   let popupRef = useRef();
 
@@ -28,6 +30,24 @@ const PopupMarker = ({ position, item, isActive, map }) => {
     }
   }, [isActive, refReady, map, position]);
   if (!isActive) return null;
+
+  function renderContentWithStars({ value, msg }) {
+    return (
+      <>
+        {value > 0 ? `${msg}: ${getStars(value)} ` : ' '}
+        {value > 0 ? <br /> : ''}
+      </>
+    );
+  }
+
+  function renderContentWithWord({ value, msg }) {
+    return (
+      <>
+        {value !== '' ? `${msg}: ${value} ` : ' '}
+        {value !== '' ? <br /> : ''}
+      </>
+    );
+  }
 
   return (
     <Marker position={{ lat: position[0], lng: position[1] }}>
@@ -43,18 +63,14 @@ const PopupMarker = ({ position, item, isActive, map }) => {
           <span>
             {address}
             <br />
-            {wifi > 0 ? `WIFI穩定: ${getStars(wifi)} ` : ' '}
-            {wifi > 0 ? <br /> : ''}
-            {seat > 0 ? `通常有位:  ${getStars(seat)} ` : ' '}
-            {seat > 0 ? <br /> : ''}
-            {quiet > 0 ? `安靜程度:  ${getStars(quiet)} ` : ' '}
-            {quiet > 0 ? <br /> : ''}
-            {tasty > 0 ? `咖啡好喝:  ${getStars(tasty)} ` : ' '}
-            {tasty > 0 ? <br /> : ''}
-            {cheap > 0 ? `價格便宜:  ${getStars(cheap)} ` : ' '}
-            {cheap > 0 ? <br /> : ''}
-            {music > 0 ? `裝潢音樂:  ${getStars(music)} ` : ' '}
-            {music > 0 ? <br /> : ''}
+            {renderContentWithStars({ msg: 'WIFI穩定', value: wifi })}
+            {renderContentWithStars({ msg: '通常有位', value: seat })}
+            {renderContentWithStars({ msg: '安靜程度', value: quiet })}
+            {renderContentWithStars({ msg: '咖啡好喝', value: tasty })}
+            {renderContentWithStars({ msg: '價格便宜', value: cheap })}
+            {renderContentWithStars({ msg: '裝潢音樂', value: music })}
+            {renderContentWithWord({ msg: '營業時間', value: openTime })}
+            {renderContentWithWord({ msg: '鄰近捷運', value: mrt })}
           </span>
           {url ? <a href={url}>粉絲專頁</a> : ''}
         </div>
