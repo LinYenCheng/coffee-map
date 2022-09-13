@@ -1,10 +1,14 @@
-name: Node CI
+name: schedule update data
 
 on:
-  pull_request:
-    types:
-      - opened
-
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: '1 12 * * 1'
+  push:
+    branches:
+      - master
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,3 +36,8 @@ jobs:
           npm run generate
           npm run build
           npm run postbuild
+
+      - name: Deploy 🚀
+              uses: JamesIves/github-pages-deploy-action@v4
+              with:
+                folder: build # The folder the action should deploy.
