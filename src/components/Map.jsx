@@ -20,7 +20,7 @@ function getStars(num) {
 }
 
 const PopupMarker = ({ position, item, isActive, map }) => {
-  const { url, name, address, wifi, seat, quiet, tasty, cheap, music } = item;
+  const { url, name, address, wifi, seat, quiet, tasty, cheap, music, limited_time } = item;
   const [refReady, setRefReady] = useState(false);
   let popupRef = useRef();
 
@@ -58,6 +58,7 @@ const PopupMarker = ({ position, item, isActive, map }) => {
             {cheap > 0 ? <br /> : ''}
             {music > 0 ? `裝潢音樂:  ${getStars(music)} ` : ' '}
             {music > 0 ? <br /> : ''}
+            {limited_time === 'no' && <span>不限時</span>}
           </span>
           {url ? <a href={url}>粉絲專頁</a> : ''}
         </div>

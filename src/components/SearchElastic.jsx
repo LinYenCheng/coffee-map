@@ -18,11 +18,18 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
   const searchWithKeyword = useCallback(
     async (event) => {
       if (event) event.preventDefault();
+      console.log('searchWithKeyword')
       const result = await APICoffee.searchWithKeyWord(`${strCheckedConditions} ${strInput}`);
       setItems(result);
     },
     [strCheckedConditions, strInput],
   );
+
+  useEffect(() => {
+    setTimeout(() => {
+      searchWithKeyword();
+    }, 800);
+  }, [])
 
   function handleChange(event) {
     setStrInput(event.target.value);
@@ -95,10 +102,10 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
         <ul>
           <li>
             <ol>
-              {item.limited_time === 'no' ? <li>無限時</li> : ''}
+              {item.limited_time === 'no' && <li>無限時</li>}
               {item.socket !== '' || item.socket !== 'no' ? <li>插座</li> : ''}
-              {item.wifi > 3 ? <li>WIFI</li> : ''}
-              {item.quiet > 3 ? <li>較安靜</li> : ''}
+              {item.wifi > 3 && <li>WIFI</li>}
+              {item.quiet > 3 && <li>較安靜</li>}
               {item.cheap > 3 ? <li>較便宜</li> : ''}
             </ol>
           </li>
