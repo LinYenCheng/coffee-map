@@ -75,13 +75,31 @@ function MyMap({ isMenuOpen, toggleMenu }) {
   return null;
 }
 
-function SimpleExample({ position, isMenuOpen, toggleMenu, item, items }) {
+function SimpleExample({ checkedConditions, position, isMenuOpen, toggleMenu, item, items }) {
   const [map, setMap] = useState();
   const { latitude, longitude } = item;
   const positionMarker = [parseFloat(latitude), parseFloat(longitude)];
   // const position = [24.8, 121.023];
   const markers = items
-    .filter((nowItem) => nowItem.lat)
+    .filter((nowItem) => {
+      const isSocketFilterEnable = checkedConditions[0] === true;
+      const isQuietFilterEnable = checkedConditions[1] === true;
+      const isNetWorkFilterEnable = checkedConditions[2] === true;
+
+      if (isSocketFilterEnable && !nowItem.socket) {
+        return false;
+      }
+
+      if (isQuietFilterEnable && !nowItem.quiet) {
+        return false;
+      }
+
+      if (isNetWorkFilterEnable && !nowItem.wifi) {
+        return false;
+      }
+       
+      return nowItem.lat;
+    })
     .map((nowItem, index) => (
       <Marker
         key={`${nowItem.lat}${nowItem.lng}${index}`}
