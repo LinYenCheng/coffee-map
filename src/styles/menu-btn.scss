@@ -18,6 +18,8 @@
 }
 
 .menu-open {
+  z-index: 999;
+
   #menu-button {
     left: 210px;
     background: rgba(41, 37, 47, 0);

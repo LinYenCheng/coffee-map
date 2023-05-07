@@ -9,7 +9,7 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
   const [page, setPage] = useState(1);
   const [items, setItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
-  const [strInput, setStrInput] = useState('網路');
+  const [strInput, setStrInput] = useState('');
   const strCheckedConditions = conditions
     .filter((condition, index) => checkedConditions[index])
     .map((condition) => condition.displayName)
@@ -18,7 +18,6 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
   const searchWithKeyword = useCallback(
     async (event) => {
       if (event) event.preventDefault();
-      console.log('searchWithKeyword')
       const result = await APICoffee.searchWithKeyWord(`${strCheckedConditions} ${strInput}`);
       setItems(result);
     },

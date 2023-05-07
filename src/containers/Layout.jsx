@@ -78,11 +78,14 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
     ];
   } else {
     itemsCoffee = items.map((nowItemCoffee) => {
-      const { latitude, longitude, name, address, wifi, seat, quiet, tasty, cheap, music } =
+      const { latitude, longitude, name, address, wifi, seat, quiet, tasty, cheap, music, socket } =
         nowItemCoffee;
       return {
         lat: parseFloat(latitude),
         lng: parseFloat(longitude),
+        wifi: wifi > 0,
+        socket: socket !== 'no',
+        quiet: quiet > 3,
         popup: `<div>
             <span style=${{ fontWeight: 800, fontSize: '16px' }}>${name}</span><br /> 
             <span>
@@ -130,6 +133,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
           </div>
           <div className="pb-1 col-md-8 col-sm-12 map__container">
             <Map
+              checkedConditions={checkedConditions}
               position={position}
               item={itemCoffee}
               items={itemsCoffee}
