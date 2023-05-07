@@ -30,5 +30,8 @@ jobs:
         run: |
           npm install
           npm run generate
-          npm run build
-          npm run postbuild
+          CI=false npm run build
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: docs # The folder the action should deploy.
