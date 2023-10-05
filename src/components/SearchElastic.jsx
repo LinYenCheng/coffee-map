@@ -56,7 +56,10 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
   }
 
   function handleScroll(e) {
-    if (e.target.scrollTop > e.target.clientHeight * page && items.length > intPageSize * page) {
+    if (
+      e.target.scrollTop + 122 > e.target.clientHeight * page &&
+      items.length > intPageSize * page
+    ) {
       setPage(page + 1);
     }
   }
