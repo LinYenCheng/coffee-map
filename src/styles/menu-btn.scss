@@ -17,6 +17,12 @@
   }
 }
 
+.menu-close {
+  nav {
+    display: none;
+  }
+}
+
 .menu-open {
   z-index: 999;
 

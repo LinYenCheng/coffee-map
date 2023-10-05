@@ -22,7 +22,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
   const [isLoading, setIsLoading] = useState(true);
   const itemCoffee = item;
   let itemsCoffee = items;
-  const strClassMenuOpen = isMenuOpen ? 'menu-open' : '';
+  const strClassMenuOpen = isMenuOpen ? 'menu-open' : 'menu-close';
 
   let blockLoading = '';
 
