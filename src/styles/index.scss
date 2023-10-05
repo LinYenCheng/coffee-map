@@ -1,5 +1,17 @@
+//theme
+@import 'primereact/resources/themes/lara-light-indigo/theme.css';
+@import 'primeicons/primeicons.css';
+
+$primary-color: #783d06;
+$header-height: 72px;
+
 * {
   box-sizing: border-box;
+}
+
+.header {
+  background: var(--outline, $primary-color);
+  height: $header-height;
 }
 
 body,

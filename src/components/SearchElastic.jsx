@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import APICoffee from '../api/APICoffee';
 import { conditions } from '../config';
+import TagNav from '../containers/TagNav';
 
 function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition }) {
   let blockCards = '';
@@ -28,7 +29,7 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
     setTimeout(() => {
       searchWithKeyword();
     }, 800);
-  }, [])
+  }, []);
 
   function handleChange(event) {
     setStrInput(event.target.value);
@@ -75,47 +76,69 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
   }, [items, page]);
 
   if (displayItems.length) {
-    blockCards = displayItems.map((item) => (
-      <div
-        role="presentation"
-        key={item.id}
-        className="card"
-        onClick={() => {
-          onSelect(item);
-          inputEl.current.blur();
-        }}
-        onFocus={() => {
-          onSelect(item);
-        }}
-        // onMouseOver={() => {
-        //   onSelect(item);
-        // }}
-        onTouchMove={() => {
-          onSelect(item);
-        }}
-        // onPointerOver={() => {
-        //   onSelect(item);
-        // }}
-      >
-        <h4>{item.name}</h4>
-        <ul>
-          <li>
-            <ol>
-              {item.limited_time === 'no' && <li>無限時</li>}
-              {item.socket !== '' || item.socket !== 'no' ? <li>插座</li> : ''}
-              {item.wifi > 3 && <li>WIFI</li>}
-              {item.quiet > 3 && <li>較安靜</li>}
-              {item.cheap > 3 ? <li>較便宜</li> : ''}
-            </ol>
-          </li>
-          <li>{`地址:${item.address}`}</li>
-          {item.open_time ? <li>{`營業時間: ${item.open_time}`}</li> : ''}
-          <li>
-            <a href={item.url}>粉絲專頁</a>
-          </li>
-        </ul>
-      </div>
-    ));
+    blockCards = displayItems.map((item) => {
+      const { cheap, music, quiet, seat, tasty, wifi } = item;
+      const score = ((cheap + music + quiet + seat + tasty + wifi) / 6).toFixed(1);
+      return (
+        <div
+          role="presentation"
+          key={item.id}
+          className="card"
+          onClick={() => {
+            onSelect(item);
+            inputEl.current.blur();
+          }}
+          onFocus={() => {
+            onSelect(item);
+          }}
+          // onMouseOver={() => {
+          //   onSelect(item);
+          // }}
+          onTouchMove={() => {
+            onSelect(item);
+          }}
+          // onPointerOver={() => {
+          //   onSelect(item);
+          // }}
+        >
+          <div className="card__title">
+            <a
+              className="h4"
+              href={item.url}
+              target="_blank"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              {item.name}
+            </a>
+            <span className="ms-2 score">{score}</span>
+            <i className="pi pi-star-fill score ms-1"></i>
+          </div>
+          <ul>
+            <li>
+              <ol>
+                {item.limited_time === 'no' && <li>無限時</li>}
+                {item.socket !== '' || item.socket !== 'no' ? <li>插座</li> : ''}
+                {item.wifi > 3 && <li>WIFI</li>}
+                {item.quiet > 3 && <li>較安靜</li>}
+                {item.cheap > 3 ? <li>較便宜</li> : ''}
+              </ol>
+            </li>
+            <li>
+              <i className="pi pi-map-marker me-2"></i>
+              <span>{item.address}</span>
+            </li>
+            {item.open_time && (
+              <li>
+                <i className="pi pi-clock me-2"></i>
+                <span>{item.open_time}</span>
+              </li>
+            )}
+          </ul>
+        </div>
+      );
+    });
   }
   let placeholderCondition = '輸入店名 地址';
   if (strCheckedConditions) {
@@ -156,7 +179,11 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
           {blockSearch}
         </form>
       </div>
-      <div className="search__result row" onScroll={handleScroll}>
+      <div className="search__result" onScroll={handleScroll}>
+        <div className="tag__container">
+          <span className="tag__title">排列順序</span>
+          <TagNav />
+        </div>
         <div>{blockCards}</div>
       </div>
     </>

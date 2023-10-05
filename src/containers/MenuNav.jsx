@@ -34,9 +34,7 @@ function MenuNav({ setPosition, checkedCities, checkedConditions, dispatch, togg
         onChange={() => {
           const tempCheckedConditions = checkedConditions.slice();
           tempCheckedConditions[index] = !checkedConditions[index];
-          // console.log(tempCheckedConditions, index);
           dispatch(toggleCondition(tempCheckedConditions));
-          toggleMenu();
         }}
       />
       <label htmlFor={condition.name} className="nav__label nav__label--condition">
@@ -48,8 +46,8 @@ function MenuNav({ setPosition, checkedCities, checkedConditions, dispatch, togg
   return (
     <nav>
       <ul>
-        {blockConditionList}
-        <br />
+        {/* {blockConditionList}
+        <br /> */}
         {blockList}
       </ul>
     </nav>

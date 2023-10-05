@@ -115,13 +115,14 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
   return (
     <div className="app">
       {blockLoading}
+      <div className="header"></div>
       <div className={strClassMenuOpen}>
         <MenuNav toggleMenu={toggleMenu} setPosition={setPosition} />
         <MenuBtn toggleMenu={toggleMenu} />
       </div>
-      <div className="container-fluid pt-2 ">
+      <div className="container-fluid p-0 ">
         <div className="row">
-          <div className="col-md-4 col-sm-12 result__container">
+          <div className="col-md-4 col-sm-12 result__container pe-0">
             {/* <Search items={items} onChange={handleSelect} /> */}
             <SearchElastic
               nowItem={item}
@@ -131,7 +132,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
               onHover={handleHover}
             />
           </div>
-          <div className="pb-1 col-md-8 col-sm-12 map__container">
+          <div className="pb-1 col-md-8 col-sm-12 map__container ps-0">
             <Map
               checkedConditions={checkedConditions}
               position={position}

@@ -29,7 +29,7 @@ nav {
 nav::before {
   content: '';
   position: absolute;
-  border-right: 1px solid rgba(41, 37, 47, .05);
+  border-right: 1px solid rgba(41, 37, 47, 0.05);
   top: 0;
   bottom: 0;
   left: -10px;
@@ -42,7 +42,6 @@ nav::before {
 }
 
 @keyframes wind {
-
   0%,
   100% {
     transform: none;
@@ -69,8 +68,7 @@ nav::before {
   cursor: pointer;
   display: inline-block;
   position: relative;
-  padding: 8px;
-  top: 10%;
+  padding: 4px;
   text-align: center;
 
   label {
@@ -91,7 +89,9 @@ nav::before {
   }
 
   .nav__label--condition {
-    border: 2px solid #E38B46;
+    border-radius: 8px;
+    border: 1px solid var(--grey4, #dbdbdb);
+    background: #fff;
   }
 
   input {
@@ -99,15 +99,15 @@ nav::before {
     left: -9999px;
   }
 
-  input:checked+.nav__label {
+  input:checked + .nav__label {
     background: #29252f;
     border: 2px solid #29252f;
     color: #fff;
   }
 
-  input:checked+.nav__label--condition {
-    background: #E38B46;
-    border: 2px solid #E38B46;
+  input:checked + .nav__label--condition {
+    background: #49454f;
+    border: 2px solid #49454f;
     color: #fff;
   }
 }
