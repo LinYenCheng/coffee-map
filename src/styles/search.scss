@@ -128,6 +128,15 @@ $header-height: 72px;
       margin-bottom: 16px;
       color: black;
     }
+
+    .li-width-50 {
+      display: inline-block;
+      width: calc(50% - 2rem);
+    }
+
+    .display-none {
+      display: none;
+    }
   }
 
   ol {

@@ -2,6 +2,22 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import APICoffee from '../api/APICoffee';
 import { conditions } from '../config';
 import TagNav from '../containers/TagNav';
+import classNames from 'classnames';
+
+function getStars(num) {
+  switch (num) {
+    case 5:
+      return '☆☆☆☆☆';
+    case 4:
+      return '☆☆☆☆';
+    case 3:
+      return '☆☆☆';
+    case 2:
+      return '☆☆';
+    default:
+      return '☆';
+  }
+}
 
 function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition }) {
   let blockCards = '';
@@ -80,12 +96,40 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
 
   if (displayItems.length) {
     blockCards = displayItems.map((item) => {
-      const { cheap, music, quiet, seat, tasty, wifi } = item;
+      const {
+        id,
+        name,
+        wifi,
+        seat,
+        quiet,
+        tasty,
+        cheap,
+        music,
+        address,
+        latitude,
+        longitude,
+        url,
+        limited_time,
+        // yes => Yes，一律有限時
+        // maybe => 看情況，假日或客滿限時
+        // no => No，一律不限時
+        socket,
+        // yes => Yes，很多
+        // maybe => 還好，看座位
+        // no => No，很少
+        standing_desk,
+        // yes => Yes，有些座位可以
+        // no => No，無法
+        mrt,
+        // 	這欄位是直接紀錄用戶回報時輸入的一串文字，因此格式沒有一致化，可能會有些亂。
+        open_time,
+        // 這欄位是直接紀錄用戶回報時輸入的一串文字，因此格式沒有一致化，可能會有些亂。
+      } = item;
       const score = ((cheap + music + quiet + seat + tasty + wifi) / 6).toFixed(1);
       return (
         <div
           role="presentation"
-          key={item.id}
+          key={id}
           className="card"
           onClick={() => {
             onSelect(item);
@@ -113,7 +157,7 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
                 e.stopPropagation();
               }}
             >
-              {item.name}
+              {name}
             </a>
             <span className="ms-2 score">{score}</span>
             <i className="pi pi-star-fill score ms-1"></i>
@@ -121,23 +165,54 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
           <ul>
             <li>
               <ol>
-                {item.limited_time === 'no' && <li>無限時</li>}
-                {item.socket !== '' || item.socket !== 'no' ? <li>插座</li> : ''}
-                {item.wifi > 3 && <li>WIFI</li>}
-                {item.quiet > 3 && <li>較安靜</li>}
-                {item.cheap > 3 ? <li>較便宜</li> : ''}
+                {wifi > 3 && <li>WIFI</li>}
+                <li
+                  className={classNames({
+                    'display-none': socket === 'no',
+                  })}
+                >
+                  插座
+                </li>
+                <li
+                  className={classNames({
+                    'display-none': limited_time === 'yes',
+                  })}
+                >
+                  無限時
+                </li>
+                <li
+                  className={classNames({
+                    'display-none': standing_desk === 'no',
+                  })}
+                >
+                  站位
+                </li>
               </ol>
             </li>
             <li>
               <i className="pi pi-map-marker me-2"></i>
-              <span>{item.address}</span>
+              <span>{address}</span>
             </li>
-            {item.open_time && (
-              <li>
-                <i className="pi pi-clock me-2"></i>
-                <span>{item.open_time}</span>
-              </li>
-            )}
+            <li
+              className={classNames({
+                'display-none': !open_time,
+              })}
+            >
+              <i className="pi pi-clock me-2"></i>
+              <span>{open_time}</span>
+            </li>
+            <hr />
+            <li
+              className={classNames('li-width-50', {
+                'display-none': !mrt,
+              })}
+            >{`捷運: ${mrt}`}</li>
+            <li className="li-width-50">{`座位數量: ${getStars(seat)}`}</li>
+            <li className="li-width-50">{`WIFI: ${getStars(wifi)}`}</li>
+            <li className="li-width-50">{`安靜程度: ${getStars(quiet)}`}</li>
+            <li className="li-width-50">{`咖啡好喝: ${getStars(tasty)}`}</li>
+            <li className="li-width-50">{`價位便宜: ${getStars(cheap)}`}</li>
+            <li className="li-width-50">{`裝潢音樂: ${getStars(music)}`}</li>
           </ul>
         </div>
       );
