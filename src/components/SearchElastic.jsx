@@ -4,6 +4,14 @@ import { conditions } from '../config';
 import TagNav from '../containers/TagNav';
 import classNames from 'classnames';
 
+import srcMRT from './assets/icon_mrt.png';
+import srcChair from './assets/icon_chair.png';
+import srcWIFI from './assets/icon_wifi.png';
+import srcNoCell from './assets/icon_no_cell.png';
+import srcCoffee from './assets/icon_coffee_maker.png';
+import srcMoney from './assets/icon_money.png';
+import srcStar from './assets/icon_star.png';
+
 function getStars(num) {
   switch (num) {
     case 5:
@@ -130,7 +138,7 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
         <div
           role="presentation"
           key={id}
-          className="card"
+          className="card pt-3 ps-4"
           onClick={() => {
             onSelect(item);
             inputEl.current.blur();
@@ -206,13 +214,34 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
               className={classNames('li-width-50', {
                 'display-none': !mrt,
               })}
-            >{`捷運: ${mrt}`}</li>
-            <li className="li-width-50">{`座位數量: ${getStars(seat)}`}</li>
-            <li className="li-width-50">{`WIFI: ${getStars(wifi)}`}</li>
-            <li className="li-width-50">{`安靜程度: ${getStars(quiet)}`}</li>
-            <li className="li-width-50">{`咖啡好喝: ${getStars(tasty)}`}</li>
-            <li className="li-width-50">{`價位便宜: ${getStars(cheap)}`}</li>
-            <li className="li-width-50">{`裝潢音樂: ${getStars(music)}`}</li>
+            >
+              <img alt="" src={srcMRT} />
+              <span className="ms-1">{`捷運：${mrt}`}</span>
+            </li>
+            <li className="li-width-50">
+              <img alt="" src={srcChair} />
+              <span className="ms-1">{`座位數量：${getStars(seat)}`}</span>
+            </li>
+            <li className="li-width-50">
+              <img alt="" src={srcWIFI} />
+              <span className="ms-1">{`WIFI：${getStars(wifi)}`}</span>
+            </li>
+            <li className="li-width-50">
+              <img alt="" src={srcNoCell} />
+              <span className="ms-1">{`安靜程度：${getStars(quiet)}`}</span>
+            </li>
+            <li className="li-width-50">
+              <img alt="" src={srcCoffee} />
+              <span className="ms-1">{`咖啡好喝：${getStars(tasty)}`}</span>
+            </li>
+            <li className="li-width-50">
+              <img alt="" src={srcMoney} />
+              <span className="ms-1">{`價位便宜：${getStars(cheap)}`}</span>
+            </li>
+            <li className="li-width-50">
+              <img alt="" src={srcStar} />
+              <span className="ms-1">{`裝潢音樂：${getStars(music)}`}</span>
+            </li>
           </ul>
         </div>
       );
@@ -262,7 +291,7 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
           <span className="tag__title">排列順序</span>
           <TagNav />
         </div>
-        <div>{blockCards}</div>
+        {blockCards}
       </div>
     </>
   );

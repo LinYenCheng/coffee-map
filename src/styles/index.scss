@@ -50,16 +50,26 @@ html {
 // * {
 //   outline: 1px solid red;
 // }
+@media screen and (min-width: 720px) {
+  .desktop-hide {
+    display: none;
+  }
+}
 
 @media screen and (max-width: 720px) {
+  .mobile-hide {
+    display: none;
+  }
+
   .result__container {
-    height: calc(65vh - 4rem);
+    height: calc(100vh - 72px);
+    overflow: scroll;
   }
 
   .map__container {
     height: 40vh;
     .leaflet-container {
-      margin-top: 16px;
+      display: none;
       height: 40vh;
       width: 100%;
     }
@@ -71,7 +81,6 @@ html {
 }
 
 .leaflet-container {
-  /*height: 100vh;*/
   height: calc(100vh - 1rem);
   width: 100%;
 }

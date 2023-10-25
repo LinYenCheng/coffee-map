@@ -86,7 +86,6 @@ $header-height: 72px;
 
 .card {
   cursor: pointer !important;
-  padding: 10px;
   background-color: #ffffff;
   border-bottom: 1px solid #cacaca;
 
@@ -181,7 +180,7 @@ $header-height: 72px;
   background: rgba(255, 255, 255, 0.9);
   font-size: 90%;
   overflow: auto;
-  max-height: calc(100vh - 65px - 1rem);
+  max-height: calc(100vh - 72px);
   top: calc($header-height + 8px);
 
   .tag__container {
