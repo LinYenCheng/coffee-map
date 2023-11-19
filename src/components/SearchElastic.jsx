@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useImperativeHandle } from 'react';
 import APICoffee from '../api/APICoffee';
 import { conditions } from '../config';
 import TagNav from '../containers/TagNav';
@@ -27,7 +27,14 @@ function getStars(num) {
   }
 }
 
-function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition }) {
+function SearchElastic({
+  onHover,
+  checkedConditions,
+  nowItem,
+  toggleCondition,
+  forwardedRef,
+  bounds,
+}) {
   let blockCards = '';
   const inputEl = useRef(null);
   const intPageSize = 10;
@@ -43,11 +50,22 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
   const searchWithKeyword = useCallback(
     async (event) => {
       if (event) event.preventDefault();
-      const result = await APICoffee.searchWithKeyWord(`${strCheckedConditions} ${strInput}`);
+      const result = await APICoffee.searchWithKeyWord({
+        keyWord: `${strCheckedConditions} ${strInput}`,
+        bounds,
+      });
+
       setItems(result);
     },
-    [strCheckedConditions, strInput],
+    [strCheckedConditions, strInput, bounds],
   );
+
+  useImperativeHandle(forwardedRef, () => ({
+    search: () => {
+      console.log('search');
+      searchWithKeyword();
+    },
+  }));
 
   useEffect(() => {
     setTimeout(() => {
@@ -67,7 +85,6 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
 
   function onSelect(item) {
     if (item && nowItem && item.id !== nowItem.id) {
-      // console.log(item);
       onHover(item);
       inputEl.current.blur();
     }
@@ -276,9 +293,7 @@ function SearchElastic({ onHover, checkedConditions, nowItem, toggleCondition })
             value={strInput}
             onChange={handleChange}
             ref={inputEl}
-            onClick={() => {
-              searchWithKeyword();
-            }}
+            onClick={searchWithKeyword}
             onKeyPress={handleKeyPress}
             placeholder={`${placeholderCondition}`}
           />

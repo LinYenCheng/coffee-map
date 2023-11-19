@@ -27,7 +27,7 @@ const PopupMarker = ({ position, item, isActive, map }) => {
   useEffect(() => {
     if (refReady && isActive) {
       popupRef.openOn(map);
-      map.panTo({ lat: position[0], lng: position[1] });
+      // map.panTo({ lat: position[0], lng: position[1] });
     }
   }, [isActive, refReady, map, position]);
   if (!isActive) return null;
@@ -67,50 +67,80 @@ const PopupMarker = ({ position, item, isActive, map }) => {
   );
 };
 
-function MyMap({ isMenuOpen, toggleMenu }) {
+function MyMap({ search, setBounds, setZoom, resetItem }) {
   // eslint-disable-next-line no-unused-vars
   const map = useMapEvent('click', () => {
-    if (isMenuOpen) toggleMenu();
+    resetItem();
   });
+
+  useMapEvent('moveend', () => {
+    if (map) {
+      const mapBounds = map.getBounds();
+      const zoom = map.getZoom();
+      setZoom(zoom);
+      setBounds({
+        northEast: mapBounds.getNorthEast(),
+        southWest: mapBounds.getSouthWest(),
+      });
+    }
+    resetItem();
+    search();
+  });
+
   return null;
 }
 
-function SimpleExample({ checkedConditions, position, isMenuOpen, toggleMenu, item, items }) {
+function SimpleExample({ checkedConditions, position, item, items, setBounds, search, resetItem }) {
   const [map, setMap] = useState();
+  const [zoom, setZoom] = useState(12);
   const { latitude, longitude } = item;
   const positionMarker = [parseFloat(latitude), parseFloat(longitude)];
   // const position = [24.8, 121.023];
-  const markers = items
-    .filter((nowItem) => {
-      const isSocketFilterEnable = checkedConditions[0] === true;
-      const isQuietFilterEnable = checkedConditions[1] === true;
-      const isNetWorkFilterEnable = checkedConditions[2] === true;
 
-      if (isSocketFilterEnable && !nowItem.socket) {
-        return false;
-      }
+  const markers =
+    zoom > 11
+      ? items
+          .filter((nowItem) => {
+            const isSocketFilterEnable = checkedConditions[0] === true;
+            const isQuietFilterEnable = checkedConditions[1] === true;
+            const isNetWorkFilterEnable = checkedConditions[2] === true;
 
-      if (isQuietFilterEnable && !nowItem.quiet) {
-        return false;
-      }
+            if (isSocketFilterEnable && !nowItem.socket) {
+              return false;
+            }
 
-      if (isNetWorkFilterEnable && !nowItem.wifi) {
-        return false;
-      }
-       
-      return nowItem.lat;
-    })
-    .map((nowItem, index) => (
-      <Marker
-        key={`${nowItem.lat}${nowItem.lng}${index}`}
-        opacity={0.6}
-        position={[parseFloat(nowItem.lat), parseFloat(nowItem.lng)]}
-      >
-        <Popup>
-          <div dangerouslySetInnerHTML={{ __html: nowItem.popup }} />
-        </Popup>
-      </Marker>
-    ));
+            if (isQuietFilterEnable && !nowItem.quiet) {
+              return false;
+            }
+
+            if (isNetWorkFilterEnable && !nowItem.wifi) {
+              return false;
+            }
+
+            return nowItem.lat;
+          })
+          .map((nowItem, index) => (
+            <Marker
+              key={`${nowItem.lat}${nowItem.lng}${index}`}
+              opacity={0.6}
+              position={[parseFloat(nowItem.lat), parseFloat(nowItem.lng)]}
+            >
+              <Popup>
+                <div dangerouslySetInnerHTML={{ __html: nowItem.popup }} />
+              </Popup>
+            </Marker>
+          ))
+      : [];
+
+  const handleMapLoad = (map) => {
+    const mapInstance = map;
+    const mapBounds = mapInstance.getBounds();
+    setBounds({
+      northEast: mapBounds.getNorthEast(),
+      southWest: mapBounds.getSouthWest(),
+    });
+    setMap(mapInstance);
+  };
 
   return (
     <MapContainer
@@ -119,9 +149,9 @@ function SimpleExample({ checkedConditions, position, isMenuOpen, toggleMenu, it
       maxZoom={18}
       zoomControl={false}
       animate
-      whenCreated={setMap}
+      whenCreated={handleMapLoad}
     >
-      <MyMap isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+      <MyMap setBounds={setBounds} setZoom={setZoom} search={search} resetItem={resetItem} />
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -140,8 +170,5 @@ function SimpleExample({ checkedConditions, position, isMenuOpen, toggleMenu, it
   );
 }
 
-SimpleExample.propTypes = {
-  isMenuOpen: PropTypes.bool.isRequired,
-  toggleMenu: PropTypes.func.isRequired,
-};
+SimpleExample.propTypes = {};
 export default SimpleExample;

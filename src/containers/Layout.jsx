@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 
 import Map from '../components/Map';
-// import Search from '../components/Search';
-import MenuBtn from '../components/MenuBtn';
-import MenuNav from './MenuNav';
 
 import '../styles/search.scss';
 import { toggleMenu, toggleCondition } from '../actions';
@@ -13,6 +10,7 @@ import SearchElastic from '../components/SearchElastic';
 
 // eslint-disable-next-line no-shadow
 function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, toggleCondition }) {
+  const searchRef = useRef(null);
   const [item, setItem] = useState({
     name: '搜尋想去的咖啡店~',
     address: '顯示地址及粉專',
@@ -22,7 +20,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
   const [isLoading, setIsLoading] = useState(true);
   const itemCoffee = item;
   let itemsCoffee = items;
-  const strClassMenuOpen = isMenuOpen ? 'menu-open' : 'menu-close';
+  const [bounds, setBounds] = useState(null);
 
   let blockLoading = '';
 
@@ -38,12 +36,6 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
         return '★★';
       default:
         return '★';
-    }
-  }
-
-  function handleHover(_item) {
-    if (item && _item && item.id !== _item.id) {
-      setItem(_item);
     }
   }
 
@@ -64,6 +56,17 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
     setItems(arrResult);
   }
 
+  const search = () => {
+    searchRef.current.search();
+  };
+
+  const resetItem = () => {
+    setItem({
+      name: '搜尋想去的咖啡店~',
+      address: '顯示地址及粉專',
+    });
+  };
+
   useEffect(() => {
     getCoffee(checkedCities);
   }, [checkedCities]);
@@ -77,16 +80,38 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
       },
     ];
   } else {
-    itemsCoffee = items.map((nowItemCoffee) => {
-      const { latitude, longitude, name, address, wifi, seat, quiet, tasty, cheap, music, socket } =
-        nowItemCoffee;
-      return {
-        lat: parseFloat(latitude),
-        lng: parseFloat(longitude),
-        wifi: wifi > 0,
-        socket: socket !== 'no',
-        quiet: quiet > 3,
-        popup: `<div>
+    const { northEast, southWest } = bounds;
+    itemsCoffee = items
+      .filter((nowItemCoffee) => {
+        const { latitude, longitude } = nowItemCoffee;
+        return (
+          latitude > southWest.lat &&
+          longitude > southWest.lng &&
+          latitude < northEast.lat &&
+          longitude < northEast.lng
+        );
+      })
+      .map((nowItemCoffee) => {
+        const {
+          latitude,
+          longitude,
+          name,
+          address,
+          wifi,
+          seat,
+          quiet,
+          tasty,
+          cheap,
+          music,
+          socket,
+        } = nowItemCoffee;
+        return {
+          lat: parseFloat(latitude),
+          lng: parseFloat(longitude),
+          wifi: wifi > 0,
+          socket: socket !== 'no',
+          quiet: quiet > 3,
+          popup: `<div>
             <span style=${{ fontWeight: 800, fontSize: '16px' }}>${name}</span><br /> 
             <span>
             ${address}<br />
@@ -99,8 +124,8 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
             </span>
             ${item.url ? `<a href=${item.url}>粉絲專頁</a>` : ''}
           </div>`,
-      };
-    });
+        };
+      });
   }
 
   if (isLoading) {
@@ -116,20 +141,18 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
     <div className="app">
       {blockLoading}
       <div className="header"></div>
-      <div className={strClassMenuOpen}>
-        <MenuNav toggleMenu={toggleMenu} setPosition={setPosition} />
-        <MenuBtn toggleMenu={toggleMenu} />
-      </div>
       <div className="container-fluid p-0 ">
         <div className="row">
           <div className="col-md-4 col-sm-12 result__container p-0">
             {/* <Search items={items} onChange={handleSelect} /> */}
             <SearchElastic
+              forwardedRef={searchRef}
               nowItem={item}
               toggleCondition={toggleCondition}
               checkedConditions={checkedConditions}
               onChange={handleSelect}
-              onHover={handleHover}
+              onHover={handleSelect}
+              bounds={bounds}
             />
           </div>
           <div className="pb-1 col-md-8 col-sm-12 map__container p-0">
@@ -138,8 +161,9 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
               position={position}
               item={itemCoffee}
               items={itemsCoffee}
-              isMenuOpen={isMenuOpen}
-              toggleMenu={toggleMenu}
+              setBounds={setBounds}
+              search={search}
+              resetItem={resetItem}
             />
           </div>
         </div>

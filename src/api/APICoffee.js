@@ -12,15 +12,8 @@ const indexSearch = lunr(function generateLunr() {
   this.field('wifiGood');
 });
 
-const arrResultCities = cities.map((city) => {
-  if (city.coffeeShops) {
-    return city;
-  }
-  return { ...city, coffeeShops: [] };
-});
-
 const getShops = async (city) => {
-  const res = await axios.get(`${import.meta.env.BASE_URL}/cafedata/${city.name}.json`);
+  const res = await axios.get(`${import.meta.env.BASE_URL}/cafedata/taiwan.json`);
   if (res.data) {
     res.data.forEach((shop) => {
       indexSearch.add({
@@ -37,48 +30,40 @@ const getShops = async (city) => {
       // });
       // indexSearch.add(shop);
     });
-    city.coffeeShops = res.data;
-    city.checked = true;
-    return city;
+    return res.data;
   }
-  return city;
+  return [];
 };
 
 async function getCoffee(checkedCities) {
-  const coffeeShops = await Promise.all(
-    checkedCities.map((isChecked, index) => {
-      if (isChecked && !arrResultCities[index].coffeeShops.length) {
-        // console.log('get', arrResultCities[index].name);
-        const res = getShops(arrResultCities[index]);
-        return res;
-      }
-      if (!isChecked) arrResultCities[index].checked = false;
-      if (isChecked) arrResultCities[index].checked = true;
-      return arrResultCities[index];
-    }),
-  );
-  let tempShops = [];
-  // console.log(coffeeShops);
-  coffeeShops.forEach((coffeeShop) => {
-    if (coffeeShop.checked) tempShops = tempShops.concat(coffeeShop.coffeeShops);
-  });
-  return tempShops;
+  const coffeeShops = await getShops();
+  return coffeeShops;
 }
 
-async function searchWithKeyWord(keyWord) {
+async function searchWithKeyWord({ bounds, keyWord }) {
   let finalResult = [];
+  const coffeeShops = await getShops();
   if (keyWord.toString().trim() !== '') {
     const results = await indexSearch.search(keyWord);
     if (results && results.length) {
       const searchResults = results.map((result) => result.ref);
-      let tempShops = [];
-      arrResultCities
-        .filter((city) => city.checked)
-        .forEach((city) => {
-          tempShops = tempShops.concat(city.coffeeShops);
-        });
-      tempShops = tempShops.filter((coffeeShop) => searchResults.indexOf(coffeeShop.id) !== -1);
 
+      let tempShops = coffeeShops;
+
+      tempShops = tempShops.filter((coffeeShop) => {
+        if (bounds) {
+          const { southWest, northEast } = bounds;
+          const { latitude, longitude } = coffeeShop;
+          return (
+            parseFloat(latitude) > southWest.lat &&
+            parseFloat(longitude) > southWest.lng &&
+            parseFloat(latitude) < northEast.lat &&
+            parseFloat(longitude) < northEast.lng &&
+            searchResults.indexOf(coffeeShop.id) !== -1
+          );
+        }
+        return searchResults.indexOf(coffeeShop.id) !== -1;
+      });
       finalResult = tempShops;
     }
   }
