@@ -104,6 +104,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
           cheap,
           music,
           socket,
+          url,
         } = nowItemCoffee;
         return {
           lat: parseFloat(latitude),
@@ -122,7 +123,7 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
             ${cheap > 0 ? `價格便宜:  ${getStars(cheap)}` : ''} ${cheap > 0 ? '<br />' : ''}
             ${music > 0 ? `裝潢音樂:  ${getStars(music)}` : ''} ${music > 0 ? '<br />' : ''}
             </span>
-            ${item.url ? `<a href=${item.url}>粉絲專頁</a>` : ''}
+            ${url ? `<a href=${url}>粉絲專頁</a>` : ''}
           </div>`,
         };
       });

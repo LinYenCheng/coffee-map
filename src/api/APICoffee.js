@@ -66,6 +66,22 @@ async function searchWithKeyWord({ bounds, keyWord }) {
       });
       finalResult = tempShops;
     }
+  } else {
+    let tempShops = coffeeShops;
+
+    tempShops = tempShops.filter((coffeeShop) => {
+      if (bounds) {
+        const { southWest, northEast } = bounds;
+        const { latitude, longitude } = coffeeShop;
+        return (
+          parseFloat(latitude) > southWest.lat &&
+          parseFloat(longitude) > southWest.lng &&
+          parseFloat(latitude) < northEast.lat &&
+          parseFloat(longitude) < northEast.lng
+        );
+      }
+    });
+    finalResult = tempShops;
   }
   return finalResult;
 }

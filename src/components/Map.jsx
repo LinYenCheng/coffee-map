@@ -19,49 +19,55 @@ function getStars(num) {
   }
 }
 
-const PopupMarker = ({ position, item, isActive, map }) => {
+const PopupContent = ({ item }) => {
+  if (!item) return <></>;
   const { url, name, address, wifi, seat, quiet, tasty, cheap, music, limited_time } = item;
-  const [refReady, setRefReady] = useState(false);
+  return (
+    <div>
+      <span style={{ fontWeight: 800, fontSize: '16px' }}>{name}</span>
+      <br />
+      <span>
+        {address}
+        <br />
+        {wifi > 0 ? `WIFI穩定: ${getStars(wifi)} ` : ' '}
+        {wifi > 0 ? <br /> : ''}
+        {seat > 0 ? `通常有位:  ${getStars(seat)} ` : ' '}
+        {seat > 0 ? <br /> : ''}
+        {quiet > 0 ? `安靜程度:  ${getStars(quiet)} ` : ' '}
+        {quiet > 0 ? <br /> : ''}
+        {tasty > 0 ? `咖啡好喝:  ${getStars(tasty)} ` : ' '}
+        {tasty > 0 ? <br /> : ''}
+        {cheap > 0 ? `價格便宜:  ${getStars(cheap)} ` : ' '}
+        {cheap > 0 ? <br /> : ''}
+        {music > 0 ? `裝潢音樂:  ${getStars(music)} ` : ' '}
+        {music > 0 ? <br /> : ''}
+        {limited_time === 'no' && <span>不限時</span>}
+      </span>
+      {url ? <a href={url}>粉絲專頁</a> : ''}
+    </div>
+  );
+};
+
+const PopupMarker = ({ position, item, isActive, map }) => {
   let popupRef = useRef();
 
   useEffect(() => {
-    if (refReady && isActive) {
-      popupRef.openOn(map);
+    if (isActive) {
+      if (popupRef.current) {
+        popupRef.current.openOn(map);
+      }
       // map.panTo({ lat: position[0], lng: position[1] });
+    } else {
+      if (popupRef.current) {
+        popupRef.current?.remove();
+      }
     }
-  }, [isActive, refReady, map, position]);
-  if (!isActive) return null;
+  }, [isActive, map]);
 
   return (
-    <Marker position={{ lat: position[0], lng: position[1] }}>
-      <Popup
-        ref={(r) => {
-          popupRef = r;
-          setRefReady(true);
-        }}
-      >
-        <div>
-          <span style={{ fontWeight: 800, fontSize: '16px' }}>{name}</span>
-          <br />
-          <span>
-            {address}
-            <br />
-            {wifi > 0 ? `WIFI穩定: ${getStars(wifi)} ` : ' '}
-            {wifi > 0 ? <br /> : ''}
-            {seat > 0 ? `通常有位:  ${getStars(seat)} ` : ' '}
-            {seat > 0 ? <br /> : ''}
-            {quiet > 0 ? `安靜程度:  ${getStars(quiet)} ` : ' '}
-            {quiet > 0 ? <br /> : ''}
-            {tasty > 0 ? `咖啡好喝:  ${getStars(tasty)} ` : ' '}
-            {tasty > 0 ? <br /> : ''}
-            {cheap > 0 ? `價格便宜:  ${getStars(cheap)} ` : ' '}
-            {cheap > 0 ? <br /> : ''}
-            {music > 0 ? `裝潢音樂:  ${getStars(music)} ` : ' '}
-            {music > 0 ? <br /> : ''}
-            {limited_time === 'no' && <span>不限時</span>}
-          </span>
-          {url ? <a href={url}>粉絲專頁</a> : ''}
-        </div>
+    <Marker position={item ? { lat: position[0], lng: position[1] } : null}>
+      <Popup ref={popupRef}>
+        <PopupContent item={item} />
       </Popup>
     </Marker>
   );
@@ -70,7 +76,7 @@ const PopupMarker = ({ position, item, isActive, map }) => {
 function MyMap({ search, setBounds, setZoom, resetItem }) {
   // eslint-disable-next-line no-unused-vars
   const map = useMapEvent('click', () => {
-    resetItem();
+    // resetItem();
   });
 
   useMapEvent('moveend', () => {
@@ -93,8 +99,10 @@ function MyMap({ search, setBounds, setZoom, resetItem }) {
 function SimpleExample({ checkedConditions, position, item, items, setBounds, search, resetItem }) {
   const [map, setMap] = useState();
   const [zoom, setZoom] = useState(12);
-  const { latitude, longitude } = item;
-  const positionMarker = [parseFloat(latitude), parseFloat(longitude)];
+  const positionMarker = [
+    parseFloat(item?.latitude || 24.8),
+    parseFloat(item?.longitude || 121.023),
+  ];
   // const position = [24.8, 121.023];
 
   const markers =
@@ -159,11 +167,8 @@ function SimpleExample({ checkedConditions, position, item, items, setBounds, se
       <PopupMarker
         position={positionMarker}
         map={map}
-        data={{
-          position: [20.27, -156],
-        }}
         item={item}
-        isActive={latitude && item.name}
+        isActive={item?.latitude && item.name}
       />
       <MarkerClusterGroup>{markers}</MarkerClusterGroup>
     </MapContainer>

@@ -107,6 +107,8 @@ function SearchElastic({
 
   useEffect(() => {
     if (strCheckedConditions !== '') {
+      searchWithKeyword();
+    } else {
       setTimeout(() => {
         searchWithKeyword();
       }, 50);

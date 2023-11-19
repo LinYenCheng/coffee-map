@@ -134,7 +134,7 @@ const conditions = [
   {
     name: 'wifi',
     displayName: '網路',
-    checked: true,
+    checked: false,
   },
 ];
 
