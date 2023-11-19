@@ -25,6 +25,8 @@
     "classnames": "^2.3.2",
     "leaflet": "^1.9.3",
     "leaflet.markercluster": "^1.5.3",
+    "localforage": "^1.10.0",
+    "match-sorter": "^6.3.1",
     "primeicons": "^6.0.1",
     "primereact": "^10.0.2",
     "prop-types": "^15.8.1",
@@ -33,10 +35,13 @@
     "react-leaflet": "^3.2.2",
     "react-leaflet-markercluster": "^3.0.0-rc1",
     "react-redux": "^8.0.5",
+    "react-router-dom": "^6.19.0",
     "redux": "^4.2.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.2",
-    "shx": "^0.3.4"
+    "shx": "^0.3.4",
+    "sort-by": "^1.2.0",
+    "swr": "^2.2.4"
   },
   "scripts": {
     "start": "vite",

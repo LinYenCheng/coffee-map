@@ -1,11 +1,17 @@
 import React from 'react';
 import { render } from 'react-dom';
+import {
+  createHashRouter,
+  RouterProvider,
+  createRoutesFromElements,
+  Route,
+} from 'react-router-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 // Logger with default options
 import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
-import Layout from './containers/Layout';
+import Layout from './pages/Layout';
 
 import './styles/index.scss';
 
@@ -30,9 +36,17 @@ const enhancer = composeEnhancers(
 );
 const store = createStore(reducer, enhancer);
 
+const router = createHashRouter(
+  createRoutesFromElements(
+    <>
+      <Route path="/" element={<Layout />} />
+    </>,
+  ),
+);
+
 render(
   <Provider store={store}>
-    <Layout />
+    <RouterProvider router={router} />
   </Provider>,
   document.getElementById('root'),
 );
