@@ -1,49 +1,8 @@
 /* eslint-disable no-param-reassign */
-import axios from 'axios';
-
 import calculateScore from '../util/calculateScore';
 
-const { lunr } = window;
-const indexSearch = lunr(function generateLunr() {
-  this.field('name');
-  this.field('address');
-  this.field('strSocket');
-  this.field('quietAways');
-  this.field('wifiGood');
-});
-
-const getShops = async (city) => {
-  const res = await axios.get(`${import.meta.env.BASE_URL}/cafedata/taiwan.json`);
-  if (res.data) {
-    res.data.forEach((shop) => {
-      indexSearch.add({
-        ...shop,
-        strSocket: shop && shop.socket === 'yes' ? '插座' : '',
-        quietAways: shop && shop.quiet > 3 ? '安靜' : '',
-        wifiGood: shop && shop.wifi > 3 ? '網路' : '',
-        score: calculateScore({ ...shop }),
-      });
-      // console.log({
-      //   ...shop,
-      //   strSocket: shop && shop.socket === 'yes' ? '插座' : '',
-      //   quietAways: shop && shop.quiet > 3 ? '安靜' : '',
-      //   wifiGood: shop && shop.wifi > 3 ? '網路' : '',
-      // });
-      // indexSearch.add(shop);
-    });
-    return res.data;
-  }
-  return [];
-};
-
-async function getCoffee() {
-  const coffeeShops = await getShops();
-  return coffeeShops;
-}
-
-async function searchWithKeyWord({ bounds, keyWord }) {
+async function searchWithKeyWord({ coffeeShops, bounds, keyWord }) {
   let finalResult = [];
-  const coffeeShops = await getShops();
   if (keyWord.toString().trim() !== '') {
     const results = await indexSearch.search(keyWord);
     if (results && results.length) {
@@ -98,7 +57,6 @@ async function searchWithKeyWord({ bounds, keyWord }) {
 }
 
 const APICoffee = {
-  getCoffee,
   searchWithKeyWord,
 };
 

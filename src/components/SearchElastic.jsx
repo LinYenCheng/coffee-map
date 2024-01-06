@@ -11,6 +11,7 @@ import srcNoCell from './assets/icon_no_cell.png';
 import srcCoffee from './assets/icon_coffee_maker.png';
 import srcMoney from './assets/icon_money.png';
 import srcStar from './assets/icon_star.png';
+import useCafeShopsStore from '../store/useCafesStore';
 
 function getStars(num) {
   switch (num) {
@@ -35,6 +36,7 @@ function SearchElastic({
   forwardedRef,
   bounds,
 }) {
+  const { coffeeShops } = useCafeShopsStore();
   let blockCards = '';
   const inputEl = useRef(null);
   const intPageSize = 10;
@@ -51,13 +53,14 @@ function SearchElastic({
     async (event) => {
       if (event) event.preventDefault();
       const result = await APICoffee.searchWithKeyWord({
+        coffeeShops: coffeeShops,
         keyWord: `${strCheckedConditions} ${strInput}`,
         bounds,
       });
 
       setItems(result);
     },
-    [strCheckedConditions, strInput, bounds],
+    [strCheckedConditions, strInput, bounds, coffeeShops],
   );
 
   useImperativeHandle(forwardedRef, () => ({
@@ -66,12 +69,6 @@ function SearchElastic({
       searchWithKeyword();
     },
   }));
-
-  useEffect(() => {
-    setTimeout(() => {
-      searchWithKeyword();
-    }, 800);
-  }, []);
 
   function handleChange(event) {
     setStrInput(event.target.value);

@@ -5,9 +5,9 @@ import Map from '../components/Map';
 
 import '../styles/search.scss';
 import { toggleCondition } from '../actions';
-import APICoffee from '../api/APICoffee';
 import SearchElastic from '../components/SearchElastic';
 import calculateScore from '../util/calculateScore';
+import { getShops } from '../store/useCafesStore';
 
 // eslint-disable-next-line no-shadow
 function Layout({ checkedConditions, toggleCondition }) {
@@ -48,15 +48,6 @@ function Layout({ checkedConditions, toggleCondition }) {
     toggleCondition();
   }
 
-  async function getCoffee() {
-    setIsLoading(true);
-    // console.log('loading');
-    const arrResult = await APICoffee.getCoffee();
-    // console.log('loading done');
-    setIsLoading(false);
-    setItems(arrResult);
-  }
-
   const search = () => {
     searchRef.current.search();
   };
@@ -69,6 +60,15 @@ function Layout({ checkedConditions, toggleCondition }) {
   };
 
   useEffect(() => {
+    async function getCoffee() {
+      setIsLoading(true);
+      // console.log('loading');
+      const coffeeShops = await getShops();
+      // console.log('loading done');
+      setIsLoading(false);
+      setItems(coffeeShops);
+      search();
+    }
     getCoffee();
   }, []);
 
