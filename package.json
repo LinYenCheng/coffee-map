@@ -1,7 +1,7 @@
 {
   "name": "react-leaflet-map",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "homepage": "http://linyencheng.github.io/coffee-map",
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",
