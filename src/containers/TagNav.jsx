@@ -1,22 +1,24 @@
 import React from 'react';
-import { connect } from 'react-redux';
+
+import useCafeShopsStore, { toggleConditions } from '../store/useCafesStore';
+
 import '../styles/menu-nav.scss';
 
-import { toggleCondition } from '../actions';
-import { conditions } from '../config';
+import { conditions } from '../constants/config';
 
-function TagNav({ checkedConditions, dispatch }) {
+function TagNav() {
+  const { checkedConditions } = useCafeShopsStore();
   const blockConditionList = conditions.map((condition, index) => (
     <li className="nav__li" key={condition.name}>
       <input
         id={condition.name}
         type="checkbox"
-        checked={checkedConditions[index]}
+        checked={checkedConditions[index].checked}
         onChange={() => {
           const tempCheckedConditions = checkedConditions.slice();
-          tempCheckedConditions[index] = !checkedConditions[index];
-          // console.log(tempCheckedConditions, index);
-          dispatch(toggleCondition(tempCheckedConditions));
+          tempCheckedConditions[index].checked = !checkedConditions[index].checked;
+          console.log(tempCheckedConditions, index);
+          toggleConditions(tempCheckedConditions);
         }}
       />
       <label htmlFor={condition.name} className="nav__label nav__label--condition">
@@ -28,10 +30,4 @@ function TagNav({ checkedConditions, dispatch }) {
   return <ul className="d-inline-block mb-0 ps-0">{blockConditionList}</ul>;
 }
 
-function mapStateToProps(state) {
-  return {
-    checkedConditions: state.checkedConditions,
-  };
-}
-
-export default connect(mapStateToProps)(TagNav);
+export default TagNav;

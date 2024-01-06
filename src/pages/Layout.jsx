@@ -1,16 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 
 import Map from '../components/Map';
 
 import '../styles/search.scss';
-import { toggleCondition } from '../actions';
 import SearchElastic from '../components/SearchElastic';
 import calculateScore from '../util/calculateScore';
-import { getShops } from '../store/useCafesStore';
+import { getShops, resetConditions } from '../store/useCafesStore';
 
 // eslint-disable-next-line no-shadow
-function Layout({ checkedConditions, toggleCondition }) {
+function Layout() {
   const searchRef = useRef(null);
   const [item, setItem] = useState({
     name: '搜尋想去的咖啡店~',
@@ -30,7 +28,7 @@ function Layout({ checkedConditions, toggleCondition }) {
     if (item && _item && item.id !== _item.id) {
       setItem(_item);
     }
-    toggleCondition();
+    resetConditions();
   }
 
   const search = () => {
@@ -156,8 +154,6 @@ function Layout({ checkedConditions, toggleCondition }) {
             <SearchElastic
               forwardedRef={searchRef}
               nowItem={item}
-              toggleCondition={toggleCondition}
-              checkedConditions={checkedConditions}
               onChange={handleSelect}
               onHover={handleSelect}
               bounds={bounds}
@@ -165,7 +161,6 @@ function Layout({ checkedConditions, toggleCondition }) {
           </div>
           <div className="pb-1 col-md-8 col-sm-12 map__container p-0">
             <Map
-              checkedConditions={checkedConditions}
               position={position}
               item={itemCoffee}
               items={itemsCoffee}
@@ -180,18 +175,8 @@ function Layout({ checkedConditions, toggleCondition }) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    checkedConditions: state.checkedConditions,
-  };
-}
-
-const mapDispatchToProps = (dispatch) => ({
-  toggleCondition: () => dispatch(toggleCondition()),
-});
-
 Layout.defaultProps = {
   name: 'Gary',
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Layout);
+export default Layout;

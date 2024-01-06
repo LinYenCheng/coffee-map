@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import axios from 'axios';
 import calculateScore from '../util/calculateScore';
+import { defaultCheckedConditions } from '../constants/config';
 
 const { lunr } = window;
 const indexSearch = lunr(function generateLunr() {
@@ -68,7 +69,16 @@ export const searchWithKeyWord = async ({ coffeeShops, bounds, keyWord }) => {
 
 const useCafeShopsStore = create(() => ({
   coffeeShops: [],
+  checkedConditions: defaultCheckedConditions,
 }));
+
+export const toggleConditions = (checkedConditions) => {
+  useCafeShopsStore.setState({ checkedConditions });
+};
+
+export const resetConditions = () => {
+  useCafeShopsStore.setState({ checkedConditions: defaultCheckedConditions });
+};
 
 export const getShops = async (city) => {
   const res = await axios.get(`${import.meta.env.BASE_URL}cafedata/taiwan.json`);

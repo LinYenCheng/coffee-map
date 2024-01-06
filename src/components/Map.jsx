@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMapEvent } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import L from 'leaflet';
+import useCafeShopsStore from '../store/useCafesStore';
 
 function getStars(num) {
   switch (num) {
@@ -96,7 +97,8 @@ function MyMap({ search, setBounds, setZoom, resetItem }) {
   return null;
 }
 
-function SimpleExample({ checkedConditions, position, item, items, setBounds, search, resetItem }) {
+function SimpleExample({ position, item, items, setBounds, search, resetItem }) {
+  const { checkedConditions } = useCafeShopsStore();
   const [map, setMap] = useState();
   const [zoom, setZoom] = useState(12);
   const positionMarker = [
@@ -109,9 +111,9 @@ function SimpleExample({ checkedConditions, position, item, items, setBounds, se
     zoom > 11
       ? items
           .filter((nowItem) => {
-            const isSocketFilterEnable = checkedConditions[0] === true;
-            const isQuietFilterEnable = checkedConditions[1] === true;
-            const isNetWorkFilterEnable = checkedConditions[2] === true;
+            const isSocketFilterEnable = checkedConditions[0].checked === true;
+            const isQuietFilterEnable = checkedConditions[1].checked === true;
+            const isNetWorkFilterEnable = checkedConditions[2].checked === true;
 
             if (isSocketFilterEnable && !nowItem.socket) {
               return false;

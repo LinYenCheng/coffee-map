@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useImperativeHandle } from 'react';
-import { conditions } from '../config';
+import { conditions } from '../constants/config';
 import TagNav from '../containers/TagNav';
 import classNames from 'classnames';
 
@@ -10,7 +10,7 @@ import srcNoCell from './assets/icon_no_cell.png';
 import srcCoffee from './assets/icon_coffee_maker.png';
 import srcMoney from './assets/icon_money.png';
 import srcStar from './assets/icon_star.png';
-import useCafeShopsStore, { searchWithKeyWord } from '../store/useCafesStore';
+import useCafeShopsStore, { resetConditions, searchWithKeyWord } from '../store/useCafesStore';
 
 function getStars(num) {
   switch (num) {
@@ -27,15 +27,8 @@ function getStars(num) {
   }
 }
 
-function SearchElastic({
-  onHover,
-  checkedConditions,
-  nowItem,
-  toggleCondition,
-  forwardedRef,
-  bounds,
-}) {
-  const { coffeeShops } = useCafeShopsStore();
+function SearchElastic({ onHover, nowItem, forwardedRef, bounds }) {
+  const { checkedConditions, coffeeShops } = useCafeShopsStore();
   let blockCards = '';
   const inputEl = useRef(null);
   const intPageSize = 10;
@@ -44,7 +37,7 @@ function SearchElastic({
   const [displayItems, setDisplayItems] = useState([]);
   const [strInput, setStrInput] = useState('');
   const strCheckedConditions = conditions
-    .filter((condition, index) => checkedConditions[index])
+    .filter((condition, index) => checkedConditions[index].checked)
     .map((condition) => condition.displayName)
     .join(' ');
 
@@ -87,7 +80,7 @@ function SearchElastic({
   }
 
   function clearSearch() {
-    toggleCondition();
+    resetConditions();
     setStrInput('');
     setDisplayItems([]);
   }

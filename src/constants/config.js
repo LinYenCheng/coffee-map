@@ -138,4 +138,6 @@ const conditions = [
   },
 ];
 
-export { cities, conditions };
+const defaultCheckedConditions = conditions;
+
+export { cities, conditions, defaultCheckedConditions };
