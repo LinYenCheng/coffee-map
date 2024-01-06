@@ -105,6 +105,12 @@ $header-height: 72px;
       text-decoration-line: underline;
     }
 
+    .h6 {
+      color: var(--Black, #2d2d2d);
+      font-style: normal;
+      font-weight: 700;
+    }
+
     .score {
       color: var(--outline, #783d06);
 
@@ -161,6 +167,15 @@ $header-height: 72px;
       font-style: normal;
       font-weight: 400;
       line-height: 21px; /* 175% */
+    }
+  }
+}
+
+.leaflet-popup-content-wrapper {
+  .card {
+    cursor: auto !important;
+    &:hover {
+      background: none;
     }
   }
 }

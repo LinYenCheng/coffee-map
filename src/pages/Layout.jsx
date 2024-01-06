@@ -106,27 +106,46 @@ function Layout({ checkedConditions, toggleCondition }) {
           music,
           socket,
           url,
+          limited_time,
+          standing_desk,
         } = nowItemCoffee;
+        const score = calculateScore(nowItemCoffee);
         return {
           name,
-          score: calculateScore(nowItemCoffee),
+          score,
           lat: parseFloat(latitude),
           lng: parseFloat(longitude),
           wifi: wifi > 0,
           socket: socket !== 'no',
           quiet: quiet > 3,
-          popup: `<div>
-            <span style=${{ fontWeight: 800, fontSize: '16px' }}>${name}</span><br /> 
-            <span>
-            ${address}<br />
-            ${wifi > 0 ? `WIFI穩定: ${getStars(wifi)}` : ''} ${wifi > 0 ? '<br />' : ''}
-            ${seat > 0 ? `通常有位:  ${getStars(seat)}` : ''} ${seat > 0 ? '<br />' : ''}
-            ${quiet > 0 ? `安靜程度:  ${getStars(quiet)}` : ''} ${quiet > 0 ? '<br />' : ''}
-            ${tasty > 0 ? `咖啡好喝:  ${getStars(tasty)}` : ''} ${tasty > 0 ? '<br />' : ''}
-            ${cheap > 0 ? `價格便宜:  ${getStars(cheap)}` : ''} ${cheap > 0 ? '<br />' : ''}
-            ${music > 0 ? `裝潢音樂:  ${getStars(music)}` : ''} ${music > 0 ? '<br />' : ''}
-            </span>
-            ${url ? `<a href=${url}>粉絲專頁</a>` : ''}
+          renderChild: () => <span>{name}</span>,
+          popup: `
+          <div class="card border-none">
+            <div class="card__title mb-2">
+              <a
+                class="h6"
+                href=${url}
+                target="_blank"
+              >
+                ${name}
+              </a>
+              <span class="ms-2 score">${score}</span>
+              <i class="pi pi-star-fill score ms-1"></i>
+            </div>
+            <ul>
+              <li>
+                 <ol class="mb-2">
+                  ${wifi > 3 ? `<li>WIFI</li>` : ''}
+                  ${socket !== 'no' ? `<li>插座</li>` : ''}
+                  ${limited_time !== 'yes' ? `<li>無限時</li>` : ''}
+                  ${standing_desk === 'yes' ? `<li>站位</li>` : ''}
+                 </ol>
+              </li>
+              <li class="mb-2">
+                <i class="pi pi-map-marker me-2"></i>
+                <span>${address}</span>
+              </li>
+            </ul>
           </div>`,
         };
       });
