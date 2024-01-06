@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import Map from '../components/Map';
@@ -24,21 +24,6 @@ function Layout({ checkedConditions, toggleCondition }) {
   const [bounds, setBounds] = useState(null);
 
   let blockLoading = '';
-
-  function getStars(num) {
-    switch (num) {
-      case 5:
-        return '★★★★★';
-      case 4:
-        return '★★★★';
-      case 3:
-        return '★★★';
-      case 2:
-        return '★★';
-      default:
-        return '★';
-    }
-  }
 
   function handleSelect(_item) {
     // console.log(_item);

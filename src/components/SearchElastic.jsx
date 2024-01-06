@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback, useImperativeHandle } from 'react';
-import APICoffee from '../api/APICoffee';
 import { conditions } from '../config';
 import TagNav from '../containers/TagNav';
 import classNames from 'classnames';
@@ -11,7 +10,7 @@ import srcNoCell from './assets/icon_no_cell.png';
 import srcCoffee from './assets/icon_coffee_maker.png';
 import srcMoney from './assets/icon_money.png';
 import srcStar from './assets/icon_star.png';
-import useCafeShopsStore from '../store/useCafesStore';
+import useCafeShopsStore, { searchWithKeyWord } from '../store/useCafesStore';
 
 function getStars(num) {
   switch (num) {
@@ -52,7 +51,7 @@ function SearchElastic({
   const searchWithKeyword = useCallback(
     async (event) => {
       if (event) event.preventDefault();
-      const result = await APICoffee.searchWithKeyWord({
+      const result = await searchWithKeyWord({
         coffeeShops: coffeeShops,
         keyWord: `${strCheckedConditions} ${strInput}`,
         bounds,
