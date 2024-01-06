@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMapEvent } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
-import PropTypes from 'prop-types';
+import L from 'leaflet';
 
 function getStars(num) {
   switch (num) {
@@ -132,6 +132,12 @@ function SimpleExample({ checkedConditions, position, item, items, setBounds, se
               key={`${nowItem.lat}${nowItem.lng}${index}`}
               opacity={0.6}
               position={[parseFloat(nowItem.lat), parseFloat(nowItem.lng)]}
+              icon={L.divIcon({
+                iconSize: 'auto',
+                html: `<div class="custom-marker">
+                            <span>${nowItem.score} ★ ${nowItem.name}</span>
+                        </div>`,
+              })}
             >
               <Popup>
                 <div dangerouslySetInnerHTML={{ __html: nowItem.popup }} />

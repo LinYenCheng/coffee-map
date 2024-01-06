@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import Map from '../components/Map';
 
 import '../styles/search.scss';
-import { toggleMenu, toggleCondition } from '../actions';
+import { toggleCondition } from '../actions';
 import APICoffee from '../api/APICoffee';
 import SearchElastic from '../components/SearchElastic';
+import calculateScore from '../util/calculateScore';
 
 // eslint-disable-next-line no-shadow
-function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, toggleCondition }) {
+function Layout({ checkedConditions, toggleCondition }) {
   const searchRef = useRef(null);
   const [item, setItem] = useState({
     name: '搜尋想去的咖啡店~',
@@ -47,10 +48,10 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
     toggleCondition();
   }
 
-  async function getCoffee(nowCheckedCities) {
+  async function getCoffee() {
     setIsLoading(true);
     // console.log('loading');
-    const arrResult = await APICoffee.getCoffee(nowCheckedCities);
+    const arrResult = await APICoffee.getCoffee();
     // console.log('loading done');
     setIsLoading(false);
     setItems(arrResult);
@@ -68,8 +69,8 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
   };
 
   useEffect(() => {
-    getCoffee(checkedCities);
-  }, [checkedCities]);
+    getCoffee();
+  }, []);
 
   if (items.length === 0) {
     itemsCoffee = [
@@ -107,6 +108,8 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
           url,
         } = nowItemCoffee;
         return {
+          name,
+          score: calculateScore(nowItemCoffee),
           lat: parseFloat(latitude),
           lng: parseFloat(longitude),
           wifi: wifi > 0,
@@ -175,16 +178,12 @@ function Layout({ isMenuOpen, checkedCities, checkedConditions, toggleMenu, togg
 
 function mapStateToProps(state) {
   return {
-    isMenuOpen: state.isMenuOpen,
-    checkedCities: state.checkedCities,
     checkedConditions: state.checkedConditions,
   };
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  //
   toggleCondition: () => dispatch(toggleCondition()),
-  toggleMenu: () => dispatch(toggleMenu()),
 });
 
 Layout.defaultProps = {

@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import axios from 'axios';
 
-import { cities } from '../config';
+import calculateScore from '../util/calculateScore';
 
 const { lunr } = window;
 const indexSearch = lunr(function generateLunr() {
@@ -21,6 +21,7 @@ const getShops = async (city) => {
         strSocket: shop && shop.socket === 'yes' ? '插座' : '',
         quietAways: shop && shop.quiet > 3 ? '安靜' : '',
         wifiGood: shop && shop.wifi > 3 ? '網路' : '',
+        score: calculateScore({ ...shop }),
       });
       // console.log({
       //   ...shop,
@@ -35,7 +36,7 @@ const getShops = async (city) => {
   return [];
 };
 
-async function getCoffee(checkedCities) {
+async function getCoffee() {
   const coffeeShops = await getShops();
   return coffeeShops;
 }
@@ -83,6 +84,16 @@ async function searchWithKeyWord({ bounds, keyWord }) {
     });
     finalResult = tempShops;
   }
+
+  finalResult = finalResult
+    .map((shop) => ({
+      ...shop,
+      strSocket: shop && shop.socket === 'yes' ? '插座' : '',
+      quietAways: shop && shop.quiet > 3 ? '安靜' : '',
+      wifiGood: shop && shop.wifi > 3 ? '網路' : '',
+      score: calculateScore({ ...shop }),
+    }))
+    .sort((a, b) => b.score - a.score);
   return finalResult;
 }
 

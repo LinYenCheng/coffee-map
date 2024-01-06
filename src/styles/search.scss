@@ -223,3 +223,34 @@ $header-height: 72px;
 .search__result::-webkit-scrollbar-thumb {
   background-color: #4c6267;
 }
+
+.map__container .leaflet-div-icon {
+  border: none;
+  background: none;
+  opacity: 0.8 !important;
+
+  .custom-marker {
+    display: flex;
+    width: 160px;
+    padding: 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border-radius: 100px;
+    background: var(--Light-Brown, #cb925d);
+    box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.3);
+    transform: translateX(-50%);
+
+    span {
+      overflow: hidden;
+      color: #fff;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 0.8rem;
+      font-style: normal;
+      font-weight: 700;
+      // line-height: 24px; /* 150% */
+      letter-spacing: 0.5px;
+    }
+  }
+}
