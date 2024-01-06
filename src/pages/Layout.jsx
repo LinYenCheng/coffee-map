@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 
-import Map from '../components/Map';
+import Map from '../containers/CafeMap';
 
 import '../styles/search.scss';
-import SearchElastic from '../components/SearchElastic';
+import SearchElastic from '../containers/SearchElastic';
 import calculateScore from '../util/calculateScore';
 import { getShops, resetConditions } from '../store/useCafesStore';
 
@@ -151,13 +151,7 @@ function Layout() {
         <div className="row">
           <div className="col-md-4 col-sm-12 result__container p-0">
             {/* <Search items={items} onChange={handleSelect} /> */}
-            <SearchElastic
-              forwardedRef={searchRef}
-              nowItem={item}
-              onChange={handleSelect}
-              onHover={handleSelect}
-              bounds={bounds}
-            />
+            <SearchElastic forwardedRef={searchRef} onChange={handleSelect} bounds={bounds} />
           </div>
           <div className="pb-1 col-md-8 col-sm-12 map__container p-0">
             <Map
