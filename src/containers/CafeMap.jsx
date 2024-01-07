@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import React, { useState, useRef, useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMapEvent } from 'react-leaflet';
-import MarkerClusterGroup from 'react-leaflet-markercluster';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import useCafeShopsStore from '../store/useCafesStore';
 import PopupMarker from '../components/PopupMarker';
@@ -110,7 +110,7 @@ function CafeMap({ position, item, items, setBounds, search, resetItem }) {
         item={item}
         isActive={item?.latitude && item.name}
       />
-      <MarkerClusterGroup>{markers}</MarkerClusterGroup>
+      <MarkerClusterGroup chunkedLoading>{markers}</MarkerClusterGroup>
     </MapContainer>
   );
 }

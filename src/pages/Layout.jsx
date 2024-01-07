@@ -64,16 +64,18 @@ function Layout() {
       },
     ];
   } else {
-    const { northEast, southWest } = bounds;
     itemsCoffee = items
       .filter((nowItemCoffee) => {
-        const { latitude, longitude } = nowItemCoffee;
-        return (
-          latitude > southWest.lat &&
-          longitude > southWest.lng &&
-          latitude < northEast.lat &&
-          longitude < northEast.lng
-        );
+        if (nowItemCoffee) {
+          const { latitude, longitude } = nowItemCoffee;
+            return (
+              latitude > bounds?.southWest.lat &&
+              longitude > bounds?.southWest.lng &&
+              latitude < bounds?.northEast.lat &&
+              longitude < bounds?.northEast.lng
+            );
+        }
+        return false
       })
       .map((nowItemCoffee) => {
         const {
