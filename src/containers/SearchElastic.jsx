@@ -7,13 +7,18 @@ import SearchCard from '../components/SearchCard';
 import ConditionalRenderer from '../components/ConditionalRenderer';
 
 function SearchElastic({ forwardedRef, bounds, onChange }) {
-  const { checkedConditions, coffeeShops } = useCafeShopsStore();
-  const inputEl = useRef(null);
   const intPageSize = 10;
+
+  const inputEl = useRef(null);
+  const observerTarget = useRef(null);
+
+  const { checkedConditions, coffeeShops } = useCafeShopsStore();
+
   const [page, setPage] = useState(1);
   const [items, setItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [strInput, setStrInput] = useState('');
+
   const strCheckedConditions = conditions
     .filter((condition, index) => checkedConditions[index].checked)
     .map((condition) => condition.displayName)
@@ -58,15 +63,6 @@ function SearchElastic({ forwardedRef, bounds, onChange }) {
     searchWithKeyword();
   }
 
-  function handleScroll(e) {
-    if (
-      e.target.scrollTop + 122 > e.target.clientHeight * page &&
-      items.length > intPageSize * page
-    ) {
-      setPage(page + 1);
-    }
-  }
-
   useEffect(() => {
     if (strCheckedConditions !== '') {
       searchWithKeyword();
@@ -82,6 +78,24 @@ function SearchElastic({ forwardedRef, bounds, onChange }) {
       setDisplayItems(items.slice(0, intPageSize * page));
     }
   }, [items, page]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setPage(page + 1);
+      }
+    });
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [observerTarget, page]);
 
   let placeholderCondition = '輸入店名、地址';
   if (strCheckedConditions) {
@@ -115,16 +129,19 @@ function SearchElastic({ forwardedRef, bounds, onChange }) {
           </ConditionalRenderer>
         </form>
       </div>
-      <div className="search__result" onScroll={handleScroll}>
+      <div className="search__result">
         <div className="tag__container">
           <span className="tag__title">排列順序</span>
           <TagNav />
         </div>
         <ConditionalRenderer isShowContent={displayItems.length}>
           {displayItems.map((item) => (
-            <SearchCard key={item?.id} item={item} onSelect={onChange} />
+            <SearchCard key={item?.id} item={item} onSelect={onChange} inputEl={inputEl} />
           ))}
         </ConditionalRenderer>
+        <div className="w-100 text-center mt-3 mb-3" ref={observerTarget}>
+          <div className="spinner-border text-secondary" role="status"></div>
+        </div>
       </div>
     </>
   );

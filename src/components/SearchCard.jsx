@@ -26,7 +26,7 @@ function getStars(num) {
 }
 
 function SearchCard(props) {
-  const { item, onSelect } = props;
+  const { item, onSelect, inputEl } = props;
   const {
     id,
     name,
@@ -63,7 +63,6 @@ function SearchCard(props) {
       className="card pt-3 ps-4"
       onClick={() => {
         onSelect(item);
-        inputEl.current.blur();
       }}
       onFocus={() => {
         onSelect(item);

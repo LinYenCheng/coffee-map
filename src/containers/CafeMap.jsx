@@ -4,7 +4,7 @@ import { MapContainer, Marker, Popup, TileLayer, useMapEvent } from 'react-leafl
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import useCafeShopsStore from '../store/useCafesStore';
-import PopupMarker from '../components/PopupMarker';
+import PopupContent from '../components/PopupContent';
 
 function MyMap({ search, setBounds, setZoom, resetItem }) {
   // eslint-disable-next-line no-unused-vars
@@ -22,14 +22,14 @@ function MyMap({ search, setBounds, setZoom, resetItem }) {
         southWest: mapBounds.getSouthWest(),
       });
     }
-    resetItem();
     search();
   });
 
   return null;
 }
 
-function CafeMap({ position, item, items, setBounds, search, resetItem }) {
+function CafeMap({ position, item, items, setBounds, search }) {
+  const popupRef = useRef();
   const { checkedConditions } = useCafeShopsStore();
   const [map, setMap] = useState();
   const [zoom, setZoom] = useState(12);
@@ -99,18 +99,25 @@ function CafeMap({ position, item, items, setBounds, search, resetItem }) {
       animate
       whenCreated={handleMapLoad}
     >
-      <MyMap setBounds={setBounds} setZoom={setZoom} search={search} resetItem={resetItem} />
+      <MyMap setBounds={setBounds} setZoom={setZoom} search={search} />
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <PopupMarker
-        position={positionMarker}
-        map={map}
-        item={item}
-        isActive={item?.latitude && item.name}
-      />
       <MarkerClusterGroup chunkedLoading>{markers}</MarkerClusterGroup>
+      <Marker
+        position={item ? { lat: positionMarker[0], lng: positionMarker[1] } : null}
+        icon={L.divIcon({
+          iconSize: 'auto',
+          html: `<div class="custom-marker custom-marker--focus">
+                    <span>${item.score} ★ ${item.name}</span>
+              </div>`,
+        })}
+      >
+        <Popup ref={popupRef}>
+          <PopupContent item={item} />
+        </Popup>
+      </Marker>
     </MapContainer>
   );
 }

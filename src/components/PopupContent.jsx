@@ -1,6 +1,3 @@
-import { useRef, useEffect } from 'react';
-import { Marker, Popup } from 'react-leaflet';
-
 function getStars(num) {
   switch (num) {
     case 5:
@@ -45,29 +42,4 @@ function PopupContent({ item }) {
   );
 }
 
-function PopupMarker({ position, item, isActive, map }) {
-  let popupRef = useRef();
-
-  useEffect(() => {
-    if (isActive) {
-      if (popupRef.current) {
-        popupRef.current.openOn(map);
-      }
-      // map.panTo({ lat: position[0], lng: position[1] });
-    } else {
-      if (popupRef.current) {
-        popupRef.current?.remove();
-      }
-    }
-  }, [isActive, map]);
-
-  return (
-    <Marker position={item ? { lat: position[0], lng: position[1] } : null}>
-      <Popup ref={popupRef}>
-        <PopupContent item={item} />
-      </Popup>
-    </Marker>
-  );
-}
-
-export default PopupMarker;
+export default PopupContent;

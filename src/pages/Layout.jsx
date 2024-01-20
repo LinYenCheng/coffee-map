@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 
 import Map from '../containers/CafeMap';
 
@@ -6,30 +6,42 @@ import '../styles/search.scss';
 import SearchElastic from '../containers/SearchElastic';
 import calculateScore from '../util/calculateScore';
 import { getShops, resetConditions } from '../store/useCafesStore';
+import ConditionalRenderer from '../components/ConditionalRenderer';
 
 // eslint-disable-next-line no-shadow
 function Layout() {
   const searchRef = useRef(null);
-  const [item, setItem] = useState({
+  const [itemCoffee, setItem] = useState({
     name: '搜尋想去的咖啡店~',
     address: '顯示地址及粉專',
   });
   const [position, setPosition] = useState({ lng: 121.5598, lat: 25.08 });
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const itemCoffee = item;
   let itemsCoffee = items;
-  const [bounds, setBounds] = useState(null);
+  const [bounds, setBounds] = useState({
+    northEast: {
+      lat: 25.19872829288669,
+      lng: 121.66603088378908,
+    },
+    southWest: {
+      lat: 24.927228790288993,
+      lng: 121.38519287109376,
+    },
+  });
 
-  let blockLoading = '';
+  const handleSelect = useCallback(
+    (_item) => {
+      // // console.log(_item);
+      if (itemCoffee && _item && itemCoffee.id !== _item.id) {
+        console.log(_item);
 
-  function handleSelect(_item) {
-    // console.log(_item);
-    if (item && _item && item.id !== _item.id) {
-      setItem(_item);
-    }
-    resetConditions();
-  }
+        setItem(_item);
+      }
+      // resetConditions();
+    },
+    [itemCoffee],
+  );
 
   const search = () => {
     searchRef.current.search();
@@ -68,14 +80,14 @@ function Layout() {
       .filter((nowItemCoffee) => {
         if (nowItemCoffee) {
           const { latitude, longitude } = nowItemCoffee;
-            return (
-              latitude > bounds?.southWest.lat &&
-              longitude > bounds?.southWest.lng &&
-              latitude < bounds?.northEast.lat &&
-              longitude < bounds?.northEast.lng
-            );
+          return (
+            latitude > bounds?.southWest.lat &&
+            longitude > bounds?.southWest.lng &&
+            latitude < bounds?.northEast.lat &&
+            longitude < bounds?.northEast.lng
+          );
         }
-        return false
+        return false;
       })
       .map((nowItemCoffee) => {
         const {
@@ -136,18 +148,13 @@ function Layout() {
       });
   }
 
-  if (isLoading) {
-    blockLoading = (
-      <div className="loading__overlay">
-        <div className="loading__content">
-          <div className="loader">Loading...</div>
-        </div>
-      </div>
-    );
-  }
   return (
     <div className="app">
-      {blockLoading}
+      <ConditionalRenderer isShowContent={isLoading}>
+        <div className="loading__overlay d-flex align-items-center align-content-center justify-content-center">
+          <div className="spinner-grow" role="status" />
+        </div>
+      </ConditionalRenderer>
       <div className="header"></div>
       <div className="container-fluid p-0 ">
         <div className="row">
@@ -162,7 +169,6 @@ function Layout() {
               items={itemsCoffee}
               setBounds={setBounds}
               search={search}
-              resetItem={resetItem}
             />
           </div>
         </div>
