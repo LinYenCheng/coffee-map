@@ -1,5 +1,3 @@
-import React from 'react';
-
 import useCafeShopsStore, { toggleConditions } from '../store/useCafesStore';
 
 import '../styles/menu-nav.scss';

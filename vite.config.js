@@ -4,13 +4,16 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   base: '/coffee-map/',
+  define: {
+    'process.env': process.env,
+  },
   server: {
     port: 3000,
   },
   esbuild: {
-    // loader: 'jsx',
-    // include: /src\/.*\.jsx?$/,
-    loader: 'tsx',
+    loader: 'jsx',
+    include: /src\/.*\.jsx?$/,
+    // loader: 'tsx',
     include: /src\/.*\.[tj]sx?$/,
     exclude: [],
   },

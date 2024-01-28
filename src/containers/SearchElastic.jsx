@@ -18,6 +18,7 @@ function SearchElastic({ forwardedRef, bounds, onChange }) {
   const [items, setItems] = useState([]);
   const [displayItems, setDisplayItems] = useState([]);
   const [strInput, setStrInput] = useState('');
+  const totalPage = items && items.length ? Math.ceil(items.length / intPageSize) : 0;
 
   const strCheckedConditions = conditions
     .filter((condition, index) => checkedConditions[index].checked)
@@ -41,10 +42,7 @@ function SearchElastic({ forwardedRef, bounds, onChange }) {
   );
 
   useImperativeHandle(forwardedRef, () => ({
-    search: () => {
-      console.log('search');
-      searchWithKeyword();
-    },
+    search: searchWithKeyword,
   }));
 
   function handleChange(event) {
@@ -81,7 +79,7 @@ function SearchElastic({ forwardedRef, bounds, onChange }) {
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
+      if (entries[0].isIntersecting && page + 1 <= totalPage) {
         setPage(page + 1);
       }
     });
@@ -95,7 +93,7 @@ function SearchElastic({ forwardedRef, bounds, onChange }) {
         observer.unobserve(observerTarget.current);
       }
     };
-  }, [observerTarget, page]);
+  }, [observerTarget, page, totalPage]);
 
   let placeholderCondition = '輸入店名、地址';
   if (strCheckedConditions) {
@@ -139,9 +137,11 @@ function SearchElastic({ forwardedRef, bounds, onChange }) {
             <SearchCard key={item?.id} item={item} onSelect={onChange} inputEl={inputEl} />
           ))}
         </ConditionalRenderer>
-        <div className="w-100 text-center mt-3 mb-3" ref={observerTarget}>
-          <div className="spinner-border text-secondary" role="status"></div>
-        </div>
+        <ConditionalRenderer isShowContent={page + 1 <= totalPage}>
+          <div className="w-100 text-center mt-3 mb-3" ref={observerTarget}>
+            <div className="spinner-border text-secondary" role="status"></div>
+          </div>
+        </ConditionalRenderer>
       </div>
     </>
   );

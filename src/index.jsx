@@ -10,9 +10,6 @@ import Layout from './pages/Layout';
 
 import './styles/index.scss';
 
-// FIXME: WORKAROUND
-if (!window.process) window.process = {};
-
 const router = createHashRouter(
   createRoutesFromElements(
     <>
