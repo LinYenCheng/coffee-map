@@ -83,13 +83,12 @@ function Layout() {
   }, []);
 
   return (
-    <div className="app">
+    <>
       <ConditionalRenderer isShowContent={isLoading}>
         <div className="loading__overlay d-flex align-items-center align-content-center justify-content-center">
           <div className="spinner-grow" role="status" />
         </div>
       </ConditionalRenderer>
-      <div className="header"></div>
       <div className="container-fluid p-0 ">
         <div className="row">
           <div className="col-md-4 col-sm-12 result__container p-0">
@@ -107,7 +106,7 @@ function Layout() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
