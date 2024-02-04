@@ -6,12 +6,24 @@ import '../styles/search.scss';
 import SearchElastic from '../containers/SearchElastic';
 import useCafeShopsStore, { getShops } from '../store/useCafesStore';
 import ConditionalRenderer from '../components/ConditionalRenderer';
+import { CoffeeShop } from '../types';
+
+interface Bounds {
+  northEast: {
+    lat: number;
+    lng: number;
+  };
+  southWest: {
+    lat: number;
+    lng: number;
+  };
+}
 
 function Layout() {
-  const searchRef = useRef(null);
-  const [coffeeShops, setCoffeeShops] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [bounds, setBounds] = useState({
+  const searchRef = useRef<any>(null);
+  const [coffeeShops, setCoffeeShops] = useState<CoffeeShop[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [bounds, setBounds] = useState<Bounds>({
     northEast: {
       lat: 25.19872829288669,
       lng: 121.66603088378908,
@@ -45,10 +57,10 @@ function Layout() {
       }
 
       return (
-        latitude > bounds?.southWest.lat &&
-        longitude > bounds?.southWest.lng &&
-        latitude < bounds?.northEast.lat &&
-        longitude < bounds?.northEast.lng
+        parseFloat(latitude) > bounds?.southWest.lat &&
+        parseFloat(longitude) > bounds?.southWest.lng &&
+        parseFloat(latitude) < bounds?.northEast.lat &&
+        parseFloat(longitude) < bounds?.northEast.lng
       );
     });
   }, [checkedConditions, bounds, coffeeShops]);
@@ -84,7 +96,7 @@ function Layout() {
             <SearchElastic forwardedRef={searchRef} onChange={handleSelect} bounds={bounds} />
           </div>
           <div className="pb-1 col-md-8 col-sm-12 map__container p-0">
-            <ConditionalRenderer isShowContent={coffeeShops.length}>
+            <ConditionalRenderer isShowContent={coffeeShops.length > 0}>
               <Map
                 position={{ lng: 121.5598, lat: 25.08 }}
                 coffeeShops={boundedCoffeeShops}

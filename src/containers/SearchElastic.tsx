@@ -1,23 +1,30 @@
-import React, { useState, useEffect, useRef, useCallback, useImperativeHandle } from 'react';
+import { useState, useEffect, useRef, useCallback, useImperativeHandle } from 'react';
 import { conditions } from '../constants/config';
 import TagNav from './TagNav';
 
 import useCafeShopsStore, { resetConditions, searchWithKeyWord } from '../store/useCafesStore';
 import SearchCard from '../components/SearchCard';
 import ConditionalRenderer from '../components/ConditionalRenderer';
+import { CoffeeShop } from '../types';
 
-function SearchElastic({ forwardedRef, bounds, onChange }) {
+interface SearchElasticProps {
+  forwardedRef: React.RefObject<any>;
+  bounds: any; // Adjust the type accordingly
+  onChange: (item: CoffeeShop) => void;
+}
+
+function SearchElastic({ forwardedRef, bounds, onChange }: SearchElasticProps): JSX.Element {
   const intPageSize = 10;
 
-  const inputEl = useRef(null);
-  const observerTarget = useRef(null);
+  const inputEl = useRef<HTMLInputElement>(null);
+  const observerTarget = useRef<HTMLDivElement>(null);
 
   const { checkedConditions, coffeeShops } = useCafeShopsStore();
 
-  const [page, setPage] = useState(1);
-  const [items, setItems] = useState([]);
-  const [displayItems, setDisplayItems] = useState([]);
-  const [strInput, setStrInput] = useState('');
+  const [page, setPage] = useState<number>(1);
+  const [items, setItems] = useState<CoffeeShop[]>([]);
+  const [displayItems, setDisplayItems] = useState<CoffeeShop[]>([]);
+  const [strInput, setStrInput] = useState<string>('');
   const totalPage = items && items.length ? Math.ceil(items.length / intPageSize) : 0;
 
   const strCheckedConditions = conditions
@@ -28,7 +35,7 @@ function SearchElastic({ forwardedRef, bounds, onChange }) {
   const hasSearchCondition = strInput !== '' || strCheckedConditions !== '';
 
   const searchWithKeyword = useCallback(
-    async (event) => {
+    async (event?: React.FormEvent<HTMLFormElement>) => {
       if (event) event.preventDefault();
       const result = await searchWithKeyWord({
         coffeeShops: coffeeShops,
@@ -45,13 +52,13 @@ function SearchElastic({ forwardedRef, bounds, onChange }) {
     search: searchWithKeyword,
   }));
 
-  function handleChange(event) {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setStrInput(event.target.value);
   }
 
-  function handleKeyPress(event) {
+  function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Enter') {
-      inputEl.current.blur();
+      inputEl.current?.blur();
     }
   }
 
@@ -132,7 +139,7 @@ function SearchElastic({ forwardedRef, bounds, onChange }) {
           <span className="tag__title">排列順序</span>
           <TagNav />
         </div>
-        <ConditionalRenderer isShowContent={displayItems.length}>
+        <ConditionalRenderer isShowContent={displayItems.length > 0}>
           {displayItems.map((item) => (
             <SearchCard key={item?.id} item={item} onSelect={onChange} inputEl={inputEl} />
           ))}

@@ -1,5 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import srcMRT from './assets/icon_mrt.png';
@@ -9,8 +7,15 @@ import srcNoCell from './assets/icon_no_cell.png';
 import srcCoffee from './assets/icon_coffee_maker.png';
 import srcMoney from './assets/icon_money.png';
 import srcStar from './assets/icon_star.png';
+import { CoffeeShop } from '../types';
 
-function getStars(num) {
+interface SearchCardProps {
+  item: CoffeeShop;
+  onSelect: (item: any) => void; // Adjust the type of item accordingly
+  inputEl: React.RefObject<HTMLInputElement>;
+}
+
+function getStars(num: number): string {
   switch (num) {
     case 5:
       return '☆☆☆☆☆';
@@ -25,8 +30,7 @@ function getStars(num) {
   }
 }
 
-function SearchCard(props) {
-  const { item, onSelect, inputEl } = props;
+function SearchCard({ item, onSelect }: SearchCardProps): JSX.Element {
   const {
     id,
     name,
@@ -37,26 +41,14 @@ function SearchCard(props) {
     cheap,
     music,
     address,
-    latitude,
-    longitude,
-    url,
     limited_time,
-    // yes => Yes，一律有限時
-    // maybe => 看情況，假日或客滿限時
-    // no => No，一律不限時
     socket,
-    // yes => Yes，很多
-    // maybe => 還好，看座位
-    // no => No，很少
     standing_desk,
-    // yes => Yes，有些座位可以
-    // no => No，無法
     mrt,
-    // 	這欄位是直接紀錄用戶回報時輸入的一串文字，因此格式沒有一致化，可能會有些亂。
     open_time,
-    // 這欄位是直接紀錄用戶回報時輸入的一串文字，因此格式沒有一致化，可能會有些亂。
   } = item;
   const score = ((cheap + music + quiet + seat + tasty + wifi) / 6).toFixed(1);
+
   return (
     <div
       role="presentation"
@@ -76,6 +68,7 @@ function SearchCard(props) {
           className="h4"
           href={item.url}
           target="_blank"
+          rel="noopener noreferrer"
           onClick={(e) => {
             e.stopPropagation();
           }}
@@ -89,47 +82,21 @@ function SearchCard(props) {
         <li>
           <ol>
             {wifi > 3 && <li>WIFI</li>}
-            <li
-              className={classNames({
-                'display-none': socket === 'no',
-              })}
-            >
-              插座
-            </li>
-            <li
-              className={classNames({
-                'display-none': limited_time === 'yes',
-              })}
-            >
-              無限時
-            </li>
-            <li
-              className={classNames({
-                'display-none': standing_desk === 'no',
-              })}
-            >
-              站位
-            </li>
+            <li className={classNames({ 'display-none': socket === 'no' })}>插座</li>
+            <li className={classNames({ 'display-none': limited_time === 'yes' })}>無限時</li>
+            <li className={classNames({ 'display-none': standing_desk === 'no' })}>站位</li>
           </ol>
         </li>
         <li>
           <i className="pi pi-map-marker me-2"></i>
           <span>{address}</span>
         </li>
-        <li
-          className={classNames({
-            'display-none': !open_time,
-          })}
-        >
+        <li className={classNames({ 'display-none': !open_time })}>
           <i className="pi pi-clock me-2"></i>
           <span>{open_time}</span>
         </li>
         <hr />
-        <li
-          className={classNames('li-width-50', {
-            'display-none': !mrt,
-          })}
-        >
+        <li className={classNames('li-width-50', { 'display-none': !mrt })}>
           <img alt="" src={srcMRT} />
           <span className="ms-1">{`捷運：${mrt}`}</span>
         </li>
@@ -161,7 +128,5 @@ function SearchCard(props) {
     </div>
   );
 }
-
-SearchCard.propTypes = {};
 
 export default SearchCard;

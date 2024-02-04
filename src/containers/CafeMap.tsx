@@ -4,16 +4,30 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import { v4 as uuidv4 } from 'uuid';
 
-import ConditionalRenderer from '../components/ConditionalRenderer';
-import calculateScore from '../util/calculateScore';
+import ConditionalRenderer from '../components/ConditionalRenderer.js';
+import calculateScore from '../util/calculateScore.js';
+import { CoffeeShop } from '../types/index.js';
 
-function MyMap({ search, setBounds, setZoom }) {
+interface CafeMapProps {
+  position: { lat: number; lng: number };
+  coffeeShops: CoffeeShop[];
+  setBounds: (bounds: { northEast: L.LatLng; southWest: L.LatLng }) => void;
+  search: () => void;
+}
+
+interface MapProps {
+  setBounds: (bounds: { northEast: L.LatLng; southWest: L.LatLng }) => void;
+  search: () => void;
+  setZoom: (zoom: number) => void;
+}
+
+function MyMap({ search, setBounds, setZoom }: MapProps) {
   const map = useMapEvent('click', () => {});
   useMapEvent('moveend', () => {
     if (map) {
       const mapBounds = map.getBounds();
       const zoom = map.getZoom();
-      setZoom(zoom);
+      if (setZoom) setZoom(zoom);
       setBounds({
         northEast: mapBounds.getNorthEast(),
         southWest: mapBounds.getSouthWest(),
@@ -25,9 +39,9 @@ function MyMap({ search, setBounds, setZoom }) {
   return null;
 }
 
-function CafeMap({ position, coffeeShops, setBounds, search }) {
-  const [zoom, setZoom] = useState(12);
-  const handleMapLoad = (map) => {
+function CafeMap({ position, coffeeShops, setBounds, search }: CafeMapProps): JSX.Element {
+  const [zoom, setZoom] = useState<number>(12);
+  const handleMapLoad = (map: L.Map) => {
     const mapInstance = map;
     const mapBounds = mapInstance.getBounds();
     setBounds({
@@ -42,7 +56,6 @@ function CafeMap({ position, coffeeShops, setBounds, search }) {
       zoom={12}
       maxZoom={18}
       zoomControl={false}
-      animate
       whenCreated={handleMapLoad}
     >
       <MyMap setBounds={setBounds} setZoom={setZoom} search={search} />
@@ -51,8 +64,8 @@ function CafeMap({ position, coffeeShops, setBounds, search }) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <MarkerClusterGroup chunkedLoading>
-        <ConditionalRenderer isShowContent={zoom > 11 && coffeeShops && coffeeShops.length}>
-          {coffeeShops.map((nowItem) => {
+        <ConditionalRenderer isShowContent={zoom > 11 && coffeeShops.length > 0}>
+          {coffeeShops.map((nowItem: CoffeeShop) => {
             const {
               latitude,
               longitude,
@@ -69,9 +82,8 @@ function CafeMap({ position, coffeeShops, setBounds, search }) {
               <Marker
                 key={uuidv4()}
                 opacity={0.5}
-                position={{ lng: longitude, lat: latitude }}
+                position={{ lng: parseFloat(longitude), lat: parseFloat(latitude) }}
                 icon={L.divIcon({
-                  iconSize: 'auto',
                   html: `<div class="custom-marker">
                             <span>${score} ★ ${nowItem.name}</span>
                         </div>`,
@@ -120,5 +132,4 @@ function CafeMap({ position, coffeeShops, setBounds, search }) {
   );
 }
 
-CafeMap.propTypes = {};
 export default CafeMap;

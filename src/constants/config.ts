@@ -1,4 +1,18 @@
-const cities = [
+interface City {
+  name: string;
+  displayName: string;
+  lng: number;
+  lat: number;
+  checked: boolean;
+}
+
+interface Condition {
+  name: string;
+  displayName: string;
+  checked: boolean;
+}
+
+const cities: City[] = [
   {
     name: 'taipei',
     displayName: '台北',
@@ -120,7 +134,7 @@ const cities = [
   },
 ];
 
-const conditions = [
+const conditions: Condition[] = [
   {
     name: 'socket',
     displayName: '插座',
@@ -138,6 +152,6 @@ const conditions = [
   },
 ];
 
-const defaultCheckedConditions = conditions;
+const defaultCheckedConditions: Condition[] = conditions;
 
 export { cities, conditions, defaultCheckedConditions };
