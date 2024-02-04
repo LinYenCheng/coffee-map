@@ -12,7 +12,6 @@ import { CoffeeShop } from '../types';
 interface SearchCardProps {
   item: CoffeeShop;
   onSelect: (item: any) => void; // Adjust the type of item accordingly
-  inputEl: React.RefObject<HTMLInputElement>;
 }
 
 function getStars(num: number): string {

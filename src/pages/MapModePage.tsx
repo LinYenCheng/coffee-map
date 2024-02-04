@@ -1,12 +1,14 @@
-import { useRef, useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 import Map from '../containers/CafeMap';
+import SearchElastic from '../containers/SearchElastic';
+import SearchForm from '../containers/SearchForm';
+import ConditionalRenderer from '../components/ConditionalRenderer';
+
+import useCafeShopsStore, { getShops, searchWithKeyword } from '../store/useCafesStore';
+import { conditions } from '../constants/config';
 
 import '../styles/search.scss';
-import SearchElastic from '../containers/SearchElastic';
-import useCafeShopsStore, { getShops } from '../store/useCafesStore';
-import ConditionalRenderer from '../components/ConditionalRenderer';
-import { CoffeeShop } from '../types';
 
 interface Bounds {
   northEast: {
@@ -19,10 +21,9 @@ interface Bounds {
   };
 }
 
-function Layout() {
-  const searchRef = useRef<any>(null);
-  const [coffeeShops, setCoffeeShops] = useState<CoffeeShop[]>([]);
+function MapModePage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const [bounds, setBounds] = useState<Bounds>({
     northEast: {
       lat: 25.19872829288669,
@@ -33,7 +34,12 @@ function Layout() {
       lng: 121.38519287109376,
     },
   });
-  const { checkedConditions } = useCafeShopsStore();
+  const { checkedConditions, coffeeShops } = useCafeShopsStore();
+
+  const strCheckedConditions = conditions
+    .filter((condition, index) => checkedConditions[index].checked)
+    .map((condition) => condition.displayName)
+    .join(' ');
 
   const boundedCoffeeShops = useMemo(() => {
     return coffeeShops.filter((nowItemCoffee) => {
@@ -67,20 +73,30 @@ function Layout() {
 
   const handleSelect = () => {};
 
-  const search = () => {
-    searchRef.current.search();
+  const search = async (keyword = '') => {
+    const result = await searchWithKeyword({
+      coffeeShops,
+      keyWord: `${keyword} ${strCheckedConditions}`,
+      bounds,
+    });
+    return result;
   };
 
   useEffect(() => {
     async function getCoffee() {
       setIsLoading(true);
-      const coffeeShops = await getShops();
-      setCoffeeShops(coffeeShops);
+      await getShops();
       search();
       setIsLoading(false);
     }
     getCoffee();
   }, []);
+
+  useEffect(() => {
+    if (strCheckedConditions !== '') {
+      search();
+    }
+  }, [strCheckedConditions, coffeeShops]);
 
   return (
     <>
@@ -92,7 +108,8 @@ function Layout() {
       <div className="container-fluid p-0 ">
         <div className="row">
           <div className="col-md-4 col-sm-12 result__container p-0">
-            <SearchElastic forwardedRef={searchRef} onChange={handleSelect} bounds={bounds} />
+            <SearchForm search={search} />
+            <SearchElastic onChange={handleSelect} bounds={bounds} />
           </div>
           <div className="pb-1 col-md-8 col-sm-12 map__container p-0">
             <ConditionalRenderer isShowContent={coffeeShops.length > 0}>
@@ -110,6 +127,4 @@ function Layout() {
   );
 }
 
-Layout.defaultProps = {};
-
-export default Layout;
+export default MapModePage;

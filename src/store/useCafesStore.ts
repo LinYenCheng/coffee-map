@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { setAutoFreeze } from 'immer';
+import { immer } from 'zustand/middleware/immer';
 import axios from 'axios';
 import calculateScore from '../util/calculateScore';
 import { defaultCheckedConditions } from '../constants/config';
@@ -13,7 +15,7 @@ const indexSearch = lunr(function generateLunr() {
   this.field('wifiGood');
 }) as any;
 
-export const searchWithKeyWord = async ({ coffeeShops, bounds, keyWord } : any) => {
+const search = async ({ coffeeShops, bounds, keyWord }: any) => {
   let finalResult = [];
   if (keyWord.toString().trim() !== '') {
     const results = await indexSearch.search(keyWord);
@@ -64,21 +66,45 @@ export const searchWithKeyWord = async ({ coffeeShops, bounds, keyWord } : any) 
       wifiGood: shop && shop.wifi > 3 ? '網路' : '',
       score: calculateScore({ ...shop }),
     }))
-    .sort((a: CoffeeShop, b: CoffeeShop) =>  b.score - a.score);
+    .sort((a: CoffeeShop, b: CoffeeShop) => b.score - a.score);
   return finalResult;
 };
 
-const useCafeShopsStore = create(() => ({
-  coffeeShops: [],
-  checkedConditions: defaultCheckedConditions,
-}));
+setAutoFreeze(false);
+const useCafeShopsStore = create(
+  immer(() => ({
+    coffeeShops: [],
+    filterCoffeeShops: [],
+    checkedConditions: defaultCheckedConditions,
+  })),
+);
 
 export const toggleConditions = (checkedConditions: any) => {
-  useCafeShopsStore.setState({ checkedConditions });
+  useCafeShopsStore.setState((state) => {
+    state.checkedConditions = checkedConditions;
+  });
 };
 
 export const resetConditions = () => {
-  useCafeShopsStore.setState({ checkedConditions: defaultCheckedConditions });
+  useCafeShopsStore.setState((state) => {
+    state.checkedConditions = [
+      {
+        name: 'socket',
+        displayName: '插座',
+        checked: false,
+      },
+      {
+        name: 'quiet',
+        displayName: '安靜',
+        checked: false,
+      },
+      {
+        name: 'wifi',
+        displayName: '網路',
+        checked: false,
+      },
+    ];
+  });
 };
 
 export const getShops = async () => {
@@ -97,6 +123,18 @@ export const getShops = async () => {
     return res.data;
   }
   return [];
+};
+
+export const searchWithKeyword = async ({ coffeeShops, keyWord, bounds }: any) => {
+  const result = await search({
+    coffeeShops,
+    keyWord,
+    bounds,
+  });
+
+  useCafeShopsStore.setState({
+    filterCoffeeShops: result,
+  });
 };
 
 export default useCafeShopsStore;

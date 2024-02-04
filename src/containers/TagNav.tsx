@@ -5,7 +5,7 @@ import '../styles/menu-nav.scss';
 import { conditions } from '../constants/config';
 import { Condition } from '../types';
 
-function TagNav(): JSX.Element {
+function TagNav() {
   const { checkedConditions } = useCafeShopsStore();
 
   const handleConditionToggle = (index: number) => {
