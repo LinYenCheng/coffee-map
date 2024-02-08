@@ -1,8 +1,10 @@
 import { createRoot } from 'react-dom/client';
-import Root from './Root';
+import { RouterProvider } from 'react-router-dom';
 
 import './styles/index.scss';
+import router from './router';
 
 const container = document.getElementById('root') as HTMLElement;
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
-root.render(<Root />);
+
+root.render(<RouterProvider router={router} />);

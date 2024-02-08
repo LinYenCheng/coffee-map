@@ -22,6 +22,7 @@ $header-height: 72px;
     box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.3);
     outline: 0;
     pointer-events: auto;
+    color: black;
   }
 
   @media screen and (max-width: 719px) {
@@ -270,5 +271,21 @@ $header-height: 72px;
 
   .custom-marker--focus {
     background: var(--outline, #783d06);
+  }
+}
+
+.list-mode {
+  .search__result {
+    max-height: none;
+    overflow: hidden;
+  }
+
+  .card {
+    margin-bottom: 1rem;
+  }
+
+  .tag__container {
+    margin-bottom: 1rem;
+    box-shadow: none;
   }
 }

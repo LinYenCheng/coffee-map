@@ -9,7 +9,6 @@ import useCafeShopsStore from '../store/useCafesStore';
 import { CoffeeShop } from '../types';
 
 interface SearchElasticProps {
-  bounds: any; // Adjust the type accordingly
   onChange: (item: CoffeeShop) => void;
 }
 

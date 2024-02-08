@@ -13,60 +13,37 @@ const indexSearch = lunr(function generateLunr() {
   this.field('strSocket');
   this.field('quietAways');
   this.field('wifiGood');
+  this.field('noLimitedTime');
 }) as any;
 
-const search = async ({ coffeeShops, bounds, keyWord }: any) => {
-  let finalResult = [];
-  if (keyWord.toString().trim() !== '') {
-    const results = await indexSearch.search(keyWord);
-    if (results && results.length) {
-      const searchResults = results.map((result: any) => result.ref);
+const search = async ({ coffeeShops, bounds = false, keyWord }: any) => {
+  const searchQuery = keyWord.toString().trim();
+  const results = searchQuery !== '' ? await indexSearch.search(keyWord) : [];
+  const searchResults = results.map((result: any) => result.ref);
 
-      let tempShops = coffeeShops;
+  const filteredShops = coffeeShops.filter((coffeeShop: CoffeeShop) => {
+    const matchesKeyword = searchQuery === '' || searchResults.includes(coffeeShop.id);
 
-      tempShops = tempShops.filter((coffeeShop: CoffeeShop) => {
-        if (bounds) {
-          const { southWest, northEast } = bounds;
-          const { latitude, longitude } = coffeeShop;
-          return (
-            parseFloat(latitude) > southWest.lat &&
-            parseFloat(longitude) > southWest.lng &&
-            parseFloat(latitude) < northEast.lat &&
-            parseFloat(longitude) < northEast.lng &&
-            searchResults.indexOf(coffeeShop.id) !== -1
-          );
-        }
-        return searchResults.indexOf(coffeeShop.id) !== -1;
-      });
-      finalResult = tempShops;
+    if (bounds) {
+      const { southWest, northEast } = bounds;
+      const { latitude, longitude } = coffeeShop;
+      const withinBounds =
+        parseFloat(latitude) > southWest.lat &&
+        parseFloat(longitude) > southWest.lng &&
+        parseFloat(latitude) < northEast.lat &&
+        parseFloat(longitude) < northEast.lng;
+      return withinBounds && matchesKeyword;
     }
-  } else {
-    let tempShops = coffeeShops;
+    return matchesKeyword;
+  });
 
-    tempShops = tempShops.filter((coffeeShop: CoffeeShop) => {
-      if (bounds) {
-        const { southWest, northEast } = bounds;
-        const { latitude, longitude } = coffeeShop;
-        return (
-          parseFloat(latitude) > southWest.lat &&
-          parseFloat(longitude) > southWest.lng &&
-          parseFloat(latitude) < northEast.lat &&
-          parseFloat(longitude) < northEast.lng
-        );
-      }
-    });
-    finalResult = tempShops;
-  }
-
-  finalResult = finalResult
+  const finalResult = filteredShops
     .map((shop: CoffeeShop) => ({
       ...shop,
-      strSocket: shop && shop.socket === 'yes' ? '插座' : '',
-      quietAways: shop && shop.quiet > 3 ? '安靜' : '',
-      wifiGood: shop && shop.wifi > 3 ? '網路' : '',
       score: calculateScore({ ...shop }),
     }))
     .sort((a: CoffeeShop, b: CoffeeShop) => b.score - a.score);
+
   return finalResult;
 };
 
@@ -110,12 +87,13 @@ export const resetConditions = () => {
 export const getShops = async () => {
   const res = await axios.get(`${import.meta.env.BASE_URL}cafedata/taiwan.json`);
   if (res.data) {
-    res.data.forEach((shop: any) => {
+    res.data.forEach((shop: CoffeeShop) => {
       indexSearch.add({
         ...shop,
         strSocket: shop && shop.socket === 'yes' ? '插座' : '',
         quietAways: shop && shop.quiet > 3 ? '安靜' : '',
         wifiGood: shop && shop.wifi > 3 ? '網路' : '',
+        noLimitedTime: shop && shop.limited_time === 'no' ? '不限時' : '',
         score: calculateScore({ ...shop }),
       });
     });
@@ -134,6 +112,14 @@ export const searchWithKeyword = async ({ coffeeShops, keyWord, bounds }: any) =
 
   useCafeShopsStore.setState({
     filterCoffeeShops: result,
+  });
+
+  return result;
+};
+
+export const clearFilterCoffeeShops = () => {
+  useCafeShopsStore.setState({
+    filterCoffeeShops: [],
   });
 };
 

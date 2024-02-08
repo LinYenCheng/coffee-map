@@ -152,6 +152,22 @@ const conditions: Condition[] = [
   },
 ];
 
-const defaultCheckedConditions: Condition[] = conditions;
+const defaultCheckedConditions: Condition[] = [
+  {
+    name: 'socket',
+    displayName: '插座',
+    checked: false,
+  },
+  {
+    name: 'quiet',
+    displayName: '安靜',
+    checked: false,
+  },
+  {
+    name: 'wifi',
+    displayName: '網路',
+    checked: false,
+  },
+];
 
 export { cities, conditions, defaultCheckedConditions };
