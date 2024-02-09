@@ -1,25 +1,27 @@
-import useCafeShopsStore, { toggleConditions } from '../store/useCafesStore';
+import useCafeShopsStore, { toggleSortConditions } from '../store/useCafesStore';
 
 import '../styles/menu-nav.scss';
 
-import { conditions } from '../constants/config';
+import { defaultSortConditions } from '../constants/config';
 import { Condition } from '../types';
 
 function TagNav() {
-  const { checkedConditions } = useCafeShopsStore();
+  const { sortConditions } = useCafeShopsStore();
 
   const handleConditionToggle = (index: number) => {
-    const tempCheckedConditions: Condition[] = [...checkedConditions];
-    tempCheckedConditions[index].checked = !checkedConditions[index].checked;
-    toggleConditions(tempCheckedConditions);
+    const tempsortConditions: Condition[] = [
+      ...sortConditions.map((elm) => ({ ...elm, checked: false })),
+    ];
+    tempsortConditions[index].checked = !sortConditions[index].checked;
+    toggleSortConditions(tempsortConditions);
   };
 
-  const blockConditionList = conditions.map((condition, index) => (
+  const blockConditionList = defaultSortConditions.map((condition, index) => (
     <li className="nav__li" key={condition.name}>
       <input
         id={condition.name}
         type="checkbox"
-        checked={checkedConditions[index].checked}
+        checked={sortConditions[index].checked}
         onChange={() => handleConditionToggle(index)}
       />
       <label htmlFor={condition.name} className="nav__label nav__label--condition">
@@ -28,7 +30,7 @@ function TagNav() {
     </li>
   ));
 
-  return <ul className="d-inline-block mb-0 ps-0">{blockConditionList}</ul>;
+  return <ul className="ms-2 mb-0 ps-0">{blockConditionList}</ul>;
 }
 
 export default TagNav;

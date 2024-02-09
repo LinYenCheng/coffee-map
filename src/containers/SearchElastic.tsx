@@ -53,7 +53,7 @@ function SearchElastic({ onChange }: SearchElasticProps) {
 
   return (
     <div className="search__result">
-      <div className="tag__container">
+      <div className="tag__container d-flex">
         <span className="tag__title">排列順序</span>
         <TagNav />
       </div>

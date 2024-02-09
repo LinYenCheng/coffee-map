@@ -10,10 +10,9 @@ $header-height: 72px;
     font: 20px;
     z-index: 9;
     width: 240px;
-    height: 48px;
+    height: 40px;
     padding: 8px 16px;
     justify-content: flex-end;
-    align-items: center;
     border: 0px;
     border-radius: 40px;
     background: #fff;
@@ -25,7 +24,7 @@ $header-height: 72px;
 
   @media screen and (max-width: 719px) {
     /*  如果使用者之裝置寬度 <= 768px，將會再載入這裡的 CSS。  */
-    display: none;
+    display: none !important;
   }
 }
 
@@ -33,20 +32,84 @@ $header-height: 72px;
   display: none;
 }
 
-.btn {
-  position: absolute;
-  cursor: pointer;
+// 多選
+.p-multiselect {
+  background: #783d06;
+  border: #783d06;
+  height: 1.75rem;
 }
 
+.p-multiselect .p-multiselect-trigger {
+  width: 1.5rem;
+}
+
+.p-multiselect-panel,
+.p-multiselect-items-wrapper,
+.p-multiselect-items {
+  padding-left: 0;
+  background: #783d06;
+  border: #783d06;
+}
+
+.p-multiselect-items-wrapper {
+  border-radius: 1rem;
+}
+
+.p-multiselect-label {
+  width: 3.75rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.p-multiselect-items {
+  margin-bottom: 0;
+  font-size: 0.75rem;
+
+  .p-checkbox-box {
+    background: #fff;
+  }
+
+  .p-multiselect-item {
+    outline: none;
+    border: none;
+    box-shadow: none;
+    padding: 0.25rem 0.75rem;
+
+    .p-checkbox .p-checkbox-box {
+      scale: 0.75;
+    }
+  }
+
+  .p-highlight {
+    background: #783d06;
+    color: #fff;
+    .p-checkbox-box {
+      background: #fff;
+    }
+  }
+
+  .p-highlight .p-multiselect-item {
+    background: #783d06;
+  }
+}
+
+.p-multiselect-header {
+  display: none;
+}
+
+.p-multiselect .p-multiselect-label {
+  color: #fff;
+}
+
+// 多選
+
 .search__button {
-  z-index: 11;
-  top: -0.25rem;
-  border: 0;
-  // padding: 5px 0;
+  border: none;
+  // padding: 0;
   background: #fff;
   border-radius: 0 3px 3px 0;
   pointer-events: auto;
-  transform: translateX(-3rem);
+  transform: translateX(-3.5rem);
 
   @media screen and (max-width: 720px) {
     /* 小於 767px */
@@ -180,10 +243,7 @@ $header-height: 72px;
     position: sticky;
     top: 0;
     z-index: 1;
-    height: 64px;
     padding: 8px 8px 8px 0px;
-    display: flex;
-    flex-direction: column;
     align-items: flex-start;
     flex-wrap: wrap;
     align-content: center;
@@ -191,11 +251,8 @@ $header-height: 72px;
     background: #fff;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.3);
 
-    ul {
-      overflow: hidden;
-    }
-
     .tag__title {
+      line-height: 2rem;
       @media screen and (max-width: 1200px) {
         display: none;
       }

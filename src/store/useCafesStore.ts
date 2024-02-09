@@ -3,8 +3,8 @@ import { setAutoFreeze } from 'immer';
 import { immer } from 'zustand/middleware/immer';
 import axios from 'axios';
 import calculateScore from '../util/calculateScore';
-import { defaultCheckedConditions } from '../constants/config';
-import { CoffeeShop } from '../types';
+import { defaultCheckedConditions, defaultSortConditions } from '../constants/config';
+import { CoffeeShop, Condition } from '../types';
 
 const { lunr } = window;
 const indexSearch = lunr(function generateLunr() {
@@ -53,12 +53,39 @@ const useCafeShopsStore = create(
     coffeeShops: [],
     filterCoffeeShops: [],
     checkedConditions: defaultCheckedConditions,
+    sortConditions: defaultSortConditions,
   })),
 );
 
 export const toggleConditions = (checkedConditions: any) => {
   useCafeShopsStore.setState((state) => {
     state.checkedConditions = checkedConditions;
+  });
+};
+
+export const toggleSortConditions = (sortConditions: any) => {
+  // Get the first active sort condition
+  const activeSortCondition = sortConditions.find((sort: Condition) => sort.checked);
+
+  useCafeShopsStore.setState((state) => {
+    state.sortConditions = sortConditions;
+
+    if (activeSortCondition) {
+      state.filterCoffeeShops = state.filterCoffeeShops.sort((a: CoffeeShop, b: CoffeeShop) => {
+        const { name } = activeSortCondition;
+        switch (name) {
+          case 'score':
+            return b.score - a.score;
+          case 'cheap':
+            return b.cheap - a.cheap;
+          case 'wifi':
+            return b.wifi - a.wifi;
+          // Add more cases for other fields
+          default:
+            return 0; // No matching field or condition
+        }
+      });
+    }
   });
 };
 

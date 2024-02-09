@@ -170,4 +170,22 @@ const defaultCheckedConditions: Condition[] = [
   },
 ];
 
-export { cities, conditions, defaultCheckedConditions };
+const defaultSortConditions: Condition[] = [
+  {
+    name: 'score',
+    displayName: '好咖啡',
+    checked: true,
+  },
+  {
+    name: 'cheap',
+    displayName: '低價',
+    checked: false,
+  },
+  {
+    name: 'wifi',
+    displayName: 'WIFI',
+    checked: false,
+  },
+];
+
+export { cities, conditions, defaultCheckedConditions, defaultSortConditions };

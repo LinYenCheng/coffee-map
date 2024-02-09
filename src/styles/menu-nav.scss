@@ -1,91 +1,16 @@
-nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 270px;
-  bottom: 0;
-  z-index: 500;
-  pointer-events: none;
-
-  ul {
-    padding-left: 10px;
-    position: absolute;
-    left: -500px;
-    height: 0;
-    margin-top: 50px;
-    pointer-events: all;
-  }
-
-  li {
-    display: inline-block;
-    overflow: hidden;
-    cursor: pointer;
-    font-weight: 200;
-    font-size: 18px;
-    opacity: 0;
-  }
-}
-
-nav::before {
-  content: '';
-  position: absolute;
-  border-right: 1px solid rgba(41, 37, 47, 0.05);
-  top: 0;
-  bottom: 0;
-  left: -10px;
-  right: 0;
-  background: rgba(255, 255, 255, 0.95);
-  transform: rotateY(90deg);
-  transition: transform 350ms;
-  transform-origin: 0 0;
-  transition-delay: 200ms;
-}
-
-@keyframes wind {
-  0%,
-  100% {
-    transform: none;
-  }
-
-  20% {
-    transform: rotateX(5deg) rotateY(8deg);
-  }
-
-  40% {
-    transform: rotateX(-2deg);
-  }
-
-  60% {
-    transform: rotateY(-3deg) rotateX(7deg);
-  }
-
-  80% {
-    transform: rotateY(-4deg) rotateX(2deg);
-  }
-}
-
 .nav__li {
   cursor: pointer;
-  display: inline-block;
+  display: inline-flex;
   position: relative;
   padding: 4px;
   text-align: center;
 
-  label {
-    cursor: pointer;
-    position: relative;
-    float: left;
-    top: 5px;
-    left: 5px;
-  }
-
   .nav__label {
+    cursor: pointer;
     border: 2px solid #29252f;
     border-radius: 2px;
     margin: 0 auto;
-    float: left;
     min-width: 80px;
-    width: 30%;
   }
 
   .nav__label--condition {
@@ -106,8 +31,8 @@ nav::before {
   }
 
   input:checked + .nav__label--condition {
-    background: #49454f;
-    border: 2px solid #49454f;
+    background: linear-gradient(0deg, #a06935, #a06935), linear-gradient(0deg, #cb925d, #cb925d);
+    border: 1px solid #a06935;
     color: #fff;
   }
 }

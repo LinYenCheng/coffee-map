@@ -5,6 +5,7 @@ import ConditionalRenderer from '../ConditionalRenderer';
 import { resetConditions } from '../../store/useCafesStore';
 
 import './search.scss';
+import OtherConditions from '../../containers/OtherConditions';
 
 type Props = {
   search: (keyword?: string) => void;
@@ -36,7 +37,8 @@ export default function SearchForm({ search }: Props) {
   };
 
   return (
-    <div className="search-container">
+    <div className="search-container d-flex flex-wrap align-items-center align-content-center">
+      <OtherConditions />
       <form onSubmit={onSubmit}>
         <InputText
           value={strInput}
