@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMapEvent } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
-import { v4 as uuidv4 } from 'uuid';
 
 import ConditionalRenderer from '../components/ConditionalRenderer.js';
 import calculateScore from '../util/calculateScore.js';
@@ -63,7 +62,7 @@ function CafeMap({ position, coffeeShops, setBounds, search }: CafeMapProps): JS
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <MarkerClusterGroup chunkedLoading>
+      <MarkerClusterGroup chunkedLoading maxClusterRadius={120} disableClusteringAtZoom={17}>
         <ConditionalRenderer isShowContent={zoom > 11 && coffeeShops.length > 0}>
           {coffeeShops.map((nowItem: CoffeeShop) => {
             const {
@@ -78,9 +77,43 @@ function CafeMap({ position, coffeeShops, setBounds, search }: CafeMapProps): JS
               standing_desk,
             } = nowItem;
             const score = calculateScore(nowItem);
+
+            const popupContent = (
+              <div className="card border-none">
+                <div className="card__title mb-2">
+                  <a className="h6" href={url} target="_blank">
+                    {name}
+                  </a>
+                  <span className="ms-2 score">{score}</span>
+                  <i className="pi pi-star-fill score ms-1"></i>
+                </div>
+                <ul>
+                  <li>
+                    <ol className="mb-2">
+                      <ConditionalRenderer isShowContent={wifi > 3}>
+                        <li>WIFI</li>
+                      </ConditionalRenderer>
+                      <ConditionalRenderer isShowContent={socket !== 'no'}>
+                        <li>插座</li>
+                      </ConditionalRenderer>
+                      <ConditionalRenderer isShowContent={limited_time !== 'yes'}>
+                        <li>無限時</li>
+                      </ConditionalRenderer>
+                      <ConditionalRenderer isShowContent={standing_desk === 'yes'}>
+                        <li>站位</li>
+                      </ConditionalRenderer>
+                    </ol>
+                  </li>
+                  <li className="mb-2">
+                    <i className="pi pi-map-marker me-2"></i>
+                    <span>{address}</span>
+                  </li>
+                </ul>
+              </div>
+            );
             return (
               <Marker
-                key={uuidv4()}
+                key={nowItem.id}
                 opacity={0.5}
                 position={{ lng: parseFloat(longitude), lat: parseFloat(latitude) }}
                 icon={L.divIcon({
@@ -89,40 +122,7 @@ function CafeMap({ position, coffeeShops, setBounds, search }: CafeMapProps): JS
                         </div>`,
                 })}
               >
-                <Popup>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: `
-                      <div class="card border-none">
-                        <div class="card__title mb-2">
-                          <a
-                            class="h6"
-                            href=${url}
-                            target="_blank"
-                          >
-                            ${name}
-                          </a>
-                          <span class="ms-2 score">${score}</span>
-                          <i class="pi pi-star-fill score ms-1"></i>
-                        </div>
-                        <ul>
-                          <li>
-                            <ol class="mb-2">
-                              ${wifi > 3 ? `<li>WIFI</li>` : ''}
-                              ${socket !== 'no' ? `<li>插座</li>` : ''}
-                              ${limited_time !== 'yes' ? `<li>無限時</li>` : ''}
-                              ${standing_desk === 'yes' ? `<li>站位</li>` : ''}
-                            </ol>
-                          </li>
-                          <li class="mb-2">
-                            <i class="pi pi-map-marker me-2"></i>
-                            <span>${address}</span>
-                          </li>
-                        </ul>
-                      </div>`,
-                    }}
-                  />
-                </Popup>
+                <Popup>{popupContent}</Popup>
               </Marker>
             );
           })}

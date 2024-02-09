@@ -8,21 +8,21 @@ interface ScoreCriteria {
 }
 
 function calculateScore({ cheap, music, quiet, seat, tasty, wifi }: ScoreCriteria): number {
-  // Create an array to hold only defined values
-  const definedValues: any[] = [cheap, music, quiet, seat, tasty, wifi].filter(
-    (value) => value !== undefined
-  );
+  const criteria = { cheap, music, quiet, seat, tasty, wifi };
+  // Filter undefined values and handle empty criteria gracefully
+  const definedCriteria = Object.entries(criteria)
+    .filter(([key, value]) => value !== undefined)
+    .map(([key, value]) => ({ key, value }));
 
-  // Check if there are no defined values
-  if (definedValues.length === 0) {
-    return 0;
+  if (definedCriteria.length === 0) {
+    return 0; // Return 0 for empty criteria to indicate neutrality
   }
 
-  // Calculate average based on the defined values
-  const sum: number = definedValues.reduce((total, value) => total + value, 0);
-  const score: number = parseFloat((sum / definedValues.length).toFixed(1));
-  if (sum === 0) return 0;
-  return score;
+  // Calculate score using weighted average with explicit type casts
+  const totalScore = definedCriteria.reduce((acc, { key, value }) => acc + (value as number), 0);
+  const averageScore = parseFloat((totalScore / definedCriteria.length).toFixed(1));
+
+  return averageScore;
 }
 
 export default calculateScore;

@@ -15,8 +15,8 @@ interface SearchElasticProps {
 function SearchElastic({ onChange }: SearchElasticProps) {
   const intPageSize = 10;
   const observerTarget = useRef<HTMLDivElement>(null);
-  const [page, setPage] = useState<number>(1);
-  const [displayfilterCoffeeShops, setDisplayfilterCoffeeShops] = useState<CoffeeShop[]>([]);
+  const [page, setPage] = useState(1);
+  const [displayFilterCoffeeShops, setDisplayFilterCoffeeShops] = useState<CoffeeShop[]>([]);
 
   const { filterCoffeeShops } = useCafeShopsStore();
 
@@ -27,9 +27,9 @@ function SearchElastic({ onChange }: SearchElasticProps) {
 
   useEffect(() => {
     if (filterCoffeeShops.length > 0) {
-      setDisplayfilterCoffeeShops(filterCoffeeShops.slice(0, intPageSize * page));
+      setDisplayFilterCoffeeShops(filterCoffeeShops.slice(0, intPageSize * page));
     } else {
-      setDisplayfilterCoffeeShops([]);
+      setDisplayFilterCoffeeShops([]);
     }
   }, [filterCoffeeShops, page]);
 
@@ -57,8 +57,8 @@ function SearchElastic({ onChange }: SearchElasticProps) {
         <span className="tag__title">排列順序</span>
         <TagNav />
       </div>
-      <ConditionalRenderer isShowContent={displayfilterCoffeeShops.length > 0}>
-        {displayfilterCoffeeShops.map((item) => (
+      <ConditionalRenderer isShowContent={displayFilterCoffeeShops.length > 0}>
+        {displayFilterCoffeeShops.map((item) => (
           <SearchCard key={item?.id} item={item} onSelect={onChange} />
         ))}
       </ConditionalRenderer>
