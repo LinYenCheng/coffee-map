@@ -1,8 +1,17 @@
 .app .p-menubar {
   padding: 0.5rem 1rem;
+  height: 100%;
+  background: none;
+  border: none;
+  color: white;
 
   a {
     color: #fff;
+    text-decoration: auto;
+  }
+
+  ul {
+    margin: 0;
   }
 }
 

@@ -1,4 +1,4 @@
-$header-height: 72px;
+$header-height: 48px;
 
 .search-container {
   position: absolute;
@@ -236,7 +236,7 @@ $header-height: 72px;
   background: rgba(255, 255, 255, 0.9);
   font-size: 90%;
   overflow: auto;
-  max-height: calc(100vh - 72px);
+  max-height: calc(100vh - $header-height);
   top: calc($header-height + 8px);
 
   .tag__container {

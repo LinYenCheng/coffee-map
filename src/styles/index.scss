@@ -3,7 +3,7 @@
 @import 'primeicons/primeicons.css';
 
 $primary-color: #783d06;
-$header-height: 72px;
+$header-height: 48px;
 
 * {
   box-sizing: border-box;
@@ -76,7 +76,7 @@ html {
   }
 
   .result__container {
-    height: calc(100vh - 72px);
+    height: calc(100vh - $header-height);
     overflow: scroll;
   }
 
@@ -117,7 +117,7 @@ html {
 
     .result__container,
     .leaflet-container {
-      height: calc(100vh - 72px);
+      height: calc(100vh - $header-height);
       overflow: hidden;
     }
   }
@@ -145,17 +145,4 @@ button {
 
 .border-none {
   border: none;
-}
-
-.app {
-  .p-menubar {
-    padding: 1rem;
-    background: none;
-    border: none;
-    color: white;
-
-    a {
-      text-decoration: auto;
-    }
-  }
 }
