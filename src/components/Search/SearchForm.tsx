@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import ConditionalRenderer from '../components/ConditionalRenderer';
-import { resetConditions } from '../store/useCafesStore';
+import ConditionalRenderer from '../ConditionalRenderer';
+import { resetConditions } from '../../store/useCafesStore';
+
+import './search.scss';
 
 type Props = {
   search: (keyword?: string) => void;

@@ -2,13 +2,13 @@ import { useState, useEffect, useMemo } from 'react';
 
 import Map from '../containers/CafeMap';
 import SearchElastic from '../containers/SearchElastic';
-import SearchForm from '../containers/SearchForm';
+import SearchForm from '../components/Search/SearchForm';
 import ConditionalRenderer from '../components/ConditionalRenderer';
 
 import useCafeShopsStore, { getShops, searchWithKeyword } from '../store/useCafesStore';
 import { conditions } from '../constants/config';
 
-import '../styles/search.scss';
+import { CoffeeShop } from '../types';
 
 interface Bounds {
   northEast: {
@@ -42,7 +42,7 @@ function MapModePage() {
     .join(' ');
 
   const boundedCoffeeShops = useMemo(() => {
-    return coffeeShops.filter((nowItemCoffee) => {
+    return coffeeShops.filter((nowItemCoffee: CoffeeShop) => {
       const { latitude, longitude } = nowItemCoffee;
       const isSocketFilterEnable = checkedConditions[0].checked === true;
       const isQuietFilterEnable = checkedConditions[1].checked === true;

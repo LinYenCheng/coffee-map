@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 
 import TagNav from './TagNav';
-import SearchCard from '../components/SearchCard';
+import SearchCard from '../components/Search/SearchCard';
 import ConditionalRenderer from '../components/ConditionalRenderer';
 
 import useCafeShopsStore from '../store/useCafesStore';

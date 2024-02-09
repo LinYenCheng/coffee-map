@@ -8,7 +8,7 @@ import srcNoCell from './assets/icon_no_cell.png';
 import srcCoffee from './assets/icon_coffee_maker.png';
 import srcMoney from './assets/icon_money.png';
 import srcStar from './assets/icon_star.png';
-import { CoffeeShop } from '../types';
+import { CoffeeShop } from '../../types';
 
 interface SearchCardProps {
   item: CoffeeShop;
