@@ -32,7 +32,6 @@ export default function ListModePage({}: Props) {
       const result = await searchWithCondition({
         coffeeShops,
         keyWord,
-        bounds: false,
         filterConditions,
       });
       return result;

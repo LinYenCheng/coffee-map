@@ -4,6 +4,8 @@ import { InputText } from 'primereact/inputtext';
 import './search.scss';
 import OtherConditions from '../../containers/OtherConditions';
 import { classNames } from 'primereact/utils';
+import CityConditions from '../../containers/CityConditions';
+import ConditionFilters from './ConditionFilters';
 
 type Props = {
   search: (keyword?: string) => void;
@@ -47,7 +49,9 @@ export default function SearchForm({ search }: Props) {
 
   return (
     <div className=" d-flex flex-wrap align-items-center align-content-center">
-      <OtherConditions />
+      <div className="mobile-hide">
+        <ConditionFilters />
+      </div>
       <form onSubmit={onSubmit}>
         <span className="p-input-icon-right">
           <i

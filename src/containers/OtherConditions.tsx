@@ -1,11 +1,14 @@
+import { useParams } from 'react-router-dom';
+
 import useCafeShopsStore, { toggleConditions } from '../store/useCafesStore';
 import { MultiSelect } from 'primereact/multiselect';
 
-import { conditions } from '../constants/config';
 import { Condition } from '../types';
+import { defaultFilterConditions } from '../constants/config';
 
 function OtherConditions() {
-  const { filterConditions } = useCafeShopsStore();
+  const { condition } = useParams();
+  const { cityConditions, filterConditions } = useCafeShopsStore();
 
   const handleConditionToggle = (e: any) => {
     const tempCheckedConditions: Condition[] = [
@@ -15,10 +18,10 @@ function OtherConditions() {
       const index = tempCheckedConditions.findIndex((elm) => elm.name === value);
       tempCheckedConditions[index].checked = true;
     });
-    toggleConditions(tempCheckedConditions);
+    toggleConditions({ cityConditions, filterConditions: tempCheckedConditions, condition });
   };
 
-  const dropdownOptions = conditions.map((condition) => ({
+  const dropdownOptions = defaultFilterConditions.map((condition) => ({
     label: condition.displayName,
     value: condition.name, // Use 'name' for unique values
   }));

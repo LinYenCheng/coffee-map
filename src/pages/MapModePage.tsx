@@ -8,6 +8,7 @@ import ConditionalRenderer from '../components/ConditionalRenderer';
 import useCafeShopsStore, { getShops, searchWithCondition } from '../store/useCafesStore';
 
 import { CoffeeShop } from '../types';
+import ConditionFilters from '../components/Search/ConditionFilters';
 
 interface Bounds {
   northEast: {
@@ -22,18 +23,7 @@ interface Bounds {
 
 function MapModePage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const [bounds, setBounds] = useState<Bounds>({
-    northEast: {
-      lat: 25.19872829288669,
-      lng: 121.66603088378908,
-    },
-    southWest: {
-      lat: 24.927228790288993,
-      lng: 121.38519287109376,
-    },
-  });
-  const { filterConditions, coffeeShops } = useCafeShopsStore();
+  const { bounds, filterConditions, coffeeShops } = useCafeShopsStore();
 
   const boundedCoffeeShops = useMemo(() => {
     return coffeeShops.filter((nowItemCoffee: CoffeeShop) => {
@@ -72,7 +62,6 @@ function MapModePage() {
       const result = await searchWithCondition({
         coffeeShops,
         keyWord,
-        bounds,
         filterConditions,
       });
       return result;
@@ -87,7 +76,6 @@ function MapModePage() {
       await searchWithCondition({
         coffeeShops: results,
         keyWord: '',
-        bounds,
         filterConditions,
       });
       setIsLoading(false);
@@ -108,6 +96,9 @@ function MapModePage() {
             <div className="search-container search-container--absolute">
               <SearchForm search={search} />
             </div>
+            <div className="desktop-hide p-2 w-100 d-flex  align-items-center align-content-center justify-content-center border-bottom">
+              <ConditionFilters />
+            </div>
             <SearchElastic onChange={handleSelect} />
           </div>
           <div className="col-md-8 col-sm-12 map__container p-0">
@@ -115,7 +106,6 @@ function MapModePage() {
               <Map
                 position={{ lng: 121.5598, lat: 25.08 }}
                 coffeeShops={boundedCoffeeShops}
-                setBounds={setBounds}
                 search={search}
               />
             </ConditionalRenderer>

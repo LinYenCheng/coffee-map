@@ -8,21 +8,20 @@ import CoffeeShopFeatureStar from '../components/Search/CoffeeShopFeatureStar.js
 
 import calculateScore from '../util/calculateScore.js';
 import { CoffeeShop } from '../types/index.js';
+import { setBounds } from '../store/useCafesStore.js';
 
 interface CafeMapProps {
   position: { lat: number; lng: number };
   coffeeShops: CoffeeShop[];
-  setBounds: (bounds: { northEast: L.LatLng; southWest: L.LatLng }) => void;
   search: () => void;
 }
 
 interface MapProps {
-  setBounds: (bounds: { northEast: L.LatLng; southWest: L.LatLng }) => void;
   search: () => void;
   setZoom: (zoom: number) => void;
 }
 
-function MyMap({ search, setBounds, setZoom }: MapProps) {
+function MyMap({ search, setZoom }: MapProps) {
   const map = useMapEvent('click', () => {});
   useMapEvent('moveend', () => {
     if (map) {
@@ -40,7 +39,7 @@ function MyMap({ search, setBounds, setZoom }: MapProps) {
   return null;
 }
 
-function CafeMap({ position, coffeeShops, setBounds, search }: CafeMapProps): JSX.Element {
+function CafeMap({ position, coffeeShops, search }: CafeMapProps): JSX.Element {
   const [zoom, setZoom] = useState<number>(12);
   const handleMapLoad = (map: L.Map) => {
     const mapInstance = map;
@@ -59,7 +58,7 @@ function CafeMap({ position, coffeeShops, setBounds, search }: CafeMapProps): JS
       zoomControl={false}
       whenCreated={handleMapLoad}
     >
-      <MyMap setBounds={setBounds} setZoom={setZoom} search={search} />
+      <MyMap setZoom={setZoom} search={search} />
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

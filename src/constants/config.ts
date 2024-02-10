@@ -1,10 +1,4 @@
-interface City {
-  name: string;
-  displayName: string;
-  lng: number;
-  lat: number;
-  checked: boolean;
-}
+import { ICity } from '../types';
 
 interface Condition {
   name: string;
@@ -12,13 +6,13 @@ interface Condition {
   checked: boolean;
 }
 
-const cities: City[] = [
+const cities: ICity[] = [
   {
     name: 'taipei',
-    displayName: '台北',
+    displayName: '雙北',
     lng: 121.5598,
     lat: 25.08,
-    checked: true,
+    checked: false,
   },
   {
     name: 'keelung',
@@ -134,25 +128,7 @@ const cities: City[] = [
   },
 ];
 
-const conditions: Condition[] = [
-  {
-    name: 'socket',
-    displayName: '插座',
-    checked: false,
-  },
-  {
-    name: 'quiet',
-    displayName: '安靜',
-    checked: false,
-  },
-  {
-    name: 'wifi',
-    displayName: '網路',
-    checked: false,
-  },
-];
-
-const defaultCheckedConditions: Condition[] = [
+const defaultFilterConditions: Condition[] = [
   {
     name: 'socket',
     displayName: '插座',
@@ -188,4 +164,4 @@ const defaultSortConditions: Condition[] = [
   },
 ];
 
-export { cities, conditions, defaultCheckedConditions, defaultSortConditions };
+export { cities, defaultFilterConditions, defaultSortConditions };
