@@ -1,12 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 
 import Map from '../containers/CafeMap';
 import SearchElastic from '../containers/SearchElastic';
 import SearchForm from '../components/Search/SearchForm';
 import ConditionalRenderer from '../components/ConditionalRenderer';
 
-import useCafeShopsStore, { getShops, searchWithKeyword } from '../store/useCafesStore';
-import { conditions } from '../constants/config';
+import useCafeShopsStore, { getShops, searchWithCondition } from '../store/useCafesStore';
 
 import { CoffeeShop } from '../types';
 
@@ -34,19 +33,14 @@ function MapModePage() {
       lng: 121.38519287109376,
     },
   });
-  const { checkedConditions, coffeeShops } = useCafeShopsStore();
-
-  const strCheckedConditions = conditions
-    .filter((condition, index) => checkedConditions[index].checked)
-    .map((condition) => condition.displayName)
-    .join(' ');
+  const { filterConditions, coffeeShops } = useCafeShopsStore();
 
   const boundedCoffeeShops = useMemo(() => {
     return coffeeShops.filter((nowItemCoffee: CoffeeShop) => {
       const { latitude, longitude } = nowItemCoffee;
-      const isSocketFilterEnable = checkedConditions[0].checked === true;
-      const isQuietFilterEnable = checkedConditions[1].checked === true;
-      const isNetWorkFilterEnable = checkedConditions[2].checked === true;
+      const isSocketFilterEnable = filterConditions[0].checked === true;
+      const isQuietFilterEnable = filterConditions[1].checked === true;
+      const isNetWorkFilterEnable = filterConditions[2].checked === true;
 
       if (!nowItemCoffee) return false;
 
@@ -69,34 +63,37 @@ function MapModePage() {
         parseFloat(longitude) < bounds?.northEast.lng
       );
     });
-  }, [checkedConditions, bounds, coffeeShops]);
+  }, [filterConditions, bounds, coffeeShops]);
 
   const handleSelect = () => {};
 
-  const search = async (keyword = '') => {
-    const result = await searchWithKeyword({
-      coffeeShops,
-      keyWord: `${keyword} ${strCheckedConditions}`,
-      bounds,
-    });
-    return result;
-  };
+  const search = useCallback(
+    async (keyWord = '') => {
+      const result = await searchWithCondition({
+        coffeeShops,
+        keyWord,
+        bounds,
+        filterConditions,
+      });
+      return result;
+    },
+    [coffeeShops, bounds, filterConditions],
+  );
 
   useEffect(() => {
     async function getCoffee() {
       setIsLoading(true);
-      await getShops();
-      search();
+      const results = await getShops();
+      await searchWithCondition({
+        coffeeShops: results,
+        keyWord: '',
+        bounds,
+        filterConditions,
+      });
       setIsLoading(false);
     }
     getCoffee();
   }, []);
-
-  useEffect(() => {
-    if (strCheckedConditions !== '') {
-      search();
-    }
-  }, [strCheckedConditions, coffeeShops]);
 
   return (
     <>
@@ -108,7 +105,9 @@ function MapModePage() {
       <div className="container-fluid p-0 map-mode">
         <div className="row">
           <div className="col-md-4 col-sm-12 result__container p-0">
-            <SearchForm search={search} />
+            <div className="search-container search-container--absolute">
+              <SearchForm search={search} />
+            </div>
             <SearchElastic onChange={handleSelect} />
           </div>
           <div className="col-md-8 col-sm-12 map__container p-0">

@@ -5,11 +5,11 @@ import { conditions } from '../constants/config';
 import { Condition } from '../types';
 
 function OtherConditions() {
-  const { checkedConditions } = useCafeShopsStore();
+  const { filterConditions } = useCafeShopsStore();
 
   const handleConditionToggle = (e: any) => {
     const tempCheckedConditions: Condition[] = [
-      ...checkedConditions.map((elm) => ({ ...elm, checked: false })),
+      ...filterConditions.map((elm) => ({ ...elm, checked: false })),
     ];
     e.value.forEach((value: string) => {
       const index = tempCheckedConditions.findIndex((elm) => elm.name === value);
@@ -24,7 +24,7 @@ function OtherConditions() {
   }));
 
   // Selected options based on checked conditions
-  const selectedOptions = checkedConditions
+  const selectedOptions = filterConditions
     .filter((condition) => condition.checked)
     .map((condition) => condition.name);
 

@@ -6,6 +6,7 @@ import calculateScore from '../util/calculateScore';
 import { defaultCheckedConditions, defaultSortConditions } from '../constants/config';
 import { CoffeeShop, Condition } from '../types';
 
+setAutoFreeze(false);
 const { lunr } = window;
 const indexSearch = lunr(function generateLunr() {
   this.field('name');
@@ -16,62 +17,157 @@ const indexSearch = lunr(function generateLunr() {
   this.field('noLimitedTime');
 }) as any;
 
-const search = async ({ coffeeShops, bounds = false, keyWord }: any) => {
-  const searchQuery = keyWord.toString().trim();
-  const results = searchQuery !== '' ? await indexSearch.search(keyWord) : [];
+const useCafeShopsStore = create(
+  immer(() => ({
+    coffeeShops: [],
+    filterCoffeeShops: [] as CoffeeShop[],
+    filterConditions: defaultCheckedConditions,
+    sortConditions: defaultSortConditions,
+  })),
+);
+
+type TSearchConidtion = {
+  coffeeShops: CoffeeShop[];
+  keyWord: any;
+  bounds: any;
+  filterConditions: Condition[];
+};
+
+export const getShops = async () => {
+  const res = await axios.get(`${import.meta.env.BASE_URL}cafedata/taiwan.json`);
+  if (res.data) {
+    res.data.forEach((shop: CoffeeShop) => {
+      indexSearch.add({
+        ...shop,
+        // TODO 改掉
+        strSocket: shop && shop.socket !== 'no' ? '插座' : '',
+        quietAways: shop && shop.quiet > 3 ? '安靜' : '',
+        wifiGood: shop && shop.wifi > 3 ? '網路' : '',
+        noLimitedTime: shop && shop.limited_time === 'no' ? '不限時' : '',
+        score: calculateScore({ ...shop }),
+      });
+    });
+    useCafeShopsStore.setState({ coffeeShops: res.data });
+    return res.data;
+  }
+  return [];
+};
+
+const search = async (searchCondition: TSearchConidtion) => {
+  const { coffeeShops, bounds = false, keyWord = '', filterConditions } = searchCondition;
+  const results = keyWord !== '' ? await indexSearch.search(keyWord || '') : [];
   const searchResults = results.map((result: any) => result.ref);
+  const filteredShops: CoffeeShop[] = coffeeShops
+    .filter((coffeeShop: CoffeeShop) => {
+      const isSocketFilterEnable = filterConditions[0].checked === true;
+      const isQuietFilterEnable = filterConditions[1].checked === true;
+      const isNetWorkFilterEnable = filterConditions[2].checked === true;
 
-  const filteredShops = coffeeShops.filter((coffeeShop: CoffeeShop) => {
-    const matchesKeyword = searchQuery === '' || searchResults.includes(coffeeShop.id);
+      if (keyWord !== '') {
+        const matchesKeyword = searchResults.includes(coffeeShop.id);
+        return matchesKeyword;
+      }
 
-    if (bounds) {
-      const { southWest, northEast } = bounds;
-      const { latitude, longitude } = coffeeShop;
-      const withinBounds =
-        parseFloat(latitude) > southWest.lat &&
-        parseFloat(longitude) > southWest.lng &&
-        parseFloat(latitude) < northEast.lat &&
-        parseFloat(longitude) < northEast.lng;
-      return withinBounds && matchesKeyword;
-    }
-    return matchesKeyword;
-  });
+      if (bounds) {
+        const { southWest, northEast } = bounds;
+        const { latitude, longitude } = coffeeShop;
+        const withinBounds =
+          parseFloat(latitude) > southWest.lat &&
+          parseFloat(longitude) > southWest.lng &&
+          parseFloat(latitude) < northEast.lat &&
+          parseFloat(longitude) < northEast.lng;
+        return withinBounds;
+      }
 
-  const finalResult = filteredShops
+      if (isSocketFilterEnable && coffeeShop.socket === 'no') {
+        return false;
+      }
+
+      if (isQuietFilterEnable && coffeeShop.quiet < 3) {
+        return false;
+      }
+
+      if (isNetWorkFilterEnable && coffeeShop.wifi < 3) {
+        return false;
+      }
+
+      return true;
+    })
     .map((shop: CoffeeShop) => ({
       ...shop,
       score: calculateScore({ ...shop }),
     }))
     .sort((a: CoffeeShop, b: CoffeeShop) => b.score - a.score);
 
-  return finalResult;
+  return filteredShops;
 };
 
-setAutoFreeze(false);
-const useCafeShopsStore = create(
-  immer(() => ({
-    coffeeShops: [],
-    filterCoffeeShops: [],
-    checkedConditions: defaultCheckedConditions,
-    sortConditions: defaultSortConditions,
-  })),
-);
+export const searchWithCondition = async ({
+  coffeeShops,
+  keyWord,
+  bounds,
+  filterConditions,
+}: TSearchConidtion) => {
+  const result = await search({
+    coffeeShops,
+    keyWord,
+    bounds,
+    filterConditions,
+  });
 
-export const toggleConditions = (checkedConditions: any) => {
+  useCafeShopsStore.setState({
+    filterCoffeeShops: result,
+  });
+
+  return result;
+};
+
+export const clearFilterCoffeeShops = () => {
+  useCafeShopsStore.setState({
+    filterCoffeeShops: [],
+  });
+};
+
+export const toggleConditions = (filterConditions: any) => {
+  const coffeeShops = useCafeShopsStore.getState().coffeeShops;
   useCafeShopsStore.setState((state) => {
-    state.checkedConditions = checkedConditions;
+    const filteredCoffeeShops = coffeeShops.filter((nowItemCoffee: CoffeeShop) => {
+      const isSocketFilterEnable = filterConditions[0].checked === true;
+      const isQuietFilterEnable = filterConditions[1].checked === true;
+      const isNetWorkFilterEnable = filterConditions[2].checked === true;
+
+      if (!nowItemCoffee) return false;
+
+      if (isSocketFilterEnable && nowItemCoffee.socket !== 'yes') {
+        return false;
+      }
+
+      if (isQuietFilterEnable && nowItemCoffee.quiet < 3) {
+        return false;
+      }
+
+      if (isNetWorkFilterEnable && nowItemCoffee.wifi < 3) {
+        return false;
+      }
+
+      return true;
+    });
+
+    state.filterConditions = filterConditions;
+    state.filterCoffeeShops = filteredCoffeeShops;
   });
 };
 
 export const toggleSortConditions = (sortConditions: any) => {
   // Get the first active sort condition
   const activeSortCondition = sortConditions.find((sort: Condition) => sort.checked);
+  const filterCoffeeShops = useCafeShopsStore.getState().filterCoffeeShops;
 
   useCafeShopsStore.setState((state) => {
     state.sortConditions = sortConditions;
 
     if (activeSortCondition) {
-      state.filterCoffeeShops = state.filterCoffeeShops.sort((a: CoffeeShop, b: CoffeeShop) => {
+      state.filterCoffeeShops = filterCoffeeShops.sort((a: CoffeeShop, b: CoffeeShop) => {
         const { name } = activeSortCondition;
         switch (name) {
           case 'score':
@@ -91,7 +187,7 @@ export const toggleSortConditions = (sortConditions: any) => {
 
 export const resetConditions = () => {
   useCafeShopsStore.setState((state) => {
-    state.checkedConditions = [
+    state.filterConditions = [
       {
         name: 'socket',
         displayName: '插座',
@@ -108,45 +204,6 @@ export const resetConditions = () => {
         checked: false,
       },
     ];
-  });
-};
-
-export const getShops = async () => {
-  const res = await axios.get(`${import.meta.env.BASE_URL}cafedata/taiwan.json`);
-  if (res.data) {
-    res.data.forEach((shop: CoffeeShop) => {
-      indexSearch.add({
-        ...shop,
-        strSocket: shop && shop.socket === 'yes' ? '插座' : '',
-        quietAways: shop && shop.quiet > 3 ? '安靜' : '',
-        wifiGood: shop && shop.wifi > 3 ? '網路' : '',
-        noLimitedTime: shop && shop.limited_time === 'no' ? '不限時' : '',
-        score: calculateScore({ ...shop }),
-      });
-    });
-    useCafeShopsStore.setState({ coffeeShops: res.data });
-    return res.data;
-  }
-  return [];
-};
-
-export const searchWithKeyword = async ({ coffeeShops, keyWord, bounds }: any) => {
-  const result = await search({
-    coffeeShops,
-    keyWord,
-    bounds,
-  });
-
-  useCafeShopsStore.setState({
-    filterCoffeeShops: result,
-  });
-
-  return result;
-};
-
-export const clearFilterCoffeeShops = () => {
-  useCafeShopsStore.setState({
-    filterCoffeeShops: [],
   });
 };
 
