@@ -177,52 +177,6 @@ $header-height: 48px;
       text-decoration-line: none;
     }
   }
-
-  ul {
-    list-style: none;
-    margin-bottom: 0;
-    padding: 0px;
-
-    li {
-      margin-bottom: 16px;
-      color: black;
-    }
-
-    .li-width-50 {
-      display: inline-block;
-      width: calc(50% - 2rem);
-    }
-
-    .display-none {
-      display: none;
-    }
-  }
-
-  ol {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 16px;
-
-    li {
-      padding: 4px 8px;
-      margin-right: 8px;
-      margin-bottom: 0;
-      font-size: 12px;
-      color: #75868a;
-      border-radius: 8px;
-      background: var(--Light-Brown2, #edd9c6);
-      letter-spacing: 0;
-      line-height: 12px;
-      display: inline-block;
-      color: var(--m-3-sys-light-on-surface-variant, var(--grey1, #49454f));
-      text-align: center;
-      font-family: Noto Sans;
-      font-size: 12px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 21px; /* 175% */
-    }
-  }
 }
 
 .leaflet-popup-content-wrapper {

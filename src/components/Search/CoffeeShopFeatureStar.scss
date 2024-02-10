@@ -1,0 +1,79 @@
+.CoffeeShopFeature {
+  .p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
+    color: #a06935;
+  }
+
+  .search-card {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    .icon-rating {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      width: calc(50% - 0.5rem);
+      margin-right: 0.5rem;
+
+      .pi {
+        color: #a06935;
+        margin-right: 0.125rem;
+      }
+
+      img {
+        width: 20px;
+        height: 20px;
+        margin-right: 0.25rem;
+      }
+
+      .feature-title {
+        display: inline-flex;
+        min-width: 4.5rem;
+      }
+    }
+  }
+
+  .search-card .rating {
+    width: 100px;
+  }
+
+  ul {
+    list-style: none;
+    margin-bottom: 0;
+    padding: 0px;
+
+    li {
+      margin-bottom: 16px;
+      color: black;
+    }
+
+    .display-none {
+      display: none;
+    }
+
+    ol {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 16px;
+
+      li {
+        padding: 4px 8px;
+        margin-right: 8px;
+        margin-bottom: 0;
+        font-size: 12px;
+        color: #75868a;
+        border-radius: 8px;
+        background: var(--Light-Brown2, #edd9c6);
+        letter-spacing: 0;
+        line-height: 12px;
+        display: inline-block;
+        color: var(--m-3-sys-light-on-surface-variant, var(--grey1, #49454f));
+        text-align: center;
+        font-family: Noto Sans;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 21px; /* 175% */
+      }
+    }
+  }
+}

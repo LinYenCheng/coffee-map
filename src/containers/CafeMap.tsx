@@ -4,6 +4,8 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 
 import ConditionalRenderer from '../components/ConditionalRenderer.js';
+import CoffeeShopFeatureStar from '../components/Search/CoffeeShopFeatureStar.js';
+
 import calculateScore from '../util/calculateScore.js';
 import { CoffeeShop } from '../types/index.js';
 
@@ -65,52 +67,9 @@ function CafeMap({ position, coffeeShops, setBounds, search }: CafeMapProps): JS
       <MarkerClusterGroup chunkedLoading maxClusterRadius={120} disableClusteringAtZoom={17}>
         <ConditionalRenderer isShowContent={zoom > 11 && coffeeShops.length > 0}>
           {coffeeShops.map((nowItem: CoffeeShop) => {
-            const {
-              latitude,
-              longitude,
-              name,
-              address,
-              wifi,
-              socket,
-              url,
-              limited_time,
-              standing_desk,
-            } = nowItem;
+            const { latitude, longitude, name, url } = nowItem;
             const score = calculateScore(nowItem);
 
-            const popupContent = (
-              <div className="card border-none">
-                <div className="card__title mb-2">
-                  <a className="h6" href={url} target="_blank">
-                    {name}
-                  </a>
-                  <span className="ms-2 score">{score}</span>
-                  <i className="pi pi-star-fill score ms-1"></i>
-                </div>
-                <ul>
-                  <li>
-                    <ol className="mb-2">
-                      <ConditionalRenderer isShowContent={wifi > 3}>
-                        <li>WIFI</li>
-                      </ConditionalRenderer>
-                      <ConditionalRenderer isShowContent={socket !== 'no'}>
-                        <li>插座</li>
-                      </ConditionalRenderer>
-                      <ConditionalRenderer isShowContent={limited_time !== 'yes'}>
-                        <li>無限時</li>
-                      </ConditionalRenderer>
-                      <ConditionalRenderer isShowContent={standing_desk === 'yes'}>
-                        <li>站位</li>
-                      </ConditionalRenderer>
-                    </ol>
-                  </li>
-                  <li className="mb-2">
-                    <i className="pi pi-map-marker me-2"></i>
-                    <span>{address}</span>
-                  </li>
-                </ul>
-              </div>
-            );
             return (
               <Marker
                 key={nowItem.id}
@@ -122,7 +81,18 @@ function CafeMap({ position, coffeeShops, setBounds, search }: CafeMapProps): JS
                         </div>`,
                 })}
               >
-                <Popup>{popupContent}</Popup>
+                <Popup>
+                  <div className="card border-none" style={{ minWidth: '400px' }}>
+                    <div className="card__title mb-2">
+                      <a className="h6" href={url} target="_blank">
+                        {name}
+                      </a>
+                      <span className="ms-2 score">{score}</span>
+                      <i className="pi pi-star-fill score ms-1"></i>
+                    </div>
+                    <CoffeeShopFeatureStar item={nowItem} />
+                  </div>
+                </Popup>
               </Marker>
             );
           })}
