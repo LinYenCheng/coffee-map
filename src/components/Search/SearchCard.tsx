@@ -2,6 +2,9 @@ import { Tooltip } from 'primereact/tooltip';
 
 import { CoffeeShop } from '../../types';
 import CoffeeShopFeatureStar from './CoffeeShopFeatureStar';
+import ConditionalRenderer from '../ConditionalRenderer';
+import { useParams } from 'react-router-dom';
+import CoffeeTag from './CoffeeTag';
 
 interface SearchCardProps {
   item: CoffeeShop;
@@ -9,7 +12,8 @@ interface SearchCardProps {
 }
 
 function SearchCard({ item, onSelect }: SearchCardProps): JSX.Element {
-  const { id, name, wifi, seat, quiet, tasty, cheap, music } = item;
+  const { condition } = useParams();
+  const { name, wifi, seat, quiet, tasty, cheap, music } = item;
   const score = ((cheap + music + quiet + seat + tasty + wifi) / 6).toFixed(1);
 
   return (
@@ -26,12 +30,12 @@ function SearchCard({ item, onSelect }: SearchCardProps): JSX.Element {
         onSelect(item);
       }}
     >
-      <div className="card__title d-flex justify-content-start">
-        <div className="title">
+      <div className="card__title d-flex ">
+        <div className="d-flex flex-grow-1 justify-content-start title">
           <Tooltip target=".a-title" position="bottom" />
           <a
             data-pr-tooltip={name}
-            className="h4 a-title"
+            className="h4 a-title me-2"
             href={item.url}
             target="_blank"
             rel="noopener noreferrer"
@@ -41,8 +45,11 @@ function SearchCard({ item, onSelect }: SearchCardProps): JSX.Element {
           >
             {name}
           </a>
+          <ConditionalRenderer isShowContent={!!condition && window.innerWidth > 768}>
+            <CoffeeTag item={item} />
+          </ConditionalRenderer>
         </div>
-        <div className="">
+        <div className="me-3">
           <span className="ms-2 score">{score}</span>
           <i className="pi pi-star-fill score ms-1"></i>
         </div>
