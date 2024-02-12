@@ -144,6 +144,16 @@ const defaultFilterConditions: Condition[] = [
     displayName: '網路',
     checked: false,
   },
+  {
+    name: 'standing_desk',
+    displayName: '站位',
+    checked: false,
+  },
+  {
+    name: 'limited_time',
+    displayName: '無限時',
+    checked: false,
+  },
 ];
 
 const defaultSortConditions: Condition[] = [

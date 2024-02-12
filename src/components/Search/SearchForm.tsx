@@ -1,17 +1,14 @@
 import { useRef, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
+import { useParams } from 'react-router-dom';
 
 import './search.scss';
-import OtherConditions from '../../containers/OtherConditions';
 import { classNames } from 'primereact/utils';
-import CityConditions from '../../containers/CityConditions';
 import ConditionFilters from './ConditionFilters';
+import { searchWithKeyword } from '../../store/useCafesStore';
 
-type Props = {
-  search: (keyword?: string) => void;
-};
-
-export default function SearchForm({ search }: Props) {
+export default function SearchForm() {
+  const { condition } = useParams();
   const inputEl = useRef<HTMLInputElement>(null);
   const [strInput, setStrInput] = useState<string>('');
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
@@ -26,7 +23,7 @@ export default function SearchForm({ search }: Props) {
   function clearSearch() {
     setStrInput('');
     setIsSubmit(false);
-    search('');
+    searchWithKeyword('', condition);
   }
 
   const onClick = (event: any) => {
@@ -37,14 +34,14 @@ export default function SearchForm({ search }: Props) {
       clearSearch();
     } else {
       setIsSubmit(true);
-      search(strInput);
+      searchWithKeyword(strInput, condition);
     }
   };
 
   const onSubmit = (event: any) => {
     if (event) event.preventDefault();
     setIsSubmit(true);
-    search(strInput);
+    searchWithKeyword(strInput, condition);
   };
 
   return (

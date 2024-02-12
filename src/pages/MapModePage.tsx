@@ -5,21 +5,10 @@ import SearchElastic from '../containers/SearchElastic';
 import SearchForm from '../components/Search/SearchForm';
 import ConditionalRenderer from '../components/ConditionalRenderer';
 
-import useCafeShopsStore, { getShops, searchWithCondition } from '../store/useCafesStore';
+import useCafeShopsStore, { getShops, searchWithKeyword } from '../store/useCafesStore';
 
 import { CoffeeShop } from '../types';
 import ConditionFilters from '../components/Search/ConditionFilters';
-
-interface Bounds {
-  northEast: {
-    lat: number;
-    lng: number;
-  };
-  southWest: {
-    lat: number;
-    lng: number;
-  };
-}
 
 function MapModePage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -57,31 +46,18 @@ function MapModePage() {
 
   const handleSelect = () => {};
 
-  const search = useCallback(
-    async (keyWord = '') => {
-      const result = await searchWithCondition({
-        coffeeShops,
-        keyWord,
-        filterConditions,
-      });
-      return result;
-    },
-    [coffeeShops, bounds, filterConditions],
-  );
-
   useEffect(() => {
     async function getCoffee() {
       setIsLoading(true);
-      const results = await getShops();
-      await searchWithCondition({
-        coffeeShops: results,
-        keyWord: '',
-        filterConditions,
-      });
+      await getShops();
       setIsLoading(false);
     }
     getCoffee();
   }, []);
+
+  useEffect(() => {
+    searchWithKeyword('');
+  }, [coffeeShops]);
 
   return (
     <>
@@ -94,7 +70,7 @@ function MapModePage() {
         <div className="row">
           <div className="col-md-4 col-sm-12 result__container p-0">
             <div className="search-container search-container--absolute">
-              <SearchForm search={search} />
+              <SearchForm />
             </div>
             <div className="desktop-hide p-2 w-100 d-flex  align-items-center align-content-center justify-content-center border-bottom">
               <ConditionFilters />
@@ -103,11 +79,7 @@ function MapModePage() {
           </div>
           <div className="col-md-8 col-sm-12 map__container p-0">
             <ConditionalRenderer isShowContent={coffeeShops.length > 0}>
-              <Map
-                position={{ lng: 121.5598, lat: 25.08 }}
-                coffeeShops={boundedCoffeeShops}
-                search={search}
-              />
+              <Map position={{ lng: 121.5598, lat: 25.08 }} coffeeShops={boundedCoffeeShops} />
             </ConditionalRenderer>
           </div>
         </div>

@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Carousel from '../../components/Carousel';
 import ConditionalRenderer from '../../components/ConditionalRenderer';
 import './ListModePage.scss';
 import SearchElastic from '../../containers/SearchElastic';
-import useCafeShopsStore, { getShops, searchWithCondition } from '../../store/useCafesStore';
+import useCafeShopsStore, { getShops, searchWithKeyword } from '../../store/useCafesStore';
 import { useParams } from 'react-router-dom';
 import SearchForm from '../../components/Search/SearchForm';
 
@@ -27,17 +27,6 @@ export default function ListModePage({}: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { coffeeShops, filterConditions } = useCafeShopsStore();
 
-  const search = useCallback(
-    async (keyWord = '') => {
-      const result = await searchWithCondition({
-        coffeeShops,
-        keyWord,
-        filterConditions,
-      });
-      return result;
-    },
-    [coffeeShops, filterConditions],
-  );
   useEffect(() => {
     async function getCoffee() {
       setIsLoading(true);
@@ -50,9 +39,9 @@ export default function ListModePage({}: Props) {
   useEffect(() => {
     if (condition) {
       const keyword = objCondition[condition as ConditionType];
-      search(keyword);
+      searchWithKeyword(keyword, condition);
     } else {
-      search('');
+      searchWithKeyword('', condition);
     }
   }, [coffeeShops, condition]);
 
@@ -65,7 +54,7 @@ export default function ListModePage({}: Props) {
       </ConditionalRenderer>
       <Carousel />
       <div className="search-container search-container--shadow d-flex pt-2 pb-2 mb-1 justify-content-center">
-        <SearchForm search={search} />
+        <SearchForm />
       </div>
       <div className="container list-mode">
         <div className="row">

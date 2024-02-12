@@ -38,7 +38,6 @@ function OtherConditions() {
       options={dropdownOptions}
       onChange={handleConditionToggle}
       placeholder="其他"
-      maxSelectedLabels={3} // Limit the number of displayed labels
     />
   );
 }
