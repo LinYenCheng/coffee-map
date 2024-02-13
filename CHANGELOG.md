@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/LinYenCheng/coffee-map/compare/v1.2.0...v1.3.0) (2024-02-13)
+
+
+### Features
+
+* add county filter ([84fee30](https://github.com/LinYenCheng/coffee-map/commit/84fee307233e4f876e7a14fbc295298951a1e759))
+* add list mode ([a9e98b2](https://github.com/LinYenCheng/coffee-map/commit/a9e98b2cdfe36eac09e338afdbcb963511ec900a))
+* modify filter and sort condition ([be1eb70](https://github.com/LinYenCheng/coffee-map/commit/be1eb70ffa8e3abd8d68165a148f40a52a3e3473))
+
+
+### Bug Fixes
+
+* bugs for loading data ([c0dd747](https://github.com/LinYenCheng/coffee-map/commit/c0dd74756876272f910de7a04d1fc742160e30f4))
+
 ## [1.2.0](https://github.com/LinYenCheng/coffee-map/compare/v1.1.0...v1.2.0) (2024-01-06)
 
 
