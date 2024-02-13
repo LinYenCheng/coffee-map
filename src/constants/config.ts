@@ -1,12 +1,12 @@
 import { ICity } from '../types';
 
-interface Condition {
+export interface Condition {
   name: string;
   displayName: string;
   checked: boolean;
 }
 
-const cities: ICity[] = [
+export const cities: ICity[] = [
   {
     name: 'taipei',
     displayName: '雙北',
@@ -128,7 +128,7 @@ const cities: ICity[] = [
   },
 ];
 
-const defaultFilterConditions: Condition[] = [
+export const defaultFilterConditions: Condition[] = [
   {
     name: 'socket',
     displayName: '插座',
@@ -156,7 +156,63 @@ const defaultFilterConditions: Condition[] = [
   },
 ];
 
-const defaultSortConditions: Condition[] = [
+export const jobFilterConditions: Condition[] = [
+  {
+    name: 'socket',
+    displayName: '插座',
+    checked: true,
+  },
+  {
+    name: 'quiet',
+    displayName: '安靜',
+    checked: false,
+  },
+  {
+    name: 'wifi',
+    displayName: '網路',
+    checked: true,
+  },
+  {
+    name: 'standing_desk',
+    displayName: '站位',
+    checked: false,
+  },
+  {
+    name: 'limited_time',
+    displayName: '無限時',
+    checked: false,
+  },
+];
+
+export const noLimitTimeFilterConditions: Condition[] = [
+  {
+    name: 'socket',
+    displayName: '插座',
+    checked: false,
+  },
+  {
+    name: 'quiet',
+    displayName: '安靜',
+    checked: false,
+  },
+  {
+    name: 'wifi',
+    displayName: '網路',
+    checked: false,
+  },
+  {
+    name: 'standing_desk',
+    displayName: '站位',
+    checked: false,
+  },
+  {
+    name: 'limited_time',
+    displayName: '無限時',
+    checked: true,
+  },
+];
+
+export const defaultSortConditions: Condition[] = [
   {
     name: 'score',
     displayName: '好咖啡',
@@ -173,5 +229,3 @@ const defaultSortConditions: Condition[] = [
     checked: false,
   },
 ];
-
-export { cities, defaultFilterConditions, defaultSortConditions };

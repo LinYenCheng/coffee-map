@@ -1,21 +1,23 @@
-import { Condition } from './../types/index';
-import { ICity, Condition, CoffeeShop } from './../types';
+import { ICity, Condition, CoffeeShop, NO_LIMITED_TIME, REMOTE_WORK } from './../types';
 import { create } from 'zustand';
 import { setAutoFreeze } from 'immer';
 import { immer } from 'zustand/middleware/immer';
 import axios from 'axios';
 import calculateScore from '../util/calculateScore';
-import { cities, defaultFilterConditions, defaultSortConditions } from '../constants/config';
+import {
+  cities,
+  defaultFilterConditions,
+  defaultSortConditions,
+  jobFilterConditions,
+  noLimitTimeFilterConditions,
+} from '../constants/config';
 
 setAutoFreeze(false);
 const { lunr } = window;
 const indexSearch = lunr(function generateLunr() {
   this.field('name');
   this.field('address');
-  this.field('strSocket');
-  this.field('quietAways');
-  this.field('wifiGood');
-  this.field('noLimitedTime');
+  this.field('keyword');
 }) as any;
 
 interface Bounds {
@@ -55,13 +57,29 @@ export const getShops = async () => {
   const res = await axios.get(`${import.meta.env.BASE_URL}cafedata/taiwan.json`);
   if (res.data) {
     const results = res.data.map((shop: CoffeeShop) => {
+      let keyword = '';
+      if (shop) {
+        if (shop.socket === 'yes') {
+          keyword += ' 插座 插頭';
+        }
+
+        if (shop.limited_time === 'no') {
+          keyword += ' 不限時';
+        }
+
+        if (shop.quiet > 3) {
+          keyword += ' 安靜';
+        }
+
+        if (shop.wifi > 3) {
+          keyword += ' 網路 WIFI wifi';
+        }
+      }
+
       const revisedCoffeeShop = {
         ...shop,
         // TODO 改掉
-        strSocket: shop && shop.socket !== 'no' ? '插座' : '',
-        quietAways: shop && shop.quiet > 3 ? '安靜' : '',
-        wifiGood: shop && shop.wifi > 3 ? '網路' : '',
-        noLimitedTime: shop && shop.limited_time === 'no' ? '不限時' : '',
+        keyword,
         score: calculateScore({ ...shop }),
       };
       indexSearch.add(revisedCoffeeShop);
@@ -131,9 +149,18 @@ const checkFilterCondtion = ({
   return true;
 };
 
-export const searchWithKeyword = async (keyWord = '', Condition = '') => {
+export const searchWithKeyword = async (keyWord = '', condition = '') => {
   const cityConditions = useCafeShopsStore.getState().cityConditions;
-  const filterConditions = useCafeShopsStore.getState().filterConditions;
+  let filterConditions;
+
+  if (condition === REMOTE_WORK) {
+    filterConditions = jobFilterConditions;
+  } else if (condition === NO_LIMITED_TIME) {
+    filterConditions = noLimitTimeFilterConditions;
+  } else {
+    filterConditions = useCafeShopsStore.getState().filterConditions;
+  }
+
   await toggleConditions({
     keyWord,
     cityConditions,

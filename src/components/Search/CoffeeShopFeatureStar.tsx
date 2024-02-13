@@ -39,7 +39,7 @@ function Stars({ num }: { num: number }) {
 
 export default function CoffeeShopFeatureStar({ item }: Props) {
   const { condition } = useParams();
-  const { wifi, seat, quiet, tasty, cheap, music, address, mrt, open_time } = item;
+  const { name, wifi, seat, quiet, tasty, cheap, music, address, mrt, open_time } = item;
 
   return (
     <>
@@ -50,7 +50,10 @@ export default function CoffeeShopFeatureStar({ item }: Props) {
         <ul className="coffee-information flex-grow-1">
           <li>
             <img alt="" src={srcLocation} />
-            <span className="ms-1 feature-title">{address}</span>
+            <a target="_blank" href={`https://www.google.com/maps/search/${address}`}>
+              <span className="ms-1 feature-title">{address}</span>
+              <span> (前往 Google 地圖)</span>
+            </a>
           </li>
           <li className={classNames({ 'display-none': !mrt })}>
             <img alt="" src={srcMRT} />

@@ -8,24 +8,11 @@ import { useParams } from 'react-router-dom';
 import SearchForm from '../../components/Search/SearchForm';
 
 type Props = {};
-interface IConditionMap {
-  'no-limited-time': string;
-  'remote-work': string;
-}
-const NO_LIMITED_TIME = 'no-limited-time';
-const REMOTE_WORK = 'remote-work';
-
-type ConditionType = typeof NO_LIMITED_TIME | typeof REMOTE_WORK;
-
-const objCondition: IConditionMap = {
-  'no-limited-time': '不限時',
-  'remote-work': '插座 網路',
-};
 
 export default function ListModePage({}: Props) {
   const { condition } = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { coffeeShops, filterConditions } = useCafeShopsStore();
+  const { coffeeShops } = useCafeShopsStore();
 
   useEffect(() => {
     async function getCoffee() {
@@ -37,12 +24,7 @@ export default function ListModePage({}: Props) {
   }, []);
 
   useEffect(() => {
-    if (condition) {
-      const keyword = objCondition[condition as ConditionType];
-      searchWithKeyword(keyword, condition);
-    } else {
-      searchWithKeyword('', condition);
-    }
+    searchWithKeyword('', condition);
   }, [coffeeShops, condition]);
 
   return (

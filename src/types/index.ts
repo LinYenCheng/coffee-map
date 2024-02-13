@@ -33,3 +33,13 @@ export interface ICity {
   lat: number;
   checked: boolean;
 }
+
+export interface IConditionMap {
+  'no-limited-time': string;
+  'remote-work': string;
+}
+
+export const NO_LIMITED_TIME = 'no-limited-time';
+export const REMOTE_WORK = 'remote-work';
+
+export type ConditionType = typeof NO_LIMITED_TIME | typeof REMOTE_WORK;

@@ -1,5 +1,7 @@
 import { useNavigate, Outlet } from 'react-router-dom';
 import { Menubar } from 'primereact/menubar';
+import { NO_LIMITED_TIME, REMOTE_WORK } from './types';
+import { ROUTE_CAFE_LIST } from './router';
 
 export default function Root() {
   const navigate = useNavigate();
@@ -8,14 +10,14 @@ export default function Root() {
       label: '無限時咖啡廳',
       // icon: 'pi pi-home',
       command: () => {
-        navigate('/cafe-list/no-limited-time');
+        navigate(`/${ROUTE_CAFE_LIST}/${NO_LIMITED_TIME}`);
       },
     },
     {
       label: '工作咖啡廳',
       // icon: 'pi pi-star',
       command: () => {
-        navigate('/cafe-list/remote-work');
+        navigate(`/${ROUTE_CAFE_LIST}/${REMOTE_WORK}`);
       },
     },
     {
