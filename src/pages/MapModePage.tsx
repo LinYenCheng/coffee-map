@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import Map from '../containers/CafeMap';
 import SearchElastic from '../containers/SearchElastic';
@@ -7,44 +7,31 @@ import ConditionalRenderer from '../components/ConditionalRenderer';
 
 import useCafeShopsStore, { getShops, searchWithKeyword } from '../store/useCafesStore';
 
-import { CoffeeShop } from '../types';
 import ConditionFilters from '../components/Search/ConditionFilters';
+import { CoffeeShop } from '../types';
 
 function MapModePage() {
+  const mapRef = useRef(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { bounds, filterConditions, coffeeShops } = useCafeShopsStore();
+  const [selectItem, setSelectItem] = useState<any>(null);
+  const { coffeeShops } = useCafeShopsStore();
 
-  const boundedCoffeeShops = useMemo(() => {
-    return coffeeShops.filter((nowItemCoffee: CoffeeShop) => {
-      const { latitude, longitude } = nowItemCoffee;
-      const isSocketFilterEnable = filterConditions[0].checked === true;
-      const isQuietFilterEnable = filterConditions[1].checked === true;
-      const isNetWorkFilterEnable = filterConditions[2].checked === true;
+  const handleSelect = (item: CoffeeShop) => {
+    const map = mapRef.current as any;
 
-      if (!nowItemCoffee) return false;
+    if (!map) {
+      return;
+    }
 
-      if (isSocketFilterEnable && !nowItemCoffee.socket) {
-        return false;
-      }
+    map.flyTo(
+      { lng: parseFloat(item.longitude), lat: parseFloat(item.latitude) },
+      map.getZoom() > 15 ? map.getZoom() : 16,
+    );
 
-      if (isQuietFilterEnable && !nowItemCoffee.quiet) {
-        return false;
-      }
-
-      if (isNetWorkFilterEnable && !nowItemCoffee.wifi) {
-        return false;
-      }
-
-      return (
-        parseFloat(latitude) > bounds?.southWest.lat &&
-        parseFloat(longitude) > bounds?.southWest.lng &&
-        parseFloat(latitude) < bounds?.northEast.lat &&
-        parseFloat(longitude) < bounds?.northEast.lng
-      );
+    map.on('moveend', function () {
+      setSelectItem(item);
     });
-  }, [filterConditions, bounds, coffeeShops]);
-
-  const handleSelect = () => {};
+  };
 
   useEffect(() => {
     async function getCoffee() {
@@ -79,7 +66,7 @@ function MapModePage() {
           </div>
           <div className="col-md-8 col-sm-12 map__container p-0">
             <ConditionalRenderer isShowContent={coffeeShops.length > 0}>
-              <Map position={{ lng: 121.5598, lat: 25.08 }} coffeeShops={boundedCoffeeShops} />
+              <Map position={{ lng: 121.5598, lat: 25.08 }} selectItem={selectItem} ref={mapRef} />
             </ConditionalRenderer>
           </div>
         </div>
