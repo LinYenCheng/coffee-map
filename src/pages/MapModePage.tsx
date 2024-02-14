@@ -25,12 +25,15 @@ function MapModePage() {
       return;
     }
 
-    map.flyTo(
-      { lng: parseFloat(item.longitude), lat: parseFloat(item.latitude) },
-      map.getZoom() >= DISABLE_CLUSTER_LEVEL ? map.getZoom() : DISABLE_CLUSTER_LEVEL,
-    );
-
-    setSelectItem(item);
+    if (item) {
+      map.setView(
+        { lng: parseFloat(item.longitude), lat: parseFloat(item.latitude) },
+        map.getZoom() >= DISABLE_CLUSTER_LEVEL ? map.getZoom() : DISABLE_CLUSTER_LEVEL,
+      );
+    }
+    setTimeout(() => {
+      setSelectItem(item);
+    }, 250);
   };
 
   useEffect(() => {
@@ -73,6 +76,7 @@ function MapModePage() {
                   <Map
                     position={{ lng: 121.5598, lat: 25.08 }}
                     selectItem={selectItem}
+                    setSelectItem={handleSelect}
                     ref={mapRef}
                   />
                 </ErrorBoundary>

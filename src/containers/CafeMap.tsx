@@ -16,14 +16,22 @@ import { DISABLE_CLUSTER_LEVEL } from '../constants/config.js';
 interface CafeMapProps {
   position: { lat: number; lng: number };
   selectItem: CoffeeShop;
+  setSelectItem: any;
 }
 
 interface MapProps {
   setZoom: (zoom: number) => void;
+  setSelectItem: any;
 }
 
-function MyMap({ setZoom }: MapProps) {
-  const map = useMapEvent('click', () => {});
+function MyMap({ setZoom, setSelectItem }: MapProps) {
+  const map = useMapEvent('click', () => {
+    setSelectItem(null);
+  });
+
+  useMapEvent('movestart', () => {
+    setSelectItem(null);
+  });
   useMapEvent('moveend', () => {
     if (map) {
       const mapBounds = map.getBounds();
@@ -34,20 +42,19 @@ function MyMap({ setZoom }: MapProps) {
         southWest: mapBounds.getSouthWest(),
       });
     }
-    searchWithKeyword('');
   });
 
   return null;
 }
 
-const CafeMap = forwardRef(({ position, selectItem }: CafeMapProps, ref: any) => {
+const CafeMap = forwardRef(({ position, selectItem, setSelectItem }: CafeMapProps, ref: any) => {
   const { bounds, filterCoffeeShops } = useCafeShopsStore();
   const [zoom, setZoom] = useState<number>(12);
   const selectId = selectItem?.id;
 
   return (
     <MapContainer center={position} zoom={12} maxZoom={18} zoomControl={false} ref={ref}>
-      <MyMap setZoom={setZoom} />
+      <MyMap setZoom={setZoom} setSelectItem={setSelectItem} />
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -66,7 +73,12 @@ const CafeMap = forwardRef(({ position, selectItem }: CafeMapProps, ref: any) =>
               return true;
             })
             .map((nowItem: CoffeeShop) => (
-              <CafeMaker key={nowItem.id} nowItem={nowItem} isActive={selectId === nowItem.id} />
+              <CafeMaker
+                key={nowItem.id}
+                nowItem={nowItem}
+                isActive={selectId === nowItem.id}
+                setSelectItem={setSelectItem}
+              />
             ))}
         </ConditionalRenderer>
       </MarkerClusterGroup>
