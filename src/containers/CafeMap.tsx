@@ -7,6 +7,7 @@ import ConditionalRenderer from '../components/ConditionalRenderer.js';
 import { CoffeeShop } from '../types';
 import useCafeShopsStore, { searchWithKeyword, setBounds } from '../store/useCafesStore.js';
 import CafeMaker from './CafeMaker.js';
+import { DISABLE_CLUSTER_LEVEL } from '../constants/config.js';
 
 interface CafeMapProps {
   position: { lat: number; lng: number };
@@ -47,7 +48,11 @@ const CafeMap = forwardRef(({ position, selectItem }: CafeMapProps, ref: any) =>
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <MarkerClusterGroup chunkedLoading maxClusterRadius={120} disableClusteringAtZoom={15}>
+      <MarkerClusterGroup
+        chunkedLoading
+        maxClusterRadius={100}
+        disableClusteringAtZoom={DISABLE_CLUSTER_LEVEL}
+      >
         <ConditionalRenderer isShowContent={zoom > 11 && coffeeShops.length > 0}>
           {coffeeShops.map((nowItem: CoffeeShop) => (
             <CafeMaker key={nowItem.id} nowItem={nowItem} isActive={selectId === nowItem.id} />

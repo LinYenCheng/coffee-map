@@ -9,6 +9,7 @@ import useCafeShopsStore, { getShops, searchWithKeyword } from '../store/useCafe
 
 import ConditionFilters from '../components/Search/ConditionFilters';
 import { CoffeeShop } from '../types';
+import { DISABLE_CLUSTER_LEVEL } from '../constants/config';
 
 function MapModePage() {
   const mapRef = useRef(null);
@@ -25,7 +26,7 @@ function MapModePage() {
 
     map.flyTo(
       { lng: parseFloat(item.longitude), lat: parseFloat(item.latitude) },
-      map.getZoom() > 15 ? map.getZoom() : 16,
+      map.getZoom() >= DISABLE_CLUSTER_LEVEL ? map.getZoom() : DISABLE_CLUSTER_LEVEL,
     );
 
     map.on('moveend', function () {

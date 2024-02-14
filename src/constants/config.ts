@@ -229,3 +229,5 @@ export const defaultSortConditions: Condition[] = [
     checked: false,
   },
 ];
+
+export const DISABLE_CLUSTER_LEVEL = 18;
