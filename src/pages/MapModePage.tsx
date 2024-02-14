@@ -10,6 +10,7 @@ import useCafeShopsStore, { getShops, searchWithKeyword } from '../store/useCafe
 import ConditionFilters from '../components/Search/ConditionFilters';
 import { CoffeeShop } from '../types';
 import { DISABLE_CLUSTER_LEVEL } from '../constants/config';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 function MapModePage() {
   const mapRef = useRef(null);
@@ -29,9 +30,7 @@ function MapModePage() {
       map.getZoom() >= DISABLE_CLUSTER_LEVEL ? map.getZoom() : DISABLE_CLUSTER_LEVEL,
     );
 
-    map.on('moveend', function () {
-      setSelectItem(item);
-    });
+    setSelectItem(item);
   };
 
   useEffect(() => {
@@ -63,16 +62,20 @@ function MapModePage() {
             <div className="desktop-hide p-2 w-100 d-flex  align-items-center align-content-center justify-content-center border-bottom">
               <ConditionFilters />
             </div>
-            <SearchElastic onChange={handleSelect} />
+            <ErrorBoundary>
+              <SearchElastic onChange={handleSelect} />
+            </ErrorBoundary>
           </div>
           <ConditionalRenderer isShowContent={window.innerWidth > 768}>
             <div className="col-md-8 col-sm-12 map__container p-0">
               <ConditionalRenderer isShowContent={coffeeShops.length > 0}>
-                <Map
-                  position={{ lng: 121.5598, lat: 25.08 }}
-                  selectItem={selectItem}
-                  ref={mapRef}
-                />
+                <ErrorBoundary>
+                  <Map
+                    position={{ lng: 121.5598, lat: 25.08 }}
+                    selectItem={selectItem}
+                    ref={mapRef}
+                  />
+                </ErrorBoundary>
               </ConditionalRenderer>
             </div>
           </ConditionalRenderer>

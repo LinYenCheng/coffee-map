@@ -21,9 +21,9 @@ export default function CafeMaker({ nowItem, isActive }: Props) {
       markerRef.current.openPopup();
     }
 
-    return () => {
-      markerRef.current?.closePopup();
-    };
+    if (!isActive && markerRef.current) {
+      markerRef.current.closePopup();
+    }
   }, [isActive]);
 
   return (
@@ -39,12 +39,16 @@ export default function CafeMaker({ nowItem, isActive }: Props) {
     >
       <Popup>
         <div className="card border-none" style={{ minWidth: '400px' }}>
-          <div className="card__title mb-2">
-            <a className="h6" href={url} target="_blank">
-              {name}
-            </a>
-            <span className="ms-2 score">{score}</span>
-            <i className="pi pi-star-fill score ms-1"></i>
+          <div className="card__title mb-2 d-flex">
+            <div className="flex-grow-1">
+              <a className="h6" href={url} target="_blank">
+                {name}
+              </a>
+            </div>
+            <div>
+              <span className="ms-2 score">{score}</span>
+              <i className="pi pi-star-fill score ms-1"></i>
+            </div>
           </div>
           <CoffeeShopFeatureStar item={nowItem} />
         </div>

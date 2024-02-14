@@ -5,7 +5,11 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import ConditionalRenderer from '../components/ConditionalRenderer.js';
 
 import { CoffeeShop } from '../types';
-import useCafeShopsStore, { searchWithKeyword, setBounds } from '../store/useCafesStore.js';
+import useCafeShopsStore, {
+  checkBounds,
+  searchWithKeyword,
+  setBounds,
+} from '../store/useCafesStore.js';
 import CafeMaker from './CafeMaker.js';
 import { DISABLE_CLUSTER_LEVEL } from '../constants/config.js';
 
@@ -37,7 +41,7 @@ function MyMap({ setZoom }: MapProps) {
 }
 
 const CafeMap = forwardRef(({ position, selectItem }: CafeMapProps, ref: any) => {
-  const { coffeeShops } = useCafeShopsStore();
+  const { bounds, filterCoffeeShops } = useCafeShopsStore();
   const [zoom, setZoom] = useState<number>(12);
   const selectId = selectItem?.id;
 
@@ -53,10 +57,17 @@ const CafeMap = forwardRef(({ position, selectItem }: CafeMapProps, ref: any) =>
         maxClusterRadius={100}
         disableClusteringAtZoom={DISABLE_CLUSTER_LEVEL}
       >
-        <ConditionalRenderer isShowContent={zoom > 11 && coffeeShops.length > 0}>
-          {coffeeShops.map((nowItem: CoffeeShop) => (
-            <CafeMaker key={nowItem.id} nowItem={nowItem} isActive={selectId === nowItem.id} />
-          ))}
+        <ConditionalRenderer isShowContent={zoom > 11 && filterCoffeeShops.length > 0}>
+          {filterCoffeeShops
+            .filter((coffeeShop: CoffeeShop) => {
+              if (bounds) {
+                return checkBounds({ bounds, coffeeShop });
+              }
+              return true;
+            })
+            .map((nowItem: CoffeeShop) => (
+              <CafeMaker key={nowItem.id} nowItem={nowItem} isActive={selectId === nowItem.id} />
+            ))}
         </ConditionalRenderer>
       </MarkerClusterGroup>
     </MapContainer>

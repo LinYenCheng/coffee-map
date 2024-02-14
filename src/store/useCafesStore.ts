@@ -92,7 +92,7 @@ export const getShops = async () => {
   return [];
 };
 
-const checkBounds = ({ bounds, coffeeShop }: { bounds: Bounds; coffeeShop: CoffeeShop }) => {
+export const checkBounds = ({ bounds, coffeeShop }: { bounds: Bounds; coffeeShop: CoffeeShop }) => {
   if (bounds) {
     const { southWest, northEast } = bounds;
     const { latitude, longitude } = coffeeShop;
@@ -180,7 +180,6 @@ export const toggleConditions = async ({
   condition?: string;
 }) => {
   const coffeeShops = useCafeShopsStore.getState().coffeeShops;
-  const bounds = useCafeShopsStore.getState().bounds;
   const results = keyWord !== '' ? await indexSearch.search(keyWord || '') : [];
   const searchResults = results.map((result: any) => result.ref);
 
@@ -195,11 +194,7 @@ export const toggleConditions = async ({
           return matchesKeyword;
         }
 
-        if (!condition && bounds) {
-          return checkBounds({ bounds, coffeeShop });
-        }
-
-        if (!!condition && checkedCities.length > 0) {
+        if (checkedCities.length > 0) {
           if (!city || !city.checked) return false;
         }
 

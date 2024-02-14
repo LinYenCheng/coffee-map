@@ -32,15 +32,13 @@ function CityConditions() {
     .map((condition) => condition.name);
 
   return (
-    <ConditionalRenderer isShowContent={!!condition || window.innerWidth < 768}>
-      <MultiSelect
-        className="me-2"
-        value={selectedOptions} // Set initial selected values
-        options={dropdownOptions}
-        onChange={handleConditionToggle}
-        placeholder="地區"
-      />
-    </ConditionalRenderer>
+    <MultiSelect
+      className="me-2"
+      value={selectedOptions} // Set initial selected values
+      options={dropdownOptions}
+      onChange={handleConditionToggle}
+      placeholder="地區"
+    />
   );
 }
 

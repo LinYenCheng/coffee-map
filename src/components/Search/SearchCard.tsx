@@ -23,15 +23,9 @@ function SearchCard({ item, onSelect }: SearchCardProps): JSX.Element {
       onClick={() => {
         onSelect(item);
       }}
-      onFocus={() => {
-        onSelect(item);
-      }}
-      onTouchMove={() => {
-        onSelect(item);
-      }}
     >
       <div className="card__title d-flex ">
-        <div className="d-flex flex-grow-1 justify-content-start title">
+        <div className="flex-grow-1 justify-content-start title">
           <Tooltip target=".a-title" position="bottom" />
           <a
             data-pr-tooltip={name}

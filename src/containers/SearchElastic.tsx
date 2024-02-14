@@ -31,7 +31,7 @@ function SearchElastic({ onChange }: SearchElasticProps) {
     } else {
       setDisplayFilterCoffeeShops([]);
     }
-  }, [filterCoffeeShops, page]);
+  }, [page, filterCoffeeShops]);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
