@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import useCafeShopsStore, { toggleConditions } from '../store/useCafesStore';
 import { MultiSelect } from 'primereact/multiselect';
 
-import { cities } from '../constants/config';
 import { ICity } from '../types';
 import ConditionalRenderer from '../components/ConditionalRenderer';
 
@@ -22,7 +21,7 @@ function CityConditions() {
     toggleConditions({ cityConditions: tempCheckedConditions, filterConditions, condition });
   };
 
-  const dropdownOptions = cities.map((condition) => ({
+  const dropdownOptions = cityConditions.map((condition) => ({
     label: condition.displayName,
     value: condition.name, // Use 'name' for unique values
   }));
@@ -33,7 +32,7 @@ function CityConditions() {
     .map((condition) => condition.name);
 
   return (
-    <ConditionalRenderer isShowContent={!!condition}>
+    <ConditionalRenderer isShowContent={!!condition || window.innerWidth < 768}>
       <MultiSelect
         className="me-2"
         value={selectedOptions} // Set initial selected values

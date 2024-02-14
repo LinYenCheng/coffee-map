@@ -53,7 +53,7 @@ function MapModePage() {
           <div className="spinner-grow" role="status" />
         </div>
       </ConditionalRenderer>
-      <div className="container-fluid p-0 map-mode">
+      <div className="container-fluid map-mode">
         <div className="row">
           <div className="col-md-4 col-sm-12 result__container p-0">
             <div className="search-container search-container--absolute">
@@ -64,11 +64,17 @@ function MapModePage() {
             </div>
             <SearchElastic onChange={handleSelect} />
           </div>
-          <div className="col-md-8 col-sm-12 map__container p-0">
-            <ConditionalRenderer isShowContent={coffeeShops.length > 0}>
-              <Map position={{ lng: 121.5598, lat: 25.08 }} selectItem={selectItem} ref={mapRef} />
-            </ConditionalRenderer>
-          </div>
+          <ConditionalRenderer isShowContent={window.innerWidth > 768}>
+            <div className="col-md-8 col-sm-12 map__container p-0">
+              <ConditionalRenderer isShowContent={coffeeShops.length > 0}>
+                <Map
+                  position={{ lng: 121.5598, lat: 25.08 }}
+                  selectItem={selectItem}
+                  ref={mapRef}
+                />
+              </ConditionalRenderer>
+            </div>
+          </ConditionalRenderer>
         </div>
       </div>
     </>
