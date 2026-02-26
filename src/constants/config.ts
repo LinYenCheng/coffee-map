@@ -214,9 +214,14 @@ export const noLimitTimeFilterConditions: Condition[] = [
 
 export const defaultSortConditions: Condition[] = [
   {
+    name: 'distance',
+    displayName: '距離',
+    checked: true,
+  },
+  {
     name: 'score',
     displayName: '好咖啡',
-    checked: true,
+    checked: false,
   },
   {
     name: 'cheap',
@@ -226,11 +231,6 @@ export const defaultSortConditions: Condition[] = [
   {
     name: 'wifi',
     displayName: 'WIFI',
-    checked: false,
-  },
-  {
-    name: 'distance',
-    displayName: '距離',
     checked: false,
   },
 ];

@@ -192,7 +192,7 @@ export const toggleConditions = async ({
   const searchResults = results.map((result: any) => result.ref);
 
   useCafeShopsStore.setState((state) => {
-    const filteredCoffeeShops = coffeeShops
+    let filteredCoffeeShops: CoffeeShop[] = coffeeShops
       .filter((coffeeShop: CoffeeShop) => {
         const checkedCities = cityConditions.filter((city) => city.checked);
         const city = checkedCities.find((city) => city.name === coffeeShop.city);
@@ -214,8 +214,39 @@ export const toggleConditions = async ({
         }
 
         return true;
-      })
-      .sort((a: CoffeeShop, b: CoffeeShop) => b.score - a.score);
+      });
+
+    // 依照當前排序條件進行排序，預設已經在 state 裡
+    const currentSortConditions = useCafeShopsStore.getState().sortConditions;
+    const userLocation = useCafeShopsStore.getState().userLocation;
+    const activeSortCondition = currentSortConditions.find((sort) => sort.checked);
+
+    if (activeSortCondition) {
+      switch (activeSortCondition.name) {
+        case 'distance':
+          if (userLocation) {
+            filteredCoffeeShops = sortByDistance(filteredCoffeeShops, userLocation);
+          }
+          break;
+        case 'score':
+          filteredCoffeeShops = filteredCoffeeShops.sort(
+            (a: CoffeeShop, b: CoffeeShop) => b.score - a.score,
+          );
+          break;
+        case 'cheap':
+          filteredCoffeeShops = filteredCoffeeShops.sort(
+            (a: CoffeeShop, b: CoffeeShop) => b.cheap - a.cheap,
+          );
+          break;
+        case 'wifi':
+          filteredCoffeeShops = filteredCoffeeShops.sort(
+            (a: CoffeeShop, b: CoffeeShop) => b.wifi - a.wifi,
+          );
+          break;
+        default:
+          break;
+      }
+    }
 
     state.cityConditions = cityConditions;
     state.filterConditions = filterConditions;
