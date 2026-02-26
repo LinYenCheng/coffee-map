@@ -10,9 +10,10 @@ import { CoffeeShop } from '../types';
 
 interface SearchElasticProps {
   onChange: (item: CoffeeShop) => void;
+  isPermissionDenied?: boolean;
 }
 
-function SearchElastic({ onChange }: SearchElasticProps) {
+function SearchElastic({ onChange, isPermissionDenied = false }: SearchElasticProps) {
   const intPageSize = 10;
   const observerTarget = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(1);
@@ -55,7 +56,7 @@ function SearchElastic({ onChange }: SearchElasticProps) {
     <div className="search__result">
       <div className="tag__container d-flex">
         <span className="tag__title">排列順序</span>
-        <TagNav />
+        <TagNav isPermissionDenied={isPermissionDenied} />
       </div>
       <ConditionalRenderer isShowContent={displayFilterCoffeeShops.length > 0}>
         {displayFilterCoffeeShops.map((item) => (

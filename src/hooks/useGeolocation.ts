@@ -11,6 +11,7 @@ export const useGeolocation = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasPrompted, setHasPrompted] = useState<boolean>(false); // 記錄是否已提示過拒絕權限
+  const [isPermissionDenied, setIsPermissionDenied] = useState<boolean>(false); // 記錄是否被拒絕定位
 
   useEffect(() => {
     // 內部函式用於請求位置，並在被拒時提示用戶重新授權
@@ -32,6 +33,7 @@ export const useGeolocation = () => {
 
           if (err.code === 1) {
             // PERMISSION_DENIED
+            setIsPermissionDenied(true);
             if (!hasPrompted) {
               setHasPrompted(true);
               window.alert(
@@ -61,5 +63,5 @@ export const useGeolocation = () => {
     requestLocation();
   }, []);
 
-  return { location, error, isLoading };
+  return { location, error, isLoading, isPermissionDenied };
 };

@@ -8,6 +8,7 @@ import useCafeShopsStore, {
   searchWithKeyword,
   setUserLocation,
   autoSelectCityByLocation,
+  toggleSortConditions,
 } from '../../store/useCafesStore';
 import { useGeolocation } from '../../hooks/useGeolocation';
 import { useParams } from 'react-router-dom';
@@ -20,7 +21,12 @@ export default function ListModePage({}: Props) {
   const { condition } = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { coffeeShops } = useCafeShopsStore();
-  const { location: userLocation, error: geoError, isLoading: isGeoLoading } = useGeolocation();
+  const {
+    location: userLocation,
+    error: geoError,
+    isLoading: isGeoLoading,
+    isPermissionDenied,
+  } = useGeolocation();
 
   useEffect(() => {
     async function getCoffee() {
@@ -43,6 +49,23 @@ export default function ListModePage({}: Props) {
     searchWithKeyword('', condition);
   }, [coffeeShops, condition, userLocation]);
 
+  // 如果定位被拒絕，改變預設排序為好咖啡(score)，並隱藏距離選項
+  useEffect(() => {
+    if (isPermissionDenied) {
+      const { sortConditions } = useCafeShopsStore.getState();
+      const newSortConditions = sortConditions.map((sort) => {
+        if (sort.name === 'score') {
+          return { ...sort, checked: true };
+        }
+        if (sort.name === 'distance') {
+          return { ...sort, checked: false };
+        }
+        return { ...sort, checked: false };
+      });
+      toggleSortConditions(newSortConditions);
+    }
+  }, [isPermissionDenied]);
+
   return (
     <>
       <ConditionalRenderer isShowContent={isLoading}>
@@ -60,7 +83,7 @@ export default function ListModePage({}: Props) {
       <div className="container list-mode">
         <div className="row">
           <div className="col">
-            <SearchElastic onChange={(item) => {}} />
+            <SearchElastic onChange={(item) => {}} isPermissionDenied={isPermissionDenied} />
           </div>
         </div>
       </div>

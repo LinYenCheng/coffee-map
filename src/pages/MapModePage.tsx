@@ -10,6 +10,7 @@ import useCafeShopsStore, {
   searchWithKeyword,
   setUserLocation,
   autoSelectCityByLocation,
+  toggleSortConditions,
 } from '../store/useCafesStore';
 import { useGeolocation } from '../hooks/useGeolocation';
 
@@ -22,8 +23,13 @@ function MapModePage() {
   const mapRef = useRef(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectItem, setSelectItem] = useState<any>(null);
-  const { coffeeShops, cityConditions } = useCafeShopsStore();
-  const { location: userLocation, error: geoError, isLoading: isGeoLoading } = useGeolocation();
+  const { coffeeShops, cityConditions, filterCoffeeShops } = useCafeShopsStore();
+  const {
+    location: userLocation,
+    error: geoError,
+    isLoading: isGeoLoading,
+    isPermissionDenied,
+  } = useGeolocation();
 
   const [initialPosition, setInitialPosition] = useState<{ lat: number; lng: number }>({
     lat: 25.08,
@@ -108,6 +114,37 @@ function MapModePage() {
     searchWithKeyword('');
   }, [coffeeShops, userLocation]);
 
+  // 當篩選後的結果變動時，自動移動地圖中心到第一筆
+  useEffect(() => {
+    if (filterCoffeeShops.length > 0) {
+      const first = filterCoffeeShops[0];
+      const map = mapRef.current as any;
+      if (map && first) {
+        map.setView(
+          { lng: parseFloat(first.longitude), lat: parseFloat(first.latitude) },
+          map.getZoom() >= DISABLE_CLUSTER_LEVEL ? map.getZoom() : DISABLE_CLUSTER_LEVEL,
+        );
+      }
+    }
+  }, [filterCoffeeShops]);
+
+  // 如果定位被拒絕，改變預設排序為好咖啡(score)，並隱藏距離選項
+  useEffect(() => {
+    if (isPermissionDenied) {
+      const { sortConditions } = useCafeShopsStore.getState();
+      const newSortConditions = sortConditions.map((sort) => {
+        if (sort.name === 'score') {
+          return { ...sort, checked: true };
+        }
+        if (sort.name === 'distance') {
+          return { ...sort, checked: false };
+        }
+        return { ...sort, checked: false };
+      });
+      toggleSortConditions(newSortConditions);
+    }
+  }, [isPermissionDenied]);
+
   return (
     <>
       <ConditionalRenderer isShowContent={isLoading}>
@@ -125,7 +162,7 @@ function MapModePage() {
               <ConditionFilters />
             </div>
             <ErrorBoundary>
-              <SearchElastic onChange={handleSelect} />
+              <SearchElastic onChange={handleSelect} isPermissionDenied={isPermissionDenied} />
             </ErrorBoundary>
           </div>
           <ConditionalRenderer isShowContent={window.innerWidth > 768}>
