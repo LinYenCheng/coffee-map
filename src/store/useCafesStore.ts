@@ -221,11 +221,30 @@ export const toggleConditions = async ({
     const userLocation = useCafeShopsStore.getState().userLocation;
     const activeSortCondition = currentSortConditions.find((sort) => sort.checked);
 
+    const getFallbackLocation = (): UserLocation | null => {
+      const stored = localStorage.getItem('lastCenter');
+      if (stored) {
+        try {
+          const obj = JSON.parse(stored);
+          return { latitude: obj.lat, longitude: obj.lng };
+        } catch {
+          return null;
+        }
+      }
+      return null;
+    };
+
     if (activeSortCondition) {
       switch (activeSortCondition.name) {
         case 'distance':
-          if (userLocation) {
-            filteredCoffeeShops = sortByDistance(filteredCoffeeShops, userLocation);
+          {
+            let loc = userLocation;
+            if (!loc) {
+              loc = getFallbackLocation();
+            }
+            if (loc) {
+              filteredCoffeeShops = sortByDistance(filteredCoffeeShops, loc);
+            }
           }
           break;
         case 'score':
@@ -260,6 +279,19 @@ export const toggleSortConditions = (sortConditions: any) => {
   const filterCoffeeShops = useCafeShopsStore.getState().filterCoffeeShops;
   const userLocation = useCafeShopsStore.getState().userLocation;
 
+  const getFallbackLocation = (): UserLocation | null => {
+    const stored = localStorage.getItem('lastCenter');
+    if (stored) {
+      try {
+        const obj = JSON.parse(stored);
+        return { latitude: obj.lat, longitude: obj.lng };
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  };
+
   useCafeShopsStore.setState((state) => {
     state.sortConditions = sortConditions;
 
@@ -277,8 +309,12 @@ export const toggleSortConditions = (sortConditions: any) => {
           sortedShops.sort((a: CoffeeShop, b: CoffeeShop) => b.wifi - a.wifi);
           break;
         case 'distance':
-          if (userLocation) {
-            sortedShops = sortByDistance(sortedShops, userLocation);
+          let loc = userLocation;
+          if (!loc) {
+            loc = getFallbackLocation();
+          }
+          if (loc) {
+            sortedShops = sortByDistance(sortedShops, loc);
           }
           break;
         default:

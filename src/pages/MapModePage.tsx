@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-import Map from '../containers/CafeMap';
+import CafeMap from '../containers/CafeMap';
 import SearchElastic from '../containers/SearchElastic';
 import SearchForm from '../components/Search/SearchForm';
 import ConditionalRenderer from '../components/ConditionalRenderer';
@@ -22,8 +22,13 @@ function MapModePage() {
   const mapRef = useRef(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectItem, setSelectItem] = useState<any>(null);
-  const { coffeeShops } = useCafeShopsStore();
+  const { coffeeShops, cityConditions } = useCafeShopsStore();
   const { location: userLocation, error: geoError, isLoading: isGeoLoading } = useGeolocation();
+
+  const [initialPosition, setInitialPosition] = useState<{ lat: number; lng: number }>({
+    lat: 25.08,
+    lng: 121.5598,
+  });
 
   const handleSelect = (item: CoffeeShop) => {
     const map = mapRef.current as any;
@@ -52,6 +57,34 @@ function MapModePage() {
     }
     getCoffee();
   }, []);
+
+  // 計算初始地圖中心點：優先用 GPS，否則 localStorage，最後用已選城市
+  useEffect(() => {
+    let pos = { lat: 25.08, lng: 121.5598 };
+    const lastCenter = localStorage.getItem('lastCenter');
+    if (lastCenter) {
+      try {
+        pos = JSON.parse(lastCenter);
+      } catch {
+        // ignore parse error
+      }
+    }
+
+    if (userLocation) {
+      pos = { lat: userLocation.latitude, lng: userLocation.longitude };
+    } else if (geoError) {
+      // 若有錯誤且為拒絕定位，已經沒有 userLocation
+      // 使用 lastCenter 或所選城市
+      if (!lastCenter) {
+        const checkedCity = cityConditions.find((c) => c.checked);
+        if (checkedCity) {
+          pos = { lat: checkedCity.lat, lng: checkedCity.lng };
+        }
+      }
+    }
+
+    setInitialPosition(pos);
+  }, [userLocation, geoError, cityConditions]);
 
   // 當用戶位置改變時更新 store 並自動選擇最近的城市，並移動地圖中心點
   useEffect(() => {
@@ -99,8 +132,8 @@ function MapModePage() {
             <div className="col-md-8 col-sm-12 map__container p-0">
               <ConditionalRenderer isShowContent={coffeeShops.length > 0}>
                 <ErrorBoundary>
-                  <Map
-                    position={{ lng: 121.5598, lat: 25.08 }}
+                  <CafeMap
+                    position={{ lng: initialPosition.lng, lat: initialPosition.lat }}
                     selectItem={selectItem}
                     setSelectItem={handleSelect}
                     ref={mapRef}
