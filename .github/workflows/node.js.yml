@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 20.x
+          - 24.x
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
@@ -28,7 +28,7 @@ jobs:
 
       - name: generate new build
         run: |
-          npm install
+          npm install --legacy-peer-deps
           npm run generate
           CI=false npm run build
       - name: Deploy 🚀
