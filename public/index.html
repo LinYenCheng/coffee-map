@@ -2,14 +2,35 @@
 <html lang="zh-Hans-TW">
   <head>
     <meta charset="utf-8" />
-    <meta property="og:site_name" content="前端三分鐘" />
-    <meta property="og:title" content="找咖啡，找到適合你聊天、工作的咖啡廳" />
-    <meta property="og:description" content="咖啡廳資訊整理 (插座、安靜、網路、佔位、無限時)" />
-    <title>找咖啡，找到適合你聊天、工作的咖啡廳</title>
-    <meta property="description" content="咖啡廳資訊整理 (插座、安靜、網路、佔位、無限時)" />
-    <meta name="description" content="咖啡廳資訊整理 (插座、安靜、網路、佔位、無限時)" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO Meta Tags -->
+    <title>Coffee Map - 台灣咖啡廳地圖 | 尋找安靜、有插座、適合工作的咖啡館</title>
+    <meta name="description" content="Coffee Map 專為您設計的台灣咖啡廳搜尋引擎。輕鬆找到有插座、WiFi穩定、不限時的理想咖啡館，無論是專心工作、讀書或與朋友聊天，都能找到最適合的角落。" />
+    <meta name="keywords" content="咖啡, 咖啡廳, 咖啡館, Coffee Map, 台灣咖啡, 找咖啡, 插座, 安靜, 工作, 讀書, 不限時, WiFi" />
+    <link rel="canonical" href="http://linyencheng.github.io/coffee-map" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://linyencheng.github.io/coffee-map" />
+    <meta property="og:site_name" content="Coffee Map" />
+    <meta property="og:title" content="Coffee Map - 台灣咖啡廳地圖 | 尋找安靜、有插座、適合工作的咖啡館" />
+    <meta property="og:description" content="Coffee Map 專為您設計的台灣咖啡廳搜尋引擎。輕鬆找到有插座、WiFi穩定、不限時的理想咖啡館，無論是專心工作、讀書或與朋友聊天，都能找到最適合的角落。" />
+    <meta property="og:image" content="%PUBLIC_URL%/og-image.png" /> 
+    <!--
+      建議在 public 資料夾中放置一張 1200x630 的圖片作為 og:image
+      Suggestion: Place a 1200x630 image named 'og-image.png' in the public folder for og:image
+    -->
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="http://linyencheng.github.io/coffee-map" />
+    <meta property="twitter:title" content="Coffee Map - 台灣咖啡廳地圖 | 尋找安靜、有插座、適合工作的咖啡館" />
+    <meta property="twitter:description" content="Coffee Map 專為您設計的台灣咖啡廳搜尋引擎。輕鬆找到有插座、WiFi穩定、不限時的理想咖啡館，無論是專心工作、讀書或與朋友聊天，都能找到最適合的角落。" />
+    <meta property="twitter:image" content="%PUBLIC_URL%/og-image.png" />
+
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+
     <!--
       Notice the use of %PUBLIC_URL% in the tag above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -27,8 +48,28 @@
       rel="stylesheet"
       href="https://unpkg.com/react-leaflet-markercluster/dist/styles.min.css"
     />
+    
+    <!-- JSON-LD for Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "http://linyencheng.github.io/coffee-map",
+      "name": "Coffee Map",
+      "description": "Coffee Map 專為您設計的台灣咖啡廳搜尋引擎。輕鬆找到有插座、WiFi穩定、不限時的理想咖啡館，無論是專心工作、讀書或與朋友聊天，都能找到最適合的角落。",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "http://linyencheng.github.io/coffee-map",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
   </head>
   <body>
+    <noscript>
+      <h1>歡迎來到 Coffee Map - 台灣咖啡廳地圖</h1>
+      <p>您需要啟用 JavaScript 才能使用此應用程式。本應用程式幫助您尋找台灣各地最適合工作、讀書、聊天的咖啡館。</p>
+    </noscript>
     <div id="root"></div>
     <!--
       This HTML file is a template.
