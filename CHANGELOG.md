@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/LinYenCheng/coffee-map/compare/v1.3.0...v1.4.0) (2026-02-26)
+
+
+### Features
+
+* add use user location ([cc559ad](https://github.com/LinYenCheng/coffee-map/commit/cc559ad0be758c8738d7c170546c51f852aafe56))
+* refactor search logic and add google map link ([e733fd6](https://github.com/LinYenCheng/coffee-map/commit/e733fd67c8f511aab5a91a14428d4711c6173fc5))
+* update maker popup when click search result ([b9bd030](https://github.com/LinYenCheng/coffee-map/commit/b9bd030896f6c8abc69333bfce9402a146c1de43))
+
+
+### Bug Fixes
+
+* bugs for popup ([92b21c2](https://github.com/LinYenCheng/coffee-map/commit/92b21c2eee0a5abb759f53655f2381a143a80f8d))
+* defaut sort by distance ([0a83ff4](https://github.com/LinYenCheng/coffee-map/commit/0a83ff448ab4d2fcdb4e4df283be602b2746d1ad))
+* DISABLE_CLUSTER_LEVEL ([638144c](https://github.com/LinYenCheng/coffee-map/commit/638144cae75f1c68b20167309024a217784e5b8c))
+* remember last location ([fbebfd5](https://github.com/LinYenCheng/coffee-map/commit/fbebfd5dac4a8a3d3160cb648d830f51a8f8142a))
+* request location again ([de5ebf5](https://github.com/LinYenCheng/coffee-map/commit/de5ebf5fc114a275b08078f7e28981921e75ed1b))
+* search logic ([b406ac5](https://github.com/LinYenCheng/coffee-map/commit/b406ac5ff1eca74d41031d577f9a72ec4f816e19))
+* ux while user not allow access position ([3e624ba](https://github.com/LinYenCheng/coffee-map/commit/3e624baf8d4b25ebfc3ec3628f4be4fd91707632))
+
 ## [1.3.0](https://github.com/LinYenCheng/coffee-map/compare/v1.2.0...v1.3.0) (2024-02-13)
 
 
