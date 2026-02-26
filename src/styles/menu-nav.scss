@@ -42,6 +42,11 @@
     background: #fff;
   }
 
+/* 放在其他條件的 MultiSelect，增加最小寬度以顯示多選文字 */
+.other-conditions__select {
+  min-width: 180px;
+}
+
   input {
     position: absolute;
     left: -9999px;

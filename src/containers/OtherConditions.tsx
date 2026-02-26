@@ -33,7 +33,8 @@ function OtherConditions() {
 
   return (
     <MultiSelect
-      className="me-2"
+      className="me-2 other-conditions__select"
+      style={{ minWidth: '180px' }}
       value={selectedOptions} // Set initial selected values
       options={dropdownOptions}
       onChange={handleConditionToggle}
