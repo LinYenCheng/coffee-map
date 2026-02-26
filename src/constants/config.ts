@@ -228,6 +228,11 @@ export const defaultSortConditions: Condition[] = [
     displayName: 'WIFI',
     checked: false,
   },
+  {
+    name: 'distance',
+    displayName: '距離',
+    checked: false,
+  },
 ];
 
 export const DISABLE_CLUSTER_LEVEL = 18;

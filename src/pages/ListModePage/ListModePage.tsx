@@ -3,7 +3,13 @@ import Carousel from '../../components/Carousel';
 import ConditionalRenderer from '../../components/ConditionalRenderer';
 import './ListModePage.scss';
 import SearchElastic from '../../containers/SearchElastic';
-import useCafeShopsStore, { getShops, searchWithKeyword } from '../../store/useCafesStore';
+import useCafeShopsStore, {
+  getShops,
+  searchWithKeyword,
+  setUserLocation,
+  autoSelectCityByLocation,
+} from '../../store/useCafesStore';
+import { useGeolocation } from '../../hooks/useGeolocation';
 import { useParams } from 'react-router-dom';
 import SearchForm from '../../components/Search/SearchForm';
 import ConditionFilters from '../../components/Search/ConditionFilters';
@@ -14,6 +20,7 @@ export default function ListModePage({}: Props) {
   const { condition } = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { coffeeShops } = useCafeShopsStore();
+  const { location: userLocation, error: geoError, isLoading: isGeoLoading } = useGeolocation();
 
   useEffect(() => {
     async function getCoffee() {
@@ -24,9 +31,17 @@ export default function ListModePage({}: Props) {
     getCoffee();
   }, []);
 
+  // 當用戶位置改變時更新 store 並自動選擇最近的城市
+  useEffect(() => {
+    if (userLocation && !isGeoLoading) {
+      setUserLocation(userLocation);
+      autoSelectCityByLocation(userLocation);
+    }
+  }, [userLocation, isGeoLoading]);
+
   useEffect(() => {
     searchWithKeyword('', condition);
-  }, [coffeeShops, condition]);
+  }, [coffeeShops, condition, userLocation]);
 
   return (
     <>

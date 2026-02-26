@@ -5,7 +5,13 @@ import SearchElastic from '../containers/SearchElastic';
 import SearchForm from '../components/Search/SearchForm';
 import ConditionalRenderer from '../components/ConditionalRenderer';
 
-import useCafeShopsStore, { getShops, searchWithKeyword } from '../store/useCafesStore';
+import useCafeShopsStore, {
+  getShops,
+  searchWithKeyword,
+  setUserLocation,
+  autoSelectCityByLocation,
+} from '../store/useCafesStore';
+import { useGeolocation } from '../hooks/useGeolocation';
 
 import ConditionFilters from '../components/Search/ConditionFilters';
 import { CoffeeShop } from '../types';
@@ -17,6 +23,7 @@ function MapModePage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectItem, setSelectItem] = useState<any>(null);
   const { coffeeShops } = useCafeShopsStore();
+  const { location: userLocation, error: geoError, isLoading: isGeoLoading } = useGeolocation();
 
   const handleSelect = (item: CoffeeShop) => {
     const map = mapRef.current as any;
@@ -36,6 +43,7 @@ function MapModePage() {
     }, 250);
   };
 
+  // 初始化咖啡店數據
   useEffect(() => {
     async function getCoffee() {
       setIsLoading(true);
@@ -45,9 +53,27 @@ function MapModePage() {
     getCoffee();
   }, []);
 
+  // 當用戶位置改變時更新 store 並自動選擇最近的城市，並移動地圖中心點
+  useEffect(() => {
+    if (userLocation && !isGeoLoading) {
+      setUserLocation(userLocation);
+      autoSelectCityByLocation(userLocation);
+
+      // 移動地圖中心點到用戶位置
+      const map = mapRef.current as any;
+      if (map) {
+        map.setView(
+          { lng: userLocation.longitude, lat: userLocation.latitude },
+          map.getZoom() >= DISABLE_CLUSTER_LEVEL ? map.getZoom() : DISABLE_CLUSTER_LEVEL,
+        );
+      }
+    }
+  }, [userLocation, isGeoLoading]);
+
+  // 當咖啡店加載或用戶位置改變時更新搜索結果
   useEffect(() => {
     searchWithKeyword('');
-  }, [coffeeShops]);
+  }, [coffeeShops, userLocation]);
 
   return (
     <>

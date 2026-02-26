@@ -56,6 +56,7 @@ export default function SearchForm() {
               'pi-search': strInput === '' || !isSubmit,
               'pi-times': strInput !== '' && isSubmit,
             })}
+            style={{ marginLeft: '0.5rem', cursor: 'pointer' }}
             onClick={onClick}
           />
           <InputText

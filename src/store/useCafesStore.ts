@@ -4,6 +4,7 @@ import { setAutoFreeze } from 'immer';
 import { immer } from 'zustand/middleware/immer';
 import axios from 'axios';
 import calculateScore from '../util/calculateScore';
+import { calculateDistance } from '../util/calculateDistance';
 import {
   cities,
   defaultFilterConditions,
@@ -42,6 +43,12 @@ const defaultBounds: Bounds = {
   },
 };
 
+export interface UserLocation {
+  latitude: number;
+  longitude: number;
+  accuracy?: number;
+}
+
 const useCafeShopsStore = create(
   immer(() => ({
     bounds: defaultBounds as Bounds,
@@ -50,6 +57,7 @@ const useCafeShopsStore = create(
     filterConditions: defaultFilterConditions,
     cityConditions: cities,
     sortConditions: defaultSortConditions,
+    userLocation: null as UserLocation | null,
   })),
 );
 
@@ -219,25 +227,34 @@ export const toggleSortConditions = (sortConditions: any) => {
   // Get the first active sort condition
   const activeSortCondition = sortConditions.find((sort: Condition) => sort.checked);
   const filterCoffeeShops = useCafeShopsStore.getState().filterCoffeeShops;
+  const userLocation = useCafeShopsStore.getState().userLocation;
 
   useCafeShopsStore.setState((state) => {
     state.sortConditions = sortConditions;
 
     if (activeSortCondition) {
-      state.filterCoffeeShops = filterCoffeeShops.sort((a: CoffeeShop, b: CoffeeShop) => {
-        const { name } = activeSortCondition;
-        switch (name) {
-          case 'score':
-            return b.score - a.score;
-          case 'cheap':
-            return b.cheap - a.cheap;
-          case 'wifi':
-            return b.wifi - a.wifi;
-          // Add more cases for other fields
-          default:
-            return 0; // No matching field or condition
-        }
-      });
+      let sortedShops = [...filterCoffeeShops];
+      const { name } = activeSortCondition;
+      switch (name) {
+        case 'score':
+          sortedShops.sort((a: CoffeeShop, b: CoffeeShop) => b.score - a.score);
+          break;
+        case 'cheap':
+          sortedShops.sort((a: CoffeeShop, b: CoffeeShop) => b.cheap - a.cheap);
+          break;
+        case 'wifi':
+          sortedShops.sort((a: CoffeeShop, b: CoffeeShop) => b.wifi - a.wifi);
+          break;
+        case 'distance':
+          if (userLocation) {
+            sortedShops = sortByDistance(sortedShops, userLocation);
+          }
+          break;
+        default:
+          // No matching field or condition
+          break;
+      }
+      state.filterCoffeeShops = sortedShops;
     }
   });
 };
@@ -251,6 +268,78 @@ export const resetConditions = () => {
 export const setBounds = (bounds: Bounds) => {
   useCafeShopsStore.setState((state) => {
     state.bounds = bounds;
+  });
+};
+
+export const setUserLocation = (location: UserLocation | null) => {
+  useCafeShopsStore.setState((state) => {
+    state.userLocation = location;
+  });
+};
+
+/**
+ * 根據用戶位置找到最近的城市
+ * @param userLat 用戶的緯度
+ * @param userLng 用戶的經度
+ * @returns 最近的城市
+ */
+export const findNearestCity = (userLat: number, userLng: number): ICity | null => {
+  const citiesToCheck = useCafeShopsStore.getState().cityConditions;
+  let nearestCity: ICity | null = null;
+  let minDistance = Infinity;
+
+  citiesToCheck.forEach((city) => {
+    const distance = calculateDistance(userLat, userLng, city.lat, city.lng);
+    if (distance < minDistance) {
+      minDistance = distance;
+      nearestCity = city;
+    }
+  });
+
+  return nearestCity;
+};
+
+/**
+ * 根據用戶位置和城市設置自動選擇最近的城市
+ * @param userLocation 用戶位置
+ */
+export const autoSelectCityByLocation = (userLocation: UserLocation) => {
+  const nearestCity = findNearestCity(userLocation.latitude, userLocation.longitude);
+  if (nearestCity) {
+    const updatedCityConditions = useCafeShopsStore.getState().cityConditions.map((city) => ({
+      ...city,
+      checked: city.name === nearestCity.name,
+    }));
+    useCafeShopsStore.setState((state) => {
+      state.cityConditions = updatedCityConditions;
+    });
+  }
+};
+
+/**
+ * 根據用戶位置排序咖啡店（從近到遠）
+ * @param coffeeShops 咖啡店列表
+ * @param userLocation 用戶位置
+ * @returns 排序後的咖啡店列表
+ */
+export const sortByDistance = (
+  coffeeShops: CoffeeShop[],
+  userLocation: UserLocation,
+): CoffeeShop[] => {
+  return coffeeShops.sort((a: CoffeeShop, b: CoffeeShop) => {
+    const distanceA = calculateDistance(
+      userLocation.latitude,
+      userLocation.longitude,
+      parseFloat(a.latitude),
+      parseFloat(a.longitude),
+    );
+    const distanceB = calculateDistance(
+      userLocation.latitude,
+      userLocation.longitude,
+      parseFloat(b.latitude),
+      parseFloat(b.longitude),
+    );
+    return distanceA - distanceB; // 從近到遠
   });
 };
 
