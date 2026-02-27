@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Tooltip } from 'primereact/tooltip';
 import { Toast } from 'primereact/toast';
 import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
 import { MapContainer, TileLayer, Circle } from 'react-leaflet';
 
 import { useParams } from 'react-router-dom';
@@ -20,7 +21,7 @@ interface SearchCardProps {
 
 function SearchCard({ item, onSelect }: SearchCardProps) {
   const { condition } = useParams();
-  const { name, wifi, seat, quiet, tasty, cheap, music, latitude, longitude } = item;
+  const { name, wifi, seat, quiet, tasty, cheap, music, latitude, longitude, address } = item;
   const score = ((cheap + music + quiet + seat + tasty + wifi) / 6).toFixed(1);
   const { userLocation } = useCafeShopsStore();
 
@@ -49,6 +50,22 @@ function SearchCard({ item, onSelect }: SearchCardProps) {
       onSelect(item);
     }
   };
+
+  const footerContent = (
+    <Button
+      label="前往 Google 地圖"
+      icon="pi pi-directions"
+      onClick={() => {
+        // 編碼地址以確保特殊字元不會失效
+        const encodedAddress = encodeURIComponent(address);
+        const url = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+
+        // 模擬 target="_blank"
+        window.open(url, '_blank', 'noreferrer');
+      }}
+      autoFocus
+    />
+  );
 
   return (
     <>
@@ -97,6 +114,7 @@ function SearchCard({ item, onSelect }: SearchCardProps) {
         header={name}
         maximized
         closable
+        footer={footerContent}
       >
         {selectedItemInModal && (
           <MapContainer
