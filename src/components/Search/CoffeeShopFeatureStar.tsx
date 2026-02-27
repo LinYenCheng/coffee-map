@@ -53,7 +53,7 @@ export default function CoffeeShopFeatureStar({ item }: Props) {
             <li>
               <img alt="" src={srcParking} />
               <a target="_blank" href={url} rel="noreferrer">
-                <span className="ms-1 feature-title">{url}</span>
+                <span className="ms-1 feature-title">官方網站/粉絲專頁連結</span>
               </a>
             </li>
           </ConditionalRenderer>
