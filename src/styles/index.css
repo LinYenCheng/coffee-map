@@ -62,7 +62,6 @@ html {
   background: white;
 }
 
-
 @media screen and (min-width: 720px) {
   .desktop-hide {
     display: none !important;
@@ -74,7 +73,7 @@ html {
     display: none !important;
   }
 
-    .result__container {
+  .result__container {
     height: calc(100vh - var(--header-height));
     overflow: scroll;
   }
@@ -90,7 +89,13 @@ html {
 }
 
 .leaflet-popup-content-wrapper {
-  min-width: 340px;
+  min-width: 290px;
+}
+
+@media screen and (min-width: 720px) {
+  .leaflet-popup-content-wrapper {
+    min-width: 440px;
+  }
 }
 
 .leaflet-container {

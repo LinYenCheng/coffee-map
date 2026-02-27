@@ -17,6 +17,7 @@ export default function CafeMaker({ nowItem, isActive, setSelectItem }: Props) {
   const markerRef = useRef<L.Marker>(null);
   const { latitude, longitude, name, url } = nowItem;
   const score = calculateScore(nowItem);
+  const isDesktop = window.innerWidth > 768;
 
   const onMarkerClick = () => {
     setSelectItem(nowItem);
@@ -43,15 +44,17 @@ export default function CafeMaker({ nowItem, isActive, setSelectItem }: Props) {
       opacity={0.5}
       eventHandlers={{ click: onMarkerClick }}
       position={{ lng: parseFloat(longitude), lat: parseFloat(latitude) }}
-      icon={L.divIcon({
-        html: `<div class="custom-marker">
-                            <span>${score} ★ ${nowItem.name}</span>
-                        </div>`,
+      {...(isDesktop && {
+        icon: L.divIcon({
+          html: `<div class="custom-marker">
+               <span>${score} ★ ${nowItem.name}</span>
+             </div>`,
+        }),
       })}
     >
       <ConditionalRenderer isShowContent={isActive}>
         <Popup>
-          <div className="card border-none" style={{ minWidth: '300px' }}>
+          <div className="card border-none" style={{ minWidth: isDesktop ? '400px' : '250px' }}>
             <div className="card__title mb-2 d-flex">
               <div className="flex-grow-1">
                 <a className="h6" href={url} target="_blank" rel="noreferrer">

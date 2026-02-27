@@ -140,6 +140,11 @@
 
 .p-dialog-header {
   background: var(--primary-color);
+  padding: 0.5rem 1rem;
+}
+
+.p-dialog-content {
+  padding: 0;
 }
 
 .search__button {
