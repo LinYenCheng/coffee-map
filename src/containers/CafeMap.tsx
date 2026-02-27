@@ -58,8 +58,9 @@ const CafeMap = forwardRef(({ position, selectItem, setSelectItem }: CafeMapProp
       <MyMap setZoom={setZoom} setSelectItem={setSelectItem} />
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        // url="https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"
-        url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
+        // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        // url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
       />
       <MarkerClusterGroup
         chunkedLoading
