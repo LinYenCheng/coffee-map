@@ -2,9 +2,9 @@ import { classNames } from 'primereact/utils';
 import './CoffeeTag.css';
 import { CoffeeShop } from '../../types';
 
-type Props = {
+interface Props {
   item: CoffeeShop;
-};
+}
 
 export default function CoffeeTag({ item }: Props) {
   const { wifi, limited_time, socket, standing_desk } = item;

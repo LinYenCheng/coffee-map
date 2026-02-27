@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
 import Carousel from '../../components/Carousel';
 import ConditionalRenderer from '../../components/ConditionalRenderer';
 import './ListModePage.css';
@@ -11,22 +13,14 @@ import useCafeShopsStore, {
   toggleSortConditions,
 } from '../../store/useCafesStore';
 import { useGeolocation } from '../../hooks/useGeolocation';
-import { useParams } from 'react-router-dom';
 import SearchForm from '../../components/Search/SearchForm';
 import ConditionFilters from '../../components/Search/ConditionFilters';
 
-type Props = {};
-
-export default function ListModePage({}: Props) {
+export default function ListModePage() {
   const { condition } = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { coffeeShops } = useCafeShopsStore();
-  const {
-    location: userLocation,
-    error: geoError,
-    isLoading: isGeoLoading,
-    isPermissionDenied,
-  } = useGeolocation();
+  const { location: userLocation, isLoading: isGeoLoading, isPermissionDenied } = useGeolocation();
 
   useEffect(() => {
     async function getCoffee() {
@@ -83,7 +77,7 @@ export default function ListModePage({}: Props) {
       <div className="container list-mode">
         <div className="row">
           <div className="col">
-            <SearchElastic onChange={(item) => {}} isPermissionDenied={isPermissionDenied} />
+            <SearchElastic onChange={() => {}} isPermissionDenied={isPermissionDenied} />
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export interface UserLocation {
   latitude: number;
@@ -10,7 +10,7 @@ export const useGeolocation = () => {
   const [location, setLocation] = useState<UserLocation | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [hasPrompted, setHasPrompted] = useState<boolean>(false); // 記錄是否已提示過拒絕權限
+  const hasPromptedRef = useRef(false);
   const [isPermissionDenied, setIsPermissionDenied] = useState<boolean>(false); // 記錄是否被拒絕定位
 
   useEffect(() => {
@@ -28,17 +28,17 @@ export const useGeolocation = () => {
           setIsLoading(false);
         },
         (err) => {
+          // eslint-disable-next-line no-console
           console.log('地理定位錯誤:', err);
           setIsLoading(false);
 
           if (err.code === 1) {
             // PERMISSION_DENIED
             setIsPermissionDenied(true);
-            if (!hasPrompted) {
-              setHasPrompted(true);
-              window.alert(
-                '定位權限被拒絕，請在瀏覽器設定允許定位後刷新頁面。'
-              );
+            if (!hasPromptedRef.current) {
+              hasPromptedRef.current = true;
+              // eslint-disable-next-line no-alert
+              window.alert('定位權限被拒絕，請在瀏覽器設定允許定位後刷新頁面。');
             }
             setError('使用者拒絕定位');
           } else {

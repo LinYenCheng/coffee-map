@@ -22,14 +22,18 @@
 
 .search-container--shadow {
   box-shadow: 0px 2px 4px 0px #0000004d;
+}
 
-  @media screen and (min-width: 768px) {
+@media screen and (min-width: 768px) {
+  .search-container--shadow {
     position: absolute;
     z-index: 2;
     width: 100%;
   }
+}
 
-  @media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
+  .search-container--shadow {
     position: absolute;
     z-index: 2;
     top: 0rem;
@@ -44,8 +48,10 @@
   top: calc(8px + var(--header-height));
   z-index: 499;
   left: 8px;
+}
 
-  @media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
+  .search-container--absolute {
     /*  如果使用者之裝置寬度 <= 768px，將會再載入這裡的 CSS。  */
     top: 0.25rem;
     left: auto;
@@ -57,7 +63,7 @@
   display: none;
 }
 
-.p-input-icon-right>i:last-of-type {
+.p-input-icon-right > i:last-of-type {
   color: black;
   cursor: pointer;
 }
@@ -84,7 +90,6 @@
 .p-multiselect-items-wrapper {
   border-radius: 1rem;
 }
-
 
 .p-multiselect-label {
   padding: 0.25rem 0.75rem;
@@ -132,15 +137,16 @@
   color: #fff;
 }
 
-
 .search__button {
   border: none;
   background: #fff;
   border-radius: 0 3px 3px 0;
   pointer-events: auto;
   transform: translateX(-3.5rem);
+}
 
-  @media screen and (max-width: 720px) {
+@media screen and (max-width: 720px) {
+  .search__button {
     /* 小於 767px */
     left: initial;
     right: 20px;
@@ -199,10 +205,9 @@
 .leaflet-popup-content-wrapper {
   .card {
     cursor: auto !important;
-
-    &:hover {
-      background: none;
-    }
+  }
+  .card:hover {
+    background: none;
   }
 }
 
@@ -223,30 +228,34 @@
   overflow: auto;
   max-height: calc(100vh - var(--header-height));
   top: calc(var(--header-height) + 8px);
+}
 
-  .tag__container {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    padding: 56px 8px 8px 0px;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: center;
-    background: #fff;
-    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.3);
+.search__result .tag__container {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 56px 8px 8px 0px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  background: #fff;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.3);
+}
 
-    @media screen and (max-width: 1200px) {
-      padding: 8px 8px 8px 0px;
-    }
+@media screen and (max-width: 1200px) {
+  .search__result .tag__container {
+    padding: 8px 8px 8px 0px;
+  }
+}
 
-    .tag__title {
-      line-height: 2rem;
+.search__result .tag__container .tag__title {
+  line-height: 2rem;
+}
 
-      @media screen and (max-width: 1200px) {
-        display: none;
-      }
-    }
+@media screen and (max-width: 1200px) {
+  .search__result .tag__container .tag__title {
+    display: none;
   }
 }
 

@@ -1,11 +1,9 @@
-import { Route, Routes, createHashRouter, createRoutesFromElements } from 'react-router-dom';
-
+import { Route, createHashRouter, createRoutesFromElements } from 'react-router-dom';
 import Root from './Root';
 
 import MapModePage from './pages/MapModePage';
 import ListModePage from './pages/ListModePage';
-
-export const ROUTE_CAFE_LIST = 'cafe-list';
+import { ROUTE_CAFE_LIST } from './constants/route';
 
 const router = createHashRouter(
   createRoutesFromElements(

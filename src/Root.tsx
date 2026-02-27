@@ -1,7 +1,7 @@
 import { useNavigate, Outlet } from 'react-router-dom';
 import { Menubar } from 'primereact/menubar';
 import { NO_LIMITED_TIME, REMOTE_WORK } from './types';
-import { ROUTE_CAFE_LIST } from './router';
+import { ROUTE_CAFE_LIST } from './constants/route';
 
 export default function Root() {
   const navigate = useNavigate();

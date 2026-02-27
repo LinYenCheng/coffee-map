@@ -8,7 +8,7 @@ interface ConditionalRendererProps {
 function ConditionalRenderer({
   isShowContent,
   children,
-}: ConditionalRendererProps): JSX.Element | null {
+}: ConditionalRendererProps): ReactNode | null {
   return isShowContent ? <>{children}</> : null;
 }
 

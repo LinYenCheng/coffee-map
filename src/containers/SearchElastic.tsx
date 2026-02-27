@@ -41,16 +41,17 @@ function SearchElastic({ onChange, isPermissionDenied = false }: SearchElasticPr
       }
     });
 
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
+    const el = observerTarget.current;
+    if (el) {
+      observer.observe(el);
     }
 
     return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
+      if (el) {
+        observer.unobserve(el);
       }
     };
-  }, [observerTarget, page, totalPage]);
+  }, [page, totalPage]);
 
   return (
     <div className="search__result">
@@ -65,7 +66,7 @@ function SearchElastic({ onChange, isPermissionDenied = false }: SearchElasticPr
       </ConditionalRenderer>
       <ConditionalRenderer isShowContent={page + 1 <= totalPage}>
         <div className="w-100 text-center mt-3 mb-3" ref={observerTarget}>
-          <div className="spinner-border text-secondary" role="status"></div>
+          <div className="spinner-border text-secondary" role="status" />
         </div>
       </ConditionalRenderer>
     </div>

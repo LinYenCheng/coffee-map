@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 
-import useCafeShopsStore, { toggleConditions } from '../store/useCafesStore';
 import { MultiSelect } from 'primereact/multiselect';
+import useCafeShopsStore, { toggleConditions } from '../store/useCafesStore';
 
 import { Condition } from '../types';
 import { defaultFilterConditions } from '../constants/config';
@@ -21,15 +21,13 @@ function OtherConditions() {
     toggleConditions({ cityConditions, filterConditions: tempCheckedConditions, condition });
   };
 
-  const dropdownOptions = defaultFilterConditions.map((condition) => ({
-    label: condition.displayName,
-    value: condition.name, // Use 'name' for unique values
+  const dropdownOptions = defaultFilterConditions.map((opt) => ({
+    label: opt.displayName,
+    value: opt.name, // Use 'name' for unique values
   }));
 
   // Selected options based on checked conditions
-  const selectedOptions = filterConditions
-    .filter((condition) => condition.checked)
-    .map((condition) => condition.name);
+  const selectedOptions = filterConditions.filter((opt) => opt.checked).map((opt) => opt.name);
 
   return (
     <MultiSelect

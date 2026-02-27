@@ -7,11 +7,11 @@ import { CoffeeShop } from '../types';
 import calculateScore from '../util/calculateScore';
 import ConditionalRenderer from '../components/ConditionalRenderer';
 
-type Props = {
+interface Props {
   nowItem: CoffeeShop;
   isActive: boolean;
   setSelectItem: any;
-};
+}
 
 export default function CafeMaker({ nowItem, isActive, setSelectItem }: Props) {
   const markerRef = useRef<L.Marker>(null);
@@ -23,16 +23,17 @@ export default function CafeMaker({ nowItem, isActive, setSelectItem }: Props) {
   };
 
   useEffect(() => {
-    if (isActive && markerRef.current) {
-      markerRef.current.openPopup();
+    const marker = markerRef.current;
+    if (isActive && marker) {
+      marker.openPopup();
     }
 
-    if (!isActive && markerRef.current) {
-      markerRef.current.closePopup();
+    if (!isActive && marker) {
+      marker.closePopup();
     }
 
     return () => {
-      if (markerRef.current) markerRef.current.closePopup();
+      if (marker) marker.closePopup();
     };
   }, [isActive]);
 
@@ -53,13 +54,13 @@ export default function CafeMaker({ nowItem, isActive, setSelectItem }: Props) {
           <div className="card border-none" style={{ minWidth: '400px' }}>
             <div className="card__title mb-2 d-flex">
               <div className="flex-grow-1">
-                <a className="h6" href={url} target="_blank">
+                <a className="h6" href={url} target="_blank" rel="noreferrer">
                   {name}
                 </a>
               </div>
               <div>
                 <span className="ms-2 score">{score}</span>
-                <i className="pi pi-star-fill score ms-1"></i>
+                <i className="pi pi-star-fill score ms-1" />
               </div>
             </div>
             <CoffeeShopFeatureStar item={nowItem} />

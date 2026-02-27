@@ -20,9 +20,9 @@ import { CoffeeShop } from '../../types';
 
 import './CoffeeShopFeatureStar.css';
 
-type Props = {
+interface Props {
   item: CoffeeShop;
-};
+}
 
 function Stars({ num }: { num: number }) {
   // Handle edge cases (0 or negative values) gracefully
@@ -52,14 +52,18 @@ export default function CoffeeShopFeatureStar({ item }: Props) {
           <ConditionalRenderer isShowContent={!!url}>
             <li>
               <img alt="" src={srcParking} />
-              <a target="_blank" href={`${url}`}>
+              <a target="_blank" href={url} rel="noreferrer">
                 <span className="ms-1 feature-title">{url}</span>
               </a>
             </li>
           </ConditionalRenderer>
           <li>
             <img alt="" src={srcLocation} />
-            <a target="_blank" href={`https://www.google.com/maps/search/${address}`}>
+            <a
+              target="_blank"
+              href={`https://www.google.com/maps/search/${address}`}
+              rel="noreferrer"
+            >
               <span className="ms-1 feature-title">{address}</span>
               <span> (前往 Google 地圖)</span>
             </a>

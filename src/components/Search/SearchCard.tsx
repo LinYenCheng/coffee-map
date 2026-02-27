@@ -2,14 +2,13 @@ import { useRef } from 'react';
 import { Tooltip } from 'primereact/tooltip';
 import { Toast } from 'primereact/toast';
 
+import { useParams } from 'react-router-dom';
 import { CoffeeShop } from '../../types';
 import CoffeeShopFeatureStar from './CoffeeShopFeatureStar';
 import ConditionalRenderer from '../ConditionalRenderer';
-import { useParams } from 'react-router-dom';
 import CoffeeTag from './CoffeeTag';
 import useCafeShopsStore from '../../store/useCafesStore';
 import { calculateDistance } from '../../util/calculateDistance';
-
 
 interface SearchCardProps {
   item: CoffeeShop;
@@ -53,7 +52,7 @@ function SearchCard({ item, onSelect }: SearchCardProps) {
             rel="noopener noreferrer"
             onClick={(e) => {
               e.stopPropagation();
-              navigator.clipboard.writeText(name)
+              navigator.clipboard.writeText(name);
               toast.current?.show({ severity: 'info', summary: name, detail: '已複製到剪貼簿' });
             }}
           >
@@ -70,7 +69,7 @@ function SearchCard({ item, onSelect }: SearchCardProps) {
             </span>
           )}
           <span className="ms-2 score">{score}</span>
-          <i className="pi pi-star-fill score ms-1"></i>
+          <i className="pi pi-star-fill score ms-1" />
         </div>
       </div>
       <CoffeeShopFeatureStar item={item} />

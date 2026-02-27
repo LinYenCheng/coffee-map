@@ -2,9 +2,7 @@ import src1 from './assets/1.jpg';
 import src2 from './assets/2.jpg';
 import src3 from './assets/3.jpg';
 
-type Props = {};
-
-export default function Carousel({}: Props) {
+export default function Carousel() {
   return (
     <div id="carouselExampleCaptions" className="carousel slide">
       <div className="carousel-indicators">
@@ -15,19 +13,19 @@ export default function Carousel({}: Props) {
           className="active"
           aria-current="true"
           aria-label="Slide 1"
-        ></button>
+        />
         <button
           type="button"
           data-bs-target="#carouselExampleCaptions"
           data-bs-slide-to="1"
           aria-label="Slide 2"
-        ></button>
+        />
         <button
           type="button"
           data-bs-target="#carouselExampleCaptions"
           data-bs-slide-to="2"
           aria-label="Slide 3"
-        ></button>
+        />
       </div>
       <div className="carousel-inner">
         <div className="carousel-item active">
@@ -58,7 +56,7 @@ export default function Carousel({}: Props) {
         data-bs-target="#carouselExampleCaptions"
         data-bs-slide="prev"
       >
-        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span className="carousel-control-prev-icon" aria-hidden="true" />
         <span className="visually-hidden">Previous</span>
       </button>
       <button
@@ -67,7 +65,7 @@ export default function Carousel({}: Props) {
         data-bs-target="#carouselExampleCaptions"
         data-bs-slide="next"
       >
-        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+        <span className="carousel-control-next-icon" aria-hidden="true" />
         <span className="visually-hidden">Next</span>
       </button>
     </div>

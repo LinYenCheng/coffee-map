@@ -1,11 +1,12 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { useParams } from 'react-router-dom';
 
-import './search.css';
 import { classNames } from 'primereact/utils';
 import ConditionFilters from './ConditionFilters';
 import { searchWithKeyword } from '../../store/useCafesStore';
+
+import './search.css';
 
 export default function SearchForm() {
   const { condition } = useParams();
@@ -13,36 +14,45 @@ export default function SearchForm() {
   const [strInput, setStrInput] = useState<string>('');
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setStrInput(event.target.value);
-    if (event.target.value === '') {
-      clearSearch();
-    }
-  }
-
-  function clearSearch() {
+  const clearSearch = useCallback(() => {
     setStrInput('');
     setIsSubmit(false);
     searchWithKeyword('', condition);
-  }
+  }, [condition]);
 
-  const onClick = (event: any) => {
-    event.preventDefault();
-    event.stopPropagation();
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setStrInput(event.target.value);
+      if (event.target.value === '') {
+        clearSearch();
+      }
+    },
+    [clearSearch],
+  );
 
-    if (strInput === '' || isSubmit) {
-      clearSearch();
-    } else {
+  const onClick = useCallback(
+    (event: any) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (strInput === '' || isSubmit) {
+        clearSearch();
+      } else {
+        setIsSubmit(true);
+        searchWithKeyword(strInput, condition);
+      }
+    },
+    [strInput, isSubmit, condition, clearSearch],
+  );
+
+  const onSubmit = useCallback(
+    (event: any) => {
+      if (event) event.preventDefault();
       setIsSubmit(true);
       searchWithKeyword(strInput, condition);
-    }
-  };
-
-  const onSubmit = (event: any) => {
-    if (event) event.preventDefault();
-    setIsSubmit(true);
-    searchWithKeyword(strInput, condition);
-  };
+    },
+    [strInput, condition],
+  );
 
   return (
     <div className=" d-flex flex-wrap align-items-center align-content-center">

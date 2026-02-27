@@ -1,8 +1,9 @@
-import { ICity, Condition, CoffeeShop, NO_LIMITED_TIME, REMOTE_WORK } from './../types';
+/* eslint-disable no-param-reassign */
 import { create } from 'zustand';
 import { setAutoFreeze } from 'immer';
 import { immer } from 'zustand/middleware/immer';
 import axios from 'axios';
+import { ICity, Condition, CoffeeShop, NO_LIMITED_TIME, REMOTE_WORK } from '../types';
 import calculateScore from '../util/calculateScore';
 import { calculateDistance } from '../util/calculateDistance';
 import {
@@ -61,7 +62,7 @@ interface CafeShopsState {
 
 const useCafeShopsStore = create<CafeShopsState>()(
   immer(() => ({
-    bounds: defaultBounds as Bounds,
+    bounds: defaultBounds,
     coffeeShops: [],
     filterCoffeeShops: [] as CoffeeShop[],
     filterConditions: defaultFilterConditions,
@@ -165,10 +166,7 @@ const checkFilterCondtion = ({
   }
 
   // MRT condition: require a non-empty string indicating proximity to a station
-  if (
-    checkItemIsChecked({ items: filterConditions, name: 'mrt' }) &&
-    !coffeeShop.mrt
-  ) {
+  if (checkItemIsChecked({ items: filterConditions, name: 'mrt' }) && !coffeeShop.mrt) {
     return false;
   }
 
@@ -176,7 +174,7 @@ const checkFilterCondtion = ({
 };
 
 export const searchWithKeyword = async (keyWord = '', condition = '') => {
-  const cityConditions = useCafeShopsStore.getState().cityConditions;
+  const { cityConditions } = useCafeShopsStore.getState();
   let filterConditions;
 
   if (condition === REMOTE_WORK) {
@@ -198,45 +196,43 @@ export const toggleConditions = async ({
   keyWord = '',
   cityConditions,
   filterConditions,
-  condition,
 }: {
   keyWord?: string;
   cityConditions: ICity[];
   filterConditions: Condition[];
   condition?: string;
 }) => {
-  const coffeeShops = useCafeShopsStore.getState().coffeeShops;
+  const { coffeeShops } = useCafeShopsStore.getState();
   const results = keyWord !== '' ? await indexSearch.search(keyWord || '') : [];
   const searchResults = results.map((result: any) => result.ref);
 
   useCafeShopsStore.setState((state) => {
-    let filteredCoffeeShops: CoffeeShop[] = coffeeShops
-      .filter((coffeeShop: CoffeeShop) => {
-        const checkedCities = cityConditions.filter((city) => city.checked);
-        const city = checkedCities.find((city) => city.name === coffeeShop.city);
+    let filteredCoffeeShops: CoffeeShop[] = coffeeShops.filter((coffeeShop: CoffeeShop) => {
+      const checkedCities = cityConditions.filter((city) => city.checked);
+      const city = checkedCities.find((currentCity) => currentCity.name === coffeeShop.city);
 
-        if (keyWord !== '') {
-          const matchesKeyword = searchResults.includes(coffeeShop.id);
-          return matchesKeyword;
-        }
+      if (keyWord !== '') {
+        const matchesKeyword = searchResults.includes(coffeeShop.id);
+        return matchesKeyword;
+      }
 
-        if (checkedCities.length > 0) {
-          if (!city || !city.checked) return false;
-        }
+      if (checkedCities.length > 0) {
+        if (!city || !city.checked) return false;
+      }
 
-        if (filterConditions) {
-          return checkFilterCondtion({
-            filterConditions,
-            coffeeShop,
-          });
-        }
+      if (filterConditions) {
+        return checkFilterCondtion({
+          filterConditions,
+          coffeeShop,
+        });
+      }
 
-        return true;
-      });
+      return true;
+    });
 
     // 依照當前排序條件進行排序，預設已經在 state 裡
     const currentSortConditions = useCafeShopsStore.getState().sortConditions;
-    const userLocation = useCafeShopsStore.getState().userLocation;
+    const { userLocation } = useCafeShopsStore.getState();
     const activeSortCondition = currentSortConditions.find((sort) => sort.checked);
 
     const getFallbackLocation = (): UserLocation | null => {
@@ -294,8 +290,8 @@ export const toggleConditions = async ({
 export const toggleSortConditions = (sortConditions: any) => {
   // Get the first active sort condition
   const activeSortCondition = sortConditions.find((sort: Condition) => sort.checked);
-  const filterCoffeeShops = useCafeShopsStore.getState().filterCoffeeShops;
-  const userLocation = useCafeShopsStore.getState().userLocation;
+  const { filterCoffeeShops } = useCafeShopsStore.getState();
+  const { userLocation } = useCafeShopsStore.getState();
 
   const getFallbackLocation = (): UserLocation | null => {
     const stored = localStorage.getItem('lastCenter');
@@ -316,6 +312,8 @@ export const toggleSortConditions = (sortConditions: any) => {
     if (activeSortCondition) {
       let sortedShops = [...filterCoffeeShops];
       const { name } = activeSortCondition;
+      let loc = userLocation;
+
       switch (name) {
         case 'score':
           sortedShops.sort((a: CoffeeShop, b: CoffeeShop) => b.score - a.score);
@@ -327,7 +325,6 @@ export const toggleSortConditions = (sortConditions: any) => {
           sortedShops.sort((a: CoffeeShop, b: CoffeeShop) => b.wifi - a.wifi);
           break;
         case 'distance':
-          let loc = userLocation;
           if (!loc) {
             loc = getFallbackLocation();
           }
@@ -410,8 +407,8 @@ export const autoSelectCityByLocation = (userLocation: UserLocation) => {
 export const sortByDistance = (
   coffeeShops: CoffeeShop[],
   userLocation: UserLocation,
-): CoffeeShop[] => {
-  return coffeeShops.sort((a: CoffeeShop, b: CoffeeShop) => {
+): CoffeeShop[] =>
+  coffeeShops.sort((a: CoffeeShop, b: CoffeeShop) => {
     const distanceA = calculateDistance(
       userLocation.latitude,
       userLocation.longitude,
@@ -426,6 +423,5 @@ export const sortByDistance = (
     );
     return distanceA - distanceB; // 從近到遠
   });
-};
 
 export default useCafeShopsStore;

@@ -4,6 +4,8 @@
   "version": "1.5.0",
   "homepage": "http://linyencheng.github.io/coffee-map",
   "devDependencies": {
+    "@eslint/compat": "^2.0.2",
+    "@eslint/js": "^10.0.1",
     "@types/leaflet": "^1.9.21",
     "@types/lunr": "^2.3.7",
     "@types/react": "^19.2.14",
@@ -11,15 +13,10 @@
     "@vitejs/plugin-react": "^5.1.4",
     "@vitest/coverage-istanbul": "^4.0.18",
     "coverage-badges-cli": "^2.2.0",
-    "eslint": "^8.2.0",
-    "eslint-config-airbnb": "^19.0.4",
+    "eslint": "9.39.3",
+    "eslint-config-airbnb-extended": "^3.0.1",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-only-warn": "^1.1.0",
     "eslint-plugin-prettier": "^5.5.5",
-    "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.3.0",
     "prettier": "^3.8.1",
     "shx": "^0.4.0",
     "standard-version": "^9.5.0",
@@ -55,6 +52,10 @@
     "postbuild": "shx rm -rf docs && shx cp -r dist docs",
     "generate": "node ./src/generateJSON.js",
     "release": "standard-version",
-    "predeploy": "npm run build"
+    "predeploy": "npm run build",
+    "eslint": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
+    "prettier": "prettier --check \"src/**/*.{js,jsx,ts,tsx}\"",
+    "prettier:fix": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
   }
 }
