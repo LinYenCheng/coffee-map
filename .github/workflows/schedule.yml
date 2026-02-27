@@ -32,7 +32,7 @@ jobs:
 
       - name: generate new build
         run: |
-          npm install --legacy-peer-deps
+          npm install
           npm run generate
           CI=false npm run build
       - name: Deploy 🚀
