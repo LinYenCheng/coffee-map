@@ -1,5 +1,5 @@
 import { classNames } from 'primereact/utils';
-import './CoffeeTag.scss';
+import './CoffeeTag.css';
 import { CoffeeShop } from '../../types';
 
 type Props = {

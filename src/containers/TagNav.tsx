@@ -1,6 +1,6 @@
 import useCafeShopsStore, { toggleSortConditions } from '../store/useCafesStore';
 
-import '../styles/menu-nav.scss';
+import '../styles/menu-nav.css';
 
 import { defaultSortConditions } from '../constants/config';
 import { Condition } from '../types';

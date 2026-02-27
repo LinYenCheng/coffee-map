@@ -1,4 +1,6 @@
-$header-height: 48px;
+:root {
+  --header-height: 48px;
+}
 
 .search-container {
   input {
@@ -39,7 +41,7 @@ $header-height: 48px;
 
 .search-container--absolute {
   position: absolute;
-  top: calc(8px + $header-height);
+  top: calc(8px + var(--header-height));
   z-index: 499;
   left: 8px;
 
@@ -60,7 +62,6 @@ $header-height: 48px;
   cursor: pointer;
 }
 
-// 多選
 .p-multiselect {
   background: #783d06;
   border: #783d06;
@@ -86,7 +87,6 @@ $header-height: 48px;
 
 
 .p-multiselect-label {
-  // width: 3.75rem;
   padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
 }
@@ -132,11 +132,9 @@ $header-height: 48px;
   color: #fff;
 }
 
-// 多選
 
 .search__button {
   border: none;
-  // padding: 0;
   background: #fff;
   border-radius: 0 3px 3px 0;
   pointer-events: auto;
@@ -144,7 +142,6 @@ $header-height: 48px;
 
   @media screen and (max-width: 720px) {
     /* 小於 767px */
-    // display: none;
     left: initial;
     right: 20px;
   }
@@ -224,8 +221,8 @@ $header-height: 48px;
   background: rgba(255, 255, 255, 0.9);
   font-size: 90%;
   overflow: auto;
-  max-height: calc(100vh - $header-height);
-  top: calc($header-height + 8px);
+  max-height: calc(100vh - var(--header-height));
+  top: calc(var(--header-height) + 8px);
 
   .tag__container {
     position: sticky;
@@ -292,7 +289,6 @@ $header-height: 48px;
       font-size: 0.8rem;
       font-style: normal;
       font-weight: 700;
-      // line-height: 24px; /* 150% */
       letter-spacing: 0.5px;
     }
   }

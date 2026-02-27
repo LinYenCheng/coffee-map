@@ -1,17 +1,18 @@
-//theme
 @import 'primereact/resources/themes/bootstrap4-dark-blue/theme.css';
 @import 'primeicons/primeicons.css';
 
-$primary-color: #783d06;
-$header-height: 48px;
+:root {
+  --primary-color: #783d06;
+  --header-height: 48px;
+}
 
 * {
   box-sizing: border-box;
 }
 
 .header {
-  background: var(--outline, $primary-color);
-  height: $header-height;
+  background: var(--outline, var(--primary-color));
+  height: var(--header-height);
 }
 
 body,
@@ -45,8 +46,8 @@ input::placeholder {
 }
 
 body {
-  // overflow-y: hidden;
-  // overflow-x: hidden;
+  /* overflow-y: hidden; */
+  /* overflow-x: hidden; */
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
@@ -57,13 +58,11 @@ body {
 #root,
 body,
 html {
-  // height: 100%;
+  /* height: 100%; */
   background: white;
 }
 
-// * {
-//   outline: 1px solid red;
-// }
+
 @media screen and (min-width: 720px) {
   .desktop-hide {
     display: none !important;
@@ -75,8 +74,8 @@ html {
     display: none !important;
   }
 
-  .result__container {
-    height: calc(100vh - $header-height);
+    .result__container {
+    height: calc(100vh - var(--header-height));
     overflow: scroll;
   }
 
@@ -117,7 +116,7 @@ html {
 
     .result__container,
     .leaflet-container {
-      height: calc(100vh - $header-height);
+      height: calc(100vh - var(--header-height));
       overflow: hidden;
     }
   }

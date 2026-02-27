@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { useParams } from 'react-router-dom';
 
-import './search.scss';
+import './search.css';
 import { classNames } from 'primereact/utils';
 import ConditionFilters from './ConditionFilters';
 import { searchWithKeyword } from '../../store/useCafesStore';

@@ -17,7 +17,7 @@ import srcTime from './assets/icon_access_time.png';
 
 import { CoffeeShop } from '../../types';
 
-import './CoffeeShopFeatureStar.scss';
+import './CoffeeShopFeatureStar.css';
 
 type Props = {
   item: CoffeeShop;

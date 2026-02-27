@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Carousel from '../../components/Carousel';
 import ConditionalRenderer from '../../components/ConditionalRenderer';
-import './ListModePage.scss';
+import './ListModePage.css';
 import SearchElastic from '../../containers/SearchElastic';
 import useCafeShopsStore, {
   getShops,
