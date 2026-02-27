@@ -65,7 +65,9 @@ export default function CoffeeShopFeatureStar({ item }: Props) {
               rel="noreferrer"
             >
               <span className="ms-1 feature-title">{address}</span>
-              <span> (前往 Google 地圖)</span>
+              <ConditionalRenderer isShowContent={window.innerWidth > 768}>
+                <span> (前往 Google 地圖)</span>
+              </ConditionalRenderer>
             </a>
           </li>
           <li className={classNames({ 'display-none': !mrt })}>

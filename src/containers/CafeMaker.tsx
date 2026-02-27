@@ -51,7 +51,7 @@ export default function CafeMaker({ nowItem, isActive, setSelectItem }: Props) {
     >
       <ConditionalRenderer isShowContent={isActive}>
         <Popup>
-          <div className="card border-none" style={{ minWidth: '400px' }}>
+          <div className="card border-none" style={{ minWidth: '300px' }}>
             <div className="card__title mb-2 d-flex">
               <div className="flex-grow-1">
                 <a className="h6" href={url} target="_blank" rel="noreferrer">

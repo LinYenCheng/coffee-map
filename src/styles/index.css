@@ -90,7 +90,7 @@ html {
 }
 
 .leaflet-popup-content-wrapper {
-  min-width: 440px;
+  min-width: 340px;
 }
 
 .leaflet-container {

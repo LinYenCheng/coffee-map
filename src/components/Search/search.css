@@ -1,5 +1,6 @@
 :root {
   --header-height: 48px;
+  --primary-color: #783d06;
 }
 
 .search-container {
@@ -69,8 +70,8 @@
 }
 
 .p-multiselect {
-  background: #783d06;
-  border: #783d06;
+  background: var(--primary-color);
+  border: var(--primary-color);
   height: 1.75rem;
 }
 
@@ -82,8 +83,8 @@
 .p-multiselect-items-wrapper,
 .p-multiselect-items {
   padding-left: 0;
-  background: #783d06;
-  border: #783d06;
+  background: var(--primary-color);
+  border: var(--primary-color);
   margin-top: 1px;
 }
 
@@ -116,7 +117,7 @@
   }
 
   .p-highlight {
-    background: #783d06;
+    background: var(--primary-color);
     color: #fff;
 
     .p-checkbox-box {
@@ -125,7 +126,7 @@
   }
 
   .p-highlight .p-multiselect-item {
-    background: #783d06;
+    background: var(--primary-color);
   }
 }
 
@@ -135,6 +136,10 @@
 
 .p-multiselect .p-multiselect-label {
   color: #fff;
+}
+
+.p-dialog-header {
+  background: var(--primary-color);
 }
 
 .search__button {
@@ -188,7 +193,7 @@
     }
 
     .score {
-      color: var(--outline, #783d06);
+      color: var(--outline, var(--primary-color));
 
       /* Noto sans bold 16 */
       font-size: 16px;
@@ -303,7 +308,7 @@
   }
 
   .custom-marker--focus {
-    background: var(--outline, #783d06);
+    background: var(--outline, var(--primary-color));
   }
 }
 
