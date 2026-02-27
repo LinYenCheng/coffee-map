@@ -2,16 +2,16 @@ $header-height: 48px;
 
 .search-container {
   input {
-    font-size: 20px;
+    font-size: 14px;
     z-index: 9;
-    width: 240px;
+    width: 180px;
     height: 40px;
     padding: 8px 32px;
     justify-content: flex-end;
     border: 0px;
     border-radius: 40px;
     background: #fff;
-    box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.3);
     outline: 0;
     pointer-events: auto;
     color: #000;
@@ -20,17 +20,33 @@ $header-height: 48px;
 
 .search-container--shadow {
   box-shadow: 0px 2px 4px 0px #0000004d;
+
+  @media screen and (min-width: 768px) {
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+  }
+
+  @media screen and (max-width: 768px) {
+    position: absolute;
+    z-index: 2;
+    top: 0rem;
+    left: auto;
+    right: 0.25rem;
+    box-shadow: none;
+  }
 }
 
 .search-container--absolute {
   position: absolute;
-  top: calc(24px + $header-height);
+  top: calc(8px + $header-height);
   z-index: 499;
-  right: 40px;
+  left: 8px;
 
   @media screen and (max-width: 768px) {
     /*  如果使用者之裝置寬度 <= 768px，將會再載入這裡的 CSS。  */
     top: 0.25rem;
+    left: auto;
     right: 0.25rem;
   }
 }
@@ -39,7 +55,7 @@ $header-height: 48px;
   display: none;
 }
 
-.p-input-icon-right > i:last-of-type {
+.p-input-icon-right>i:last-of-type {
   color: black;
   cursor: pointer;
 }
@@ -87,7 +103,7 @@ $header-height: 48px;
     outline: none;
     border: none;
     box-shadow: none;
-    padding: 0.25rem 0.75rem;
+    padding: 0.25rem 0.5rem;
 
     .p-checkbox .p-checkbox-box {
       scale: 0.75;
@@ -97,6 +113,7 @@ $header-height: 48px;
   .p-highlight {
     background: #783d06;
     color: #fff;
+
     .p-checkbox-box {
       background: #fff;
     }
@@ -155,7 +172,8 @@ $header-height: 48px;
         font-size: 24px;
         font-style: normal;
         font-weight: 700;
-        line-height: 24px; /* 100% */
+        line-height: 24px;
+        /* 100% */
         text-decoration-line: underline;
       }
     }
@@ -173,7 +191,8 @@ $header-height: 48px;
       font-size: 16px;
       font-style: normal;
       font-weight: 700;
-      line-height: 24px; /* 150% */
+      line-height: 24px;
+      /* 150% */
       letter-spacing: 0.5px;
       text-decoration-line: none;
     }
@@ -183,6 +202,7 @@ $header-height: 48px;
 .leaflet-popup-content-wrapper {
   .card {
     cursor: auto !important;
+
     &:hover {
       background: none;
     }
@@ -192,6 +212,7 @@ $header-height: 48px;
 @media screen and (max-width: 720px) {
   .card {
     font-size: 12px;
+
     h4 {
       font-size: 16px;
     }
@@ -210,7 +231,7 @@ $header-height: 48px;
     position: sticky;
     top: 0;
     z-index: 1;
-    padding: 8px 8px 8px 0px;
+    padding: 56px 8px 8px 0px;
     align-items: flex-start;
     flex-wrap: wrap;
     align-content: center;
@@ -218,8 +239,13 @@ $header-height: 48px;
     background: #fff;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.3);
 
+    @media screen and (max-width: 1200px) {
+      padding: 8px 8px 8px 0px;
+    }
+
     .tag__title {
       line-height: 2rem;
+
       @media screen and (max-width: 1200px) {
         display: none;
       }

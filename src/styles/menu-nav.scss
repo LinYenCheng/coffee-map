@@ -33,7 +33,7 @@
     border: 2px solid #29252f;
     border-radius: 2px;
     margin: 0 auto;
-    min-width: 80px;
+    min-width: 72px;
   }
 
   .nav__label--condition {
@@ -42,10 +42,7 @@
     background: #fff;
   }
 
-/* 放在其他條件的 MultiSelect，增加最小寬度以顯示多選文字 */
-.other-conditions__select {
-  min-width: 180px;
-}
+
 
   input {
     position: absolute;

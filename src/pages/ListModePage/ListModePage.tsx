@@ -74,7 +74,7 @@ export default function ListModePage({}: Props) {
         </div>
       </ConditionalRenderer>
       <Carousel />
-      <div className="search-container search-container--shadow d-flex pt-2 pb-2 mb-1 justify-content-center">
+      <div className="search-container search-container--shadow d-flex pt-1 pb-2 justify-content-center">
         <SearchForm />
       </div>
       <div className="desktop-hide p-2 w-100 d-flex  align-items-center align-content-center justify-content-center border-bottom">
