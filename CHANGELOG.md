@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/LinYenCheng/coffee-map/compare/v1.5.0...v1.6.0) (2026-02-27)
+
+
+### Features
+
+* add mobile map ([3bb2629](https://github.com/LinYenCheng/coffee-map/commit/3bb2629824857b64ac1e443f44a28e20edf38aff))
+
+
+### Bug Fixes
+
+* adopt eslint-config-airbnb-extended ([d503f0a](https://github.com/LinYenCheng/coffee-map/commit/d503f0aa21a99d59a05d55f1db562c233a7816f5))
+* replace open time with url link if message is a url ([f89014c](https://github.com/LinYenCheng/coffee-map/commit/f89014c243c6b3f2d055ee4c4b36a1a5227a2784))
+
 ## [1.5.0](https://github.com/LinYenCheng/coffee-map/compare/v1.4.1...v1.5.0) (2026-02-27)
 
 
