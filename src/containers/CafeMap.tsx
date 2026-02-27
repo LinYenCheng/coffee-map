@@ -1,5 +1,5 @@
 import { forwardRef, useState } from 'react';
-import { MapContainer, TileLayer, useMapEvent } from 'react-leaflet';
+import { MapContainer, TileLayer, useMapEvent, Circle } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 
 import ConditionalRenderer from '../components/ConditionalRenderer.js';
@@ -57,7 +57,7 @@ function MyMap({ setZoom, setSelectItem }: MapProps) {
 
 const CafeMap = forwardRef(
   ({ position, selectItem, setSelectItem }: CafeMapProps, ref: any) => {
-    const { bounds, filterCoffeeShops } = useCafeShopsStore();
+    const { bounds, filterCoffeeShops, userLocation } = useCafeShopsStore();
     const [zoom, setZoom] = useState<number>(12);
     const selectId = selectItem?.id;
 
@@ -66,7 +66,8 @@ const CafeMap = forwardRef(
         <MyMap setZoom={setZoom} setSelectItem={setSelectItem} />
         <TileLayer
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          // url="https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"
+          url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
         />
         <MarkerClusterGroup
           chunkedLoading
@@ -91,6 +92,13 @@ const CafeMap = forwardRef(
               ))}
           </ConditionalRenderer>
         </MarkerClusterGroup>
+        {userLocation && (
+          <Circle
+            center={[userLocation.latitude, userLocation.longitude]}
+            radius={20}
+            pathOptions={{ color: '#0d6efd', fillColor: '#0d6efd', fillOpacity: 0.7 }}
+          />
+        )}
       </MapContainer>
     );
   },
