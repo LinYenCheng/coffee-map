@@ -164,6 +164,14 @@ const checkFilterCondtion = ({
     return false;
   }
 
+  // MRT condition: require a non-empty string indicating proximity to a station
+  if (
+    checkItemIsChecked({ items: filterConditions, name: 'mrt' }) &&
+    !coffeeShop.mrt
+  ) {
+    return false;
+  }
+
   return true;
 };
 

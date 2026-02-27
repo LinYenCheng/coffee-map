@@ -154,6 +154,11 @@ export const defaultFilterConditions: Condition[] = [
     displayName: '無限時',
     checked: false,
   },
+  {
+    name: 'mrt',
+    displayName: '近捷運站',
+    checked: false,
+  },
 ];
 
 export const jobFilterConditions: Condition[] = [
@@ -225,7 +230,7 @@ export const defaultSortConditions: Condition[] = [
   },
   {
     name: 'cheap',
-    displayName: '低價',
+    displayName: '便宜',
     checked: false,
   },
   {
