@@ -14,6 +14,7 @@ import srcMoney from './assets/icon_money.png';
 import srcStar from './assets/icon_star.png';
 import srcLocation from './assets/icon_location_on.png';
 import srcTime from './assets/icon_access_time.png';
+import srcParking from './assets/icon_parking.png';
 
 import { CoffeeShop } from '../../types';
 
@@ -39,7 +40,7 @@ function Stars({ num }: { num: number }) {
 
 export default function CoffeeShopFeatureStar({ item }: Props) {
   const { condition } = useParams();
-  const { name, wifi, seat, quiet, tasty, cheap, music, address, mrt, open_time } = item;
+  const { url, wifi, seat, quiet, tasty, cheap, music, address, mrt, open_time } = item;
 
   return (
     <>
@@ -48,6 +49,14 @@ export default function CoffeeShopFeatureStar({ item }: Props) {
       </ConditionalRenderer>
       <div className="CoffeeShopFeature">
         <ul className="coffee-information flex-grow-1">
+          <ConditionalRenderer isShowContent={!!url}>
+            <li>
+              <img alt="" src={srcParking} />
+              <a target="_blank" href={`${url}`}>
+                <span className="ms-1 feature-title">{url}</span>
+              </a>
+            </li>
+          </ConditionalRenderer>
           <li>
             <img alt="" src={srcLocation} />
             <a target="_blank" href={`https://www.google.com/maps/search/${address}`}>
@@ -62,7 +71,13 @@ export default function CoffeeShopFeatureStar({ item }: Props) {
           </li>
           <li className={classNames({ 'display-none': !open_time })}>
             <img alt="" src={srcTime} />
-            <span className="ms-1 feature-title">{open_time}</span>
+            {open_time && (open_time.includes('https://') || open_time.includes('http://')) ? (
+              <a href={open_time} target="_blank" rel="noopener noreferrer">
+                <span className="ms-1 feature-title">請參考官方網站訊息</span>
+              </a>
+            ) : (
+              <span className="ms-1 feature-title">{open_time}</span>
+            )}
           </li>
           <hr />
         </ul>

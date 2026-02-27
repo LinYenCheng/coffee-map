@@ -1,4 +1,6 @@
+import { useRef } from 'react';
 import { Tooltip } from 'primereact/tooltip';
+import { Toast } from 'primereact/toast';
 
 import { CoffeeShop } from '../../types';
 import CoffeeShopFeatureStar from './CoffeeShopFeatureStar';
@@ -8,16 +10,19 @@ import CoffeeTag from './CoffeeTag';
 import useCafeShopsStore from '../../store/useCafesStore';
 import { calculateDistance } from '../../util/calculateDistance';
 
+
 interface SearchCardProps {
   item: CoffeeShop;
   onSelect: (item: any) => void; // Adjust the type of item accordingly
 }
 
-function SearchCard({ item, onSelect }: SearchCardProps): JSX.Element {
+function SearchCard({ item, onSelect }: SearchCardProps) {
   const { condition } = useParams();
   const { name, wifi, seat, quiet, tasty, cheap, music, latitude, longitude } = item;
   const score = ((cheap + music + quiet + seat + tasty + wifi) / 6).toFixed(1);
   const { userLocation } = useCafeShopsStore();
+
+  const toast = useRef<Toast | null>(null);
 
   // 計算距離（如果有用戶位置）
   let distance: number | null = null;
@@ -41,14 +46,15 @@ function SearchCard({ item, onSelect }: SearchCardProps): JSX.Element {
       <div className="card__title d-flex ">
         <div className="flex-grow-1 justify-content-start title">
           <Tooltip target=".a-title" position="bottom" />
+          <Toast ref={toast} />
           <a
             data-pr-tooltip={name}
             className="h4 a-title me-2"
-            href={item.url}
-            target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => {
               e.stopPropagation();
+              navigator.clipboard.writeText(name)
+              toast.current?.show({ severity: 'info', summary: name, detail: '已複製到剪貼簿' });
             }}
           >
             {name}
