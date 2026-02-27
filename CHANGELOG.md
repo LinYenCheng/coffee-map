@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/LinYenCheng/coffee-map/compare/v1.4.1...v1.5.0) (2026-02-27)
+
+
+### Features
+
+* add mrt filter ([ac822f1](https://github.com/LinYenCheng/coffee-map/commit/ac822f1eb9b71d183fea9959effa6d47dfbe6cc1))
+* show current user location ([f03e58e](https://github.com/LinYenCheng/coffee-map/commit/f03e58e211b2220dea02435293a45e68b2bbca31))
+
 ### [1.4.1](https://github.com/LinYenCheng/coffee-map/compare/v1.4.0...v1.4.1) (2026-02-27)
 
 
