@@ -49,7 +49,17 @@ export interface UserLocation {
   accuracy?: number;
 }
 
-const useCafeShopsStore = create(
+interface CafeShopsState {
+  bounds: Bounds;
+  coffeeShops: CoffeeShop[];
+  filterCoffeeShops: CoffeeShop[];
+  filterConditions: Condition[];
+  cityConditions: ICity[];
+  sortConditions: Condition[];
+  userLocation: UserLocation | null;
+}
+
+const useCafeShopsStore = create<CafeShopsState>()(
   immer(() => ({
     bounds: defaultBounds as Bounds,
     coffeeShops: [],
