@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.1](https://github.com/LinYenCheng/coffee-map/compare/v1.4.0...v1.4.1) (2026-02-27)
+
+
+### Bug Fixes
+
+* typescript error ([cc5e05a](https://github.com/LinYenCheng/coffee-map/commit/cc5e05ae089625e98ab04584c405db643aa4e3c5))
+
 ## [1.4.0](https://github.com/LinYenCheng/coffee-map/compare/v1.3.0...v1.4.0) (2026-02-26)
 
 
