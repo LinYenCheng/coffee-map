@@ -382,6 +382,60 @@ export const findNearestCity = (userLat: number, userLng: number): ICity | null 
 };
 
 /**
+ * 根據地圖中心點自動選擇最近的城市
+ * @param center 地圖中心點
+ */
+export const autoSelectCityByMapCenter = (center: { lat: number; lng: number }) => {
+  const nearestCity = findNearestCity(center.lat, center.lng);
+  if (nearestCity) {
+    const { cityConditions, filterConditions } = useCafeShopsStore.getState();
+
+    const isAlreadyChecked = cityConditions.find((c) => c.name === nearestCity.name && c.checked);
+
+    if (isAlreadyChecked) {
+      return;
+    }
+
+    // 選中最近的城市
+    const updatedCityConditions = cityConditions.map((city) => {
+      if (city.name === nearestCity.name) {
+        return { ...city, checked: true };
+      }
+      return city;
+    });
+
+    // 檢查已選中的城市數量是否超過 2 個
+    const checkedCities = updatedCityConditions.filter((city) => city.checked);
+
+    if (checkedCities.length > 2) {
+      // 找出距離地圖中心最遠的城市並取消選取
+      let farthestCity: ICity | null = null;
+      let maxDistance = -1;
+
+      checkedCities.forEach((city) => {
+        const distance = calculateDistance(center.lat, center.lng, city.lat, city.lng);
+        if (distance > maxDistance) {
+          maxDistance = distance;
+          farthestCity = city;
+        }
+      });
+
+      if (farthestCity) {
+        const finalCityConditions = updatedCityConditions.map((city) => {
+          if (city.name === (farthestCity as ICity).name) {
+            return { ...city, checked: false };
+          }
+          return city;
+        });
+        toggleConditions({ cityConditions: finalCityConditions, filterConditions });
+      }
+    } else {
+      toggleConditions({ cityConditions: updatedCityConditions, filterConditions });
+    }
+  }
+};
+
+/**
  * 根據用戶位置和城市設置自動選擇最近的城市
  * @param userLocation 用戶位置
  */
