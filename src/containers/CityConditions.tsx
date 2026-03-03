@@ -31,7 +31,7 @@ function CityConditions() {
   return (
     <MultiSelect
       className="me-2"
-      style={{ minWidth: '84px' }}
+      style={{ minWidth: '84px', maxWidth: '100px' }}
       value={selectedOptions} // Set initial selected values
       options={dropdownOptions}
       onChange={handleConditionToggle}

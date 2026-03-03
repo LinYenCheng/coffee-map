@@ -23,7 +23,7 @@ function MapModePage() {
   const mapRef = useRef(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectItem, setSelectItem] = useState<any>(null);
-  const { coffeeShops, cityConditions, filterCoffeeShops } = useCafeShopsStore();
+  const { coffeeShops, cityConditions } = useCafeShopsStore();
   const {
     location: userLocation,
     error: geoError,
@@ -103,7 +103,7 @@ function MapModePage() {
       if (map) {
         map.setView(
           { lng: userLocation.longitude, lat: userLocation.latitude },
-          map.getZoom() >= DISABLE_CLUSTER_LEVEL ? map.getZoom() : DISABLE_CLUSTER_LEVEL,
+          map.getZoom() >= DISABLE_CLUSTER_LEVEL ? map.getZoom() : 16,
         );
       }
     }
@@ -113,20 +113,6 @@ function MapModePage() {
   useEffect(() => {
     searchWithKeyword('');
   }, [coffeeShops, userLocation]);
-
-  // 當篩選後的結果變動時，自動移動地圖中心到第一筆
-  useEffect(() => {
-    if (filterCoffeeShops.length > 0) {
-      const first = filterCoffeeShops[0];
-      const map = mapRef.current as any;
-      if (map && first) {
-        map.setView(
-          { lng: parseFloat(first.longitude), lat: parseFloat(first.latitude) },
-          map.getZoom() >= DISABLE_CLUSTER_LEVEL ? map.getZoom() : DISABLE_CLUSTER_LEVEL,
-        );
-      }
-    }
-  }, [filterCoffeeShops]);
 
   // 如果定位被拒絕，改變預設排序為好咖啡(score)，並隱藏距離選項
   useEffect(() => {

@@ -5,7 +5,11 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import ConditionalRenderer from '../components/ConditionalRenderer.js';
 
 import { CoffeeShop } from '../types';
-import useCafeShopsStore, { checkBounds, setBounds } from '../store/useCafesStore.js';
+import useCafeShopsStore, {
+  checkBounds,
+  setBounds,
+  autoSelectCityByMapCenter,
+} from '../store/useCafesStore.js';
 import CafeMaker from './CafeMaker.js';
 import { DISABLE_CLUSTER_LEVEL } from '../constants/config.js';
 
@@ -42,6 +46,9 @@ function MyMap({ setZoom, setSelectItem }: MapProps) {
       // 儲存最後一次中心點位置到 localStorage
       const center = map.getCenter();
       localStorage.setItem('lastCenter', JSON.stringify({ lat: center.lat, lng: center.lng }));
+      if (zoom > 11) {
+        autoSelectCityByMapCenter(center);
+      }
     }
   });
 
