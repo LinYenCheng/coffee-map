@@ -1,67 +1,67 @@
-import { useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
+// The original UserLocation interface
 export interface UserLocation {
   latitude: number;
   longitude: number;
   accuracy?: number;
 }
 
-export const useGeolocation = () => {
+const defaultOptions: PositionOptions = {
+  enableHighAccuracy: true,
+  maximumAge: 30000,
+  timeout: 27000,
+};
+
+export const useGeolocation = (options: Partial<PositionOptions> = defaultOptions) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [location, setLocation] = useState<UserLocation | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const hasPromptedRef = useRef(false);
-  const [isPermissionDenied, setIsPermissionDenied] = useState<boolean>(false); // 記錄是否被拒絕定位
+  const [isPermissionDenied, setIsPermissionDenied] = useState(false);
+
+  const updatePosition = useCallback((position: GeolocationPosition) => {
+    setLocation({
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+      accuracy: position.coords.accuracy,
+    });
+    setError(null);
+    setIsLoading(false);
+    setIsPermissionDenied(false);
+  }, []);
+
+  const updateError = useCallback((err: GeolocationPositionError) => {
+    if (err.code === 1) {
+      setError('使用者拒絕定位');
+      setIsPermissionDenied(true);
+    } else {
+      setError(err.message);
+    }
+    setIsLoading(false);
+  }, []);
 
   useEffect(() => {
-    // 內部函式用於請求位置，並在被拒時提示用戶重新授權
-    const requestLocation = () => {
-      setIsLoading(true);
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            accuracy: position.coords.accuracy,
-          });
-          setError(null);
-          setIsLoading(false);
-        },
-        (err) => {
-          // eslint-disable-next-line no-console
-          console.log('地理定位錯誤:', err);
-          setIsLoading(false);
+    const isSupported =
+      typeof navigator !== 'undefined' && typeof navigator.geolocation !== 'undefined';
 
-          if (err.code === 1) {
-            // PERMISSION_DENIED
-            setIsPermissionDenied(true);
-            if (!hasPromptedRef.current) {
-              hasPromptedRef.current = true;
-              // eslint-disable-next-line no-alert
-              window.alert('定位權限被拒絕，請在瀏覽器設定允許定位後刷新頁面。');
-            }
-            setError('使用者拒絕定位');
-          } else {
-            setError(err.message);
-          }
-        },
-        {
-          enableHighAccuracy: false, // 使用較不精確的模式以避免高精準耗時
-          timeout: 15000,
-          maximumAge: 60000, // 允許使用一分鐘內的快取位置
-        },
-      );
-    };
-
-    // 檢查瀏覽器是否支持 Geolocation API
-    if (!navigator.geolocation) {
-      setError('瀏覽器不支持地理定位');
+    if (!isSupported) {
+      setError('Geolocation is not supported by your browser');
+      setIsLoading(false);
       return;
     }
 
-    // 首次請求位置
-    requestLocation();
-  }, []);
+    // Get a quick initial position
+    navigator.geolocation.getCurrentPosition(updatePosition, updateError, options);
+
+    const watchId = navigator.geolocation.watchPosition(updatePosition, updateError, options);
+
+    return () => {
+      if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [options, updateError, updatePosition]);
 
   return { location, error, isLoading, isPermissionDenied };
 };
