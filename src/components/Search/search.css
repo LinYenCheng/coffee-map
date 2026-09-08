@@ -1,28 +1,31 @@
-:root {
-  --header-height: 48px;
-  --primary-color: #783d06;
-}
+/* ─── Search panel chrome ────────────────────────────────────────── */
 
 .search-container {
   input {
+    font-family: var(--font-body);
     font-size: 14px;
     z-index: 9;
-    width: 180px;
+    width: 200px;
     height: 40px;
-    padding: 8px 32px;
-    justify-content: flex-end;
-    border: 0px;
+    padding: 8px 36px 8px 14px;
+    border: 1.5px solid var(--divider);
     border-radius: 40px;
     background: #fff;
-    box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(26,18,8,0.08);
     outline: 0;
-    pointer-events: auto;
-    color: #000;
+    color: var(--grounds);
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &:focus {
+      border-color: var(--crema);
+      box-shadow: 0 0 0 3px rgba(192,120,51,0.15);
+    }
   }
 }
 
 .search-container--shadow {
-  box-shadow: 0px 2px 4px 0px #0000004d;
+  box-shadow: 0 2px 8px rgba(26,18,8,0.1);
+  background: var(--steam);
 }
 
 @media screen and (min-width: 768px) {
@@ -37,7 +40,7 @@
   .search-container--shadow {
     position: absolute;
     z-index: 2;
-    top: 0rem;
+    top: 0;
     left: auto;
     right: 0.25rem;
     box-shadow: none;
@@ -46,14 +49,13 @@
 
 .search-container--absolute {
   position: absolute;
-  top: calc(8px + var(--header-height));
+  top: calc(10px + var(--header-height));
   z-index: 499;
-  left: 8px;
+  left: 10px;
 }
 
 @media screen and (max-width: 768px) {
   .search-container--absolute {
-    /*  如果使用者之裝置寬度 <= 768px，將會再載入這裡的 CSS。  */
     top: 0.25rem;
     left: auto;
     right: 0.25rem;
@@ -64,69 +66,97 @@
   display: none;
 }
 
+/* Search icon/clear button */
 .p-input-icon-right > i:last-of-type {
-  color: black;
+  color: var(--grounds-soft);
   cursor: pointer;
+  transition: color 0.15s;
+
+  &:hover {
+    color: var(--crema);
+  }
 }
 
+/* ─── PrimeReact MultiSelect (city / other filters) ──────────────── */
 .p-multiselect {
-  background: var(--primary-color);
-  border: var(--primary-color);
-  height: 1.75rem;
+  background: var(--espresso);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  height: 2rem;
+  transition: border-color 0.15s;
+
+  &:hover {
+    border-color: var(--crema) !important;
+  }
+
+  &:not(.p-disabled).p-focus {
+    box-shadow: 0 0 0 2px rgba(192,120,51,0.25);
+    border-color: var(--crema) !important;
+  }
 }
 
 .p-multiselect .p-multiselect-trigger {
   width: 1.5rem;
+  color: rgba(255,255,255,0.6);
 }
 
 .p-multiselect-panel,
 .p-multiselect-items-wrapper,
 .p-multiselect-items {
   padding-left: 0;
-  background: var(--primary-color);
-  border: var(--primary-color);
-  margin-top: 1px;
+  background: var(--espresso);
+  border: none;
+  margin-top: 4px;
 }
 
 .p-multiselect-items-wrapper {
-  border-radius: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(26,18,8,0.25);
 }
 
 .p-multiselect-label {
   padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
+  font-family: var(--font-body);
+  color: rgba(255,255,255,0.88);
 }
 
 .p-multiselect-items {
   margin-bottom: 0;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
+  font-family: var(--font-body);
 
   .p-checkbox-box {
-    background: #fff;
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.25) !important;
   }
 
   .p-multiselect-item {
     outline: none;
     border: none;
     box-shadow: none;
-    padding: 0.25rem 0.5rem;
+    padding: 0.375rem 0.75rem;
+    color: rgba(255,255,255,0.82);
+    transition: background 0.12s;
+
+    &:hover {
+      background: rgba(192,120,51,0.15) !important;
+      color: #fff !important;
+    }
 
     .p-checkbox .p-checkbox-box {
-      scale: 0.75;
+      scale: 0.85;
     }
   }
 
   .p-highlight {
-    background: var(--primary-color);
+    background: rgba(192,120,51,0.2);
     color: #fff;
 
     .p-checkbox-box {
-      background: #fff;
+      background: var(--crema);
+      border-color: var(--crema) !important;
     }
-  }
-
-  .p-highlight .p-multiselect-item {
-    background: var(--primary-color);
   }
 }
 
@@ -134,133 +164,85 @@
   display: none;
 }
 
-.p-multiselect .p-multiselect-label {
-  color: #fff;
-}
-
+/* ─── PrimeReact Dialog ──────────────────────────────────────────── */
 .p-dialog-header {
-  background: var(--primary-color);
-  padding: 0.5rem 1rem;
+  background: var(--espresso);
+  padding: 0.75rem 1rem;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
 }
 
 .p-dialog-content {
   padding: 0;
 }
 
+/* ─── Search button ──────────────────────────────────────────────── */
 .search__button {
   border: none;
   background: #fff;
-  border-radius: 0 3px 3px 0;
+  border-radius: 0 8px 8px 0;
   pointer-events: auto;
   transform: translateX(-3.5rem);
 }
 
 @media screen and (max-width: 720px) {
   .search__button {
-    /* 小於 767px */
     left: initial;
     right: 20px;
   }
 }
 
-.card {
-  cursor: pointer !important;
-  background-color: #ffffff;
-  border-bottom: 1px solid #cacaca;
-
-  &:hover {
-    background-color: #eeeeee;
-  }
-
-  .card__title {
-    margin-bottom: 16px;
-
-    .title {
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-
-      .h4 {
-        color: var(--Black, #2d2d2d);
-        font-size: 24px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 24px;
-        /* 100% */
-        text-decoration-line: underline;
-      }
-    }
-
-    .h6 {
-      color: var(--Black, #2d2d2d);
-      font-style: normal;
-      font-weight: 700;
-    }
-
-    .score {
-      color: var(--outline, var(--primary-color));
-
-      /* Noto sans bold 16 */
-      font-size: 16px;
-      font-style: normal;
-      font-weight: 700;
-      line-height: 24px;
-      /* 150% */
-      letter-spacing: 0.5px;
-      text-decoration-line: none;
-    }
-  }
-}
-
-.leaflet-popup-content-wrapper {
-  .card {
-    cursor: auto !important;
-  }
-  .card:hover {
-    background: none;
-  }
-}
-
-@media screen and (max-width: 720px) {
-  .card {
-    font-size: 12px;
-
-    h4 {
-      font-size: 16px;
-    }
-  }
-}
-
+/* ─── Result list scrollbar ──────────────────────────────────────── */
 .search__result {
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.9);
+  border-radius: 0;
+  background: var(--steam);
   font-size: 90%;
   overflow: auto;
   max-height: calc(100vh - var(--header-height));
   top: calc(var(--header-height) + 8px);
 }
 
+.search__result::-webkit-scrollbar-track {
+  background-color: var(--steam);
+}
+
+.search__result::-webkit-scrollbar {
+  width: 4px;
+  background-color: var(--steam);
+}
+
+.search__result::-webkit-scrollbar-thumb {
+  background-color: var(--divider);
+  border-radius: 4px;
+}
+
+/* ─── Sort/filter tag bar ────────────────────────────────────────── */
 .search__result .tag__container {
   position: sticky;
   top: 0;
   z-index: 1;
-  padding: 56px 8px 8px 0px;
-  align-items: flex-start;
+  padding: 56px 12px 10px 12px;
+  align-items: center;
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
-  background: #fff;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.3);
+  background: var(--steam);
+  box-shadow: 0 1px 0 var(--divider);
 }
 
 @media screen and (max-width: 1200px) {
   .search__result .tag__container {
-    padding: 8px 8px 8px 0px;
+    padding: 10px 12px;
   }
 }
 
 .search__result .tag__container .tag__title {
   line-height: 2rem;
+  font-size: 0.8125rem;
+  color: var(--grounds-soft);
+  font-weight: 500;
+  margin-right: 0.25rem;
 }
 
 @media screen and (max-width: 1200px) {
@@ -269,65 +251,225 @@
   }
 }
 
-.search__result::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #eeeeee;
+/* ─── Sort nav pills (TagNav) ────────────────────────────────────── */
+.nav__li {
+  cursor: pointer;
+  display: inline-flex;
+  position: relative;
+  padding: 3px 4px;
+  text-align: center;
+
+  .nav__label {
+    cursor: pointer;
+    border: 1.5px solid var(--divider);
+    border-radius: 20px;
+    margin: 0 auto;
+    min-width: 64px;
+    padding: 3px 10px;
+    font-size: 0.8125rem;
+    font-family: var(--font-body);
+    color: var(--grounds-soft);
+    background: #fff;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+
+    &:hover {
+      border-color: var(--crema);
+      color: var(--crema);
+    }
+  }
+
+  .nav__label--condition {
+    border-radius: 20px;
+    border: 1.5px solid var(--divider);
+    background: #fff;
+  }
+
+  input {
+    position: absolute;
+    left: -9999px;
+  }
+
+  input:checked + .nav__label,
+  input:checked + .nav__label--condition {
+    background: var(--crema);
+    border-color: var(--crema);
+    color: #fff;
+    font-weight: 600;
+  }
 }
 
-.search__result::-webkit-scrollbar {
-  width: 6px;
-  background-color: #eeeeee;
+/* ─── Shop card ─────────────────────────────────────────────────── */
+.card {
+  cursor: pointer !important;
+  background-color: var(--card-bg);
+  border: none;
+  border-bottom: 1px solid var(--divider);
+  padding: 16px 16px 12px;
+  position: relative;
+  transition: background-color 0.15s;
+
+  /* Signature element: crema left-rule bookmark that slides in on hover */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 3px;
+    background: var(--crema);
+    border-radius: 0 2px 2px 0;
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: transform 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+
+  &:hover {
+    background-color: var(--card-hover);
+
+    &::before {
+      transform: scaleY(1);
+    }
+  }
+
+  .card__title {
+    margin-bottom: 10px;
+
+    .title {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+
+      /* Shop name in display serif — the editorial pick feeling */
+      .h4 {
+        font-family: var(--font-display);
+        color: var(--grounds);
+        font-size: 1.125rem;
+        font-weight: 700;
+        line-height: 1.3;
+        text-decoration: none;
+        letter-spacing: 0.01em;
+        transition: color 0.15s;
+
+        &:hover {
+          color: var(--crema);
+        }
+      }
+    }
+
+    .h6 {
+      color: var(--grounds-soft);
+      font-style: normal;
+      font-weight: 500;
+      font-size: 0.8125rem;
+    }
+
+    .score {
+      color: var(--crema);
+      font-size: 0.9375rem;
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: 0.5px;
+      text-decoration-line: none;
+    }
+  }
+
+  .distance-info {
+    font-size: 0.75rem;
+    color: var(--grounds-soft);
+    font-weight: 500;
+    background: var(--steam);
+    padding: 2px 7px;
+    border-radius: 10px;
+    border: 1px solid var(--divider);
+  }
+
+  /* Star icon for score */
+  .pi.pi-star-fill.score {
+    color: var(--crema);
+    font-size: 0.875rem;
+  }
 }
 
-.search__result::-webkit-scrollbar-thumb {
-  background-color: #4c6267;
+/* Popup card shouldn't have the hover treatment */
+.leaflet-popup-content-wrapper {
+  .card {
+    cursor: auto !important;
+
+    &::before {
+      display: none;
+    }
+
+    &:hover {
+      background: none;
+    }
+  }
 }
 
+@media screen and (max-width: 720px) {
+  .card {
+    font-size: 13px;
+    padding: 14px 14px 10px;
+
+    h4, .h4 {
+      font-size: 1rem;
+    }
+  }
+}
+
+/* ─── Map markers ────────────────────────────────────────────────── */
 .map__container .leaflet-div-icon {
   border: none;
   background: none;
-  opacity: 0.8 !important;
+  opacity: 0.92 !important;
 
   .custom-marker {
     display: flex;
-    width: 160px;
-    padding: 8px;
+    width: 148px;
+    padding: 6px 12px;
     justify-content: center;
     align-items: center;
     gap: 4px;
     border-radius: 100px;
-    background: var(--Light-Brown, #cb925d);
-    box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.3);
+    background: var(--patina);
+    box-shadow: 0 2px 8px rgba(26,18,8,0.28);
     transform: translateX(-50%);
+    transition: background 0.15s;
 
     span {
       overflow: hidden;
       color: #fff;
       text-overflow: ellipsis;
       white-space: nowrap;
-      font-size: 0.8rem;
-      font-style: normal;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
     }
   }
 
   .custom-marker--focus {
-    background: var(--outline, var(--primary-color));
+    background: var(--crema);
+    box-shadow: 0 3px 12px rgba(192,120,51,0.5);
   }
 }
 
+/* ─── List mode overrides ────────────────────────────────────────── */
 .list-mode {
   .search__result {
     max-height: none;
     overflow: hidden;
+    background: transparent;
   }
 
   .card {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--divider);
+    box-shadow: 0 1px 4px rgba(26,18,8,0.04);
   }
 
   .tag__container {
     box-shadow: none;
+    background: transparent;
   }
 }

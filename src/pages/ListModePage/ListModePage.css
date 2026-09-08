@@ -1,8 +1,5 @@
-.carousel-item {
-  max-height: 20rem;
-
-  img {
-    object-fit: cover;
-    height: 20rem;
-  }
+/* List mode page gets the Steam background and generous container padding */
+.list-mode.container {
+  padding-top: 1.5rem;
+  padding-bottom: 3rem;
 }

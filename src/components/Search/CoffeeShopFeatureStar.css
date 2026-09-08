@@ -1,39 +1,42 @@
-.CoffeeShopFeature {
-  .p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
-    color: #a06935;
-  }
+/* ─── Shop feature detail section ────────────────────────────────── */
 
+.CoffeeShopFeature {
   .search-card {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 0 0.5rem;
 
     @media screen and (max-width: 768px) {
-      /*  如果使用者之裝置寬度 <= 768px，將會再載入這裡的 CSS。  */
       flex-direction: column;
+      gap: 0;
     }
 
     .icon-rating {
       display: flex;
       align-items: center;
-      margin-bottom: 1rem;
-      width: calc(50% - 0.5rem);
-      margin-right: 0.5rem;
+      margin-bottom: 0.625rem;
+      width: calc(50% - 0.25rem);
 
+      /* Star icons */
       .pi {
-        color: #a06935;
-        margin-right: 0.125rem;
+        color: var(--crema);
+        font-size: 0.75rem;
+        margin-right: 0.1rem;
       }
 
       img {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         margin-right: 0.25rem;
+        opacity: 0.75;
       }
 
       .feature-title {
         display: inline-flex;
         min-width: 4.5rem;
+        font-size: 0.8125rem;
+        color: var(--grounds-soft);
       }
     }
   }
@@ -42,33 +45,71 @@
     width: 100px;
   }
 
-  ul {
+  ul.coffee-information {
     list-style: none;
     margin-bottom: 0;
-    padding: 0px;
+    padding: 0;
 
     li {
-      margin-bottom: 16px;
-      color: black;
+      margin-bottom: 10px;
+      color: var(--grounds);
+      font-size: 0.8125rem;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+
+      img {
+        width: 16px;
+        height: 16px;
+        opacity: 0.65;
+        flex-shrink: 0;
+        position: relative;
+        top: 2px;
+      }
+
+      a {
+        color: var(--patina);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.15s;
+
+        &:hover {
+          color: var(--crema);
+          text-decoration: underline;
+        }
+      }
     }
 
     .display-none {
       display: none;
     }
+
+    hr {
+      border-color: var(--divider);
+      opacity: 1;
+      margin: 8px 0 12px;
+    }
   }
 }
 
+/* ─── List-mode: info and ratings side-by-side on desktop ─────────── */
 @media screen and (min-width: 768px) {
   .list-mode {
     .CoffeeShopFeature {
       display: flex;
+      gap: 1rem;
 
       hr {
         display: none;
       }
 
+      ul.coffee-information {
+        flex: 1;
+      }
+
       .search-card {
-        width: 50%;
+        width: 48%;
+        flex-shrink: 0;
       }
     }
   }

@@ -1,63 +1,7 @@
-.app .p-menubar {
-  padding: 0.5rem 1rem;
-  height: 100%;
-  background: none;
-  border: none;
-  color: white;
+/* TagNav sort pills — see also .nav__li in search.css for full styles */
 
-  a {
-    color: #fff;
-    text-decoration: auto;
-  }
-
-  ul {
-    margin: 0;
-  }
-}
-
-.p-menubar-root-list {
-  background: #783d06;
-  border: #783d06;
-  padding-left: 0.5rem;
-}
-
-.nav__li {
-  cursor: pointer;
-  display: inline-flex;
-  position: relative;
-  padding: 4px;
-  text-align: center;
-
-  .nav__label {
-    cursor: pointer;
-    border: 2px solid #29252f;
-    border-radius: 2px;
-    margin: 0 auto;
-    min-width: 72px;
-  }
-
-  .nav__label--condition {
-    border-radius: 8px;
-    border: 1px solid var(--grey4, #dbdbdb);
-    background: #fff;
-  }
-
-
-
-  input {
-    position: absolute;
-    left: -9999px;
-  }
-
-  input:checked + .nav__label {
-    background: #29252f;
-    border: 2px solid #29252f;
-    color: #fff;
-  }
-
-  input:checked + .nav__label--condition {
-    background: linear-gradient(0deg, #a06935, #a06935), linear-gradient(0deg, #cb925d, #cb925d);
-    border: 1px solid #a06935;
-    color: #fff;
-  }
+/* Ensure the hidden radio/checkbox pattern still works with keyboard focus */
+.nav__li input:focus-visible + .nav__label {
+  outline: 2px solid var(--crema);
+  outline-offset: 2px;
 }

@@ -1,18 +1,28 @@
 @import 'primereact/resources/themes/bootstrap4-dark-blue/theme.css';
 @import 'primeicons/primeicons.css';
 
+/* ─── Design Tokens ──────────────────────────────────────────────── */
 :root {
-  --primary-color: #783d06;
-  --header-height: 48px;
+  --espresso:   #1a1208;  /* header, deep ground             */
+  --steam:      #f7f3ee;  /* page background, warm off-white */
+  --crema:      #c07833;  /* primary accent – amber          */
+  --crema-dim:  #9a5e28;  /* hover/pressed crema             */
+  --patina:     #3d6b5e;  /* secondary accent – muted teal   */
+  --grounds:    #2e2a26;  /* primary text                    */
+  --grounds-soft: #6b5f56; /* secondary text                  */
+  --divider:    #e4ddd6;  /* card borders, hairlines         */
+  --card-bg:    #ffffff;
+  --card-hover: #fdf9f5;
+
+  --header-height: 52px;
+
+  --font-display: 'Noto Serif TC', '蘋果儷中黑', 'Apple LiGothic Medium', serif;
+  --font-body:    'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
 }
 
+/* ─── Reset ──────────────────────────────────────────────────────── */
 * {
   box-sizing: border-box;
-}
-
-.header {
-  background: var(--outline, var(--primary-color));
-  height: var(--header-height);
 }
 
 body,
@@ -21,47 +31,64 @@ html {
   margin: 0;
   width: 100%;
   height: 100%;
-  font-family:
-    PingFang TC,
-    黑體-繁,
-    Heiti TC,
-    蘋果儷中黑,
-    Apple LiGothic Medium,
-    微軟正黑體,
-    Microsoft JhengHei,
-    sans-serif !important;
-}
-
-input::placeholder {
-  font-family:
-    PingFang TC,
-    黑體-繁,
-    Heiti TC,
-    蘋果儷中黑,
-    Apple LiGothic Medium,
-    微軟正黑體,
-    Microsoft JhengHei,
-    sans-serif !important;
-  opacity: 1;
-}
-
-body {
-  /* overflow-y: hidden; */
-  /* overflow-x: hidden; */
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  font-family: var(--font-body);
+  color: var(--grounds);
+  background: var(--steam);
 }
 
 #root,
 body,
 html {
-  /* height: 100%; */
-  background: white;
+  background: var(--steam);
 }
 
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+input::placeholder {
+  font-family: var(--font-body);
+  opacity: 1;
+}
+
+button {
+  border: none;
+  outline: none;
+  appearance: none;
+}
+
+.border-none {
+  border: none;
+}
+
+/* ─── Header ──────────────────────────────────────────────────────── */
+.header {
+  background: var(--espresso);
+  height: var(--header-height);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ─── Loading overlay ────────────────────────────────────────────── */
+.loading__overlay {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  background: rgba(26, 18, 8, 0.75);
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(2px);
+
+  .spinner-grow {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: var(--crema);
+  }
+}
+
+/* ─── Responsive visibility helpers ─────────────────────────────── */
 @media screen and (min-width: 720px) {
   .desktop-hide {
     display: none !important;
@@ -88,8 +115,11 @@ html {
   }
 }
 
+/* ─── Map layout ─────────────────────────────────────────────────── */
 .leaflet-popup-content-wrapper {
   min-width: 290px;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 24px rgba(26,18,8,0.18) !important;
 }
 
 @media screen and (min-width: 720px) {
@@ -113,6 +143,7 @@ html {
 
     .col-md-4 {
       width: 480px !important;
+      background: var(--steam);
     }
 
     .col-md-8 {
@@ -127,32 +158,152 @@ html {
   }
 }
 
-.loading__overlay {
-  position: fixed;
-  z-index: 999;
-  top: 0px;
-  background: rgba(0, 0, 0, 0.6);
-  width: 100vw;
-  height: 100vh;
-
-  .spinner-grow {
-    width: 3rem;
-    height: 3rem;
-  }
-}
-
-button {
-  border: none;
-  outline: none;
-  appearance: none;
-}
-
-.border-none {
-  border: none;
-}
-
+/* ─── Carousel ───────────────────────────────────────────────────── */
 @media screen and (max-width: 768px) {
   .carousel-inner .carousel-item img {
     height: 10rem;
+    object-fit: cover;
   }
+}
+
+/* ─── PrimeReact menu overrides ──────────────────────────────────── */
+.app .p-menubar {
+  padding: 0 1.25rem;
+  height: 100%;
+  background: transparent;
+  border: none;
+
+  a, .p-menuitem-text {
+    color: rgba(255,255,255,0.88) !important;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+
+  ul {
+    margin: 0;
+  }
+
+  .p-menuitem:hover > .p-menuitem-content .p-menuitem-text {
+    color: var(--crema) !important;
+  }
+}
+
+/* Desktop: transparent root list */
+.p-menubar-root-list {
+  background: transparent !important;
+  border: none !important;
+  padding-left: 0.5rem;
+
+  .p-menuitem {
+    .p-menuitem-content {
+      background: transparent !important;
+      border-radius: 4px;
+      transition: background 0.15s;
+
+      &:hover {
+        background: rgba(255,255,255,0.08) !important;
+
+        .p-menuitem-text {
+          color: var(--crema) !important;
+        }
+      }
+    }
+
+    &.p-focus > .p-menuitem-content {
+      background: rgba(255,255,255,0.1) !important;
+    }
+  }
+}
+
+/* ─── Mobile burger menu ─────────────────────────────────────────── */
+@media screen and (max-width: 960px) {
+  /* Burger icon button — match espresso header */
+  .p-menubar .p-menubar-button {
+    color: rgba(255, 255, 255, 0.9) !important;
+    background: rgba(255,255,255,0.08) !important;
+    border-radius: 8px !important;
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    transition: background 0.15s, color 0.15s !important;
+
+    &:hover {
+      background: rgba(192, 120, 51, 0.25) !important;
+      color: var(--crema) !important;
+    }
+
+    &:focus {
+      outline: 2px solid var(--crema) !important;
+      outline-offset: 2px !important;
+      box-shadow: none !important;
+    }
+  }
+
+  /* Full-screen dropdown panel */
+  .p-menubar .p-menubar-root-list {
+    position: fixed !important;
+    top: var(--header-height) !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: calc(100dvh - var(--header-height)) !important;
+    z-index: 1000 !important;
+    background: var(--espresso) !important;
+    border: none !important;
+    border-top: 1px solid rgba(255,255,255,0.08) !important;
+    padding: 1rem 0 !important;
+    box-shadow: none !important;
+    overflow-y: auto;
+    display: none; /* hidden by default, PrimeReact toggles this */
+  }
+
+  /* When open */
+  .p-menubar.p-menubar-mobile-active .p-menubar-root-list {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Full-width menu items with generous tap targets */
+  .p-menubar .p-menubar-root-list > .p-menuitem {
+    width: 100% !important;
+
+    > .p-menuitem-content {
+      background: transparent !important;
+      border-radius: 0 !important;
+
+      .p-menuitem-link {
+        padding: 1.125rem 1.75rem !important;
+        border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+
+        .p-menuitem-text {
+          font-family: var(--font-body) !important;
+          font-size: 1.0625rem !important;
+          font-weight: 500 !important;
+          color: rgba(255,255,255,0.88) !important;
+          letter-spacing: 0.01em !important;
+        }
+      }
+
+      &:hover {
+        background: rgba(192, 120, 51, 0.12) !important;
+
+        .p-menuitem-text {
+          color: var(--crema) !important;
+        }
+      }
+    }
+  }
+}
+
+/* Logo text in menubar */
+.p-menubar-start {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--crema);
+  letter-spacing: 0.02em;
+  margin-right: 1.5rem;
 }
