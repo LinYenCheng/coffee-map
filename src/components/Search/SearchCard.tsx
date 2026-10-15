@@ -56,9 +56,8 @@ function SearchCard({ item, onSelect }: SearchCardProps) {
       label="前往 Google 地圖"
       icon="pi pi-directions"
       onClick={() => {
-        // 編碼地址以確保特殊字元不會失效
-        const encodedAddress = encodeURIComponent(address);
-        const url = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+        const mapsQuery = [name, address].filter(Boolean).join(' ');
+        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQuery)}`;
 
         // 模擬 target="_blank"
         window.open(url, '_blank', 'noreferrer');

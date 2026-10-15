@@ -40,7 +40,9 @@ function Stars({ num }: { num: number }) {
 
 export default function CoffeeShopFeatureStar({ item }: Props) {
   const { condition } = useParams();
-  const { url, wifi, seat, quiet, tasty, cheap, music, address, mrt, open_time } = item;
+  const { name, url, wifi, seat, quiet, tasty, cheap, music, address, mrt, open_time } = item;
+  const mapsQuery = [name, address].filter(Boolean).join(' ');
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQuery)}`;
 
   return (
     <>
@@ -59,11 +61,7 @@ export default function CoffeeShopFeatureStar({ item }: Props) {
           </ConditionalRenderer>
           <li>
             <img alt="" src={srcLocation} />
-            <a
-              target="_blank"
-              href={`https://www.google.com/maps/search/${address}`}
-              rel="noreferrer"
-            >
+            <a target="_blank" href={mapsUrl} rel="noreferrer">
               <span className="ms-1 feature-title">{address}</span>
               <ConditionalRenderer isShowContent={window.innerWidth > 768}>
                 <span> (前往 Google 地圖)</span>
