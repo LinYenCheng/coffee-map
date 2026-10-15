@@ -54,6 +54,10 @@ function MapModePage() {
     }, 250);
   };
 
+  const handleMarkerSelect = (item: CoffeeShop) => {
+    setSelectItem(item);
+  };
+
   // 初始化咖啡店數據
   useEffect(() => {
     async function getCoffee() {
@@ -159,6 +163,7 @@ function MapModePage() {
                     position={{ lng: initialPosition.lng, lat: initialPosition.lat }}
                     selectItem={selectItem}
                     setSelectItem={handleSelect}
+                    onMarkerSelect={handleMarkerSelect}
                     ref={mapRef}
                   />
                 </ErrorBoundary>

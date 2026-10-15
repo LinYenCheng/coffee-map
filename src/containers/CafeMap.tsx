@@ -17,6 +17,7 @@ interface CafeMapProps {
   position: { lat: number; lng: number };
   selectItem: CoffeeShop;
   setSelectItem: any;
+  onMarkerSelect: (item: CoffeeShop) => void;
 }
 
 interface MapProps {
@@ -55,7 +56,7 @@ function MyMap({ setZoom, setSelectItem }: MapProps) {
   return null;
 }
 
-const CafeMap = forwardRef(({ position, selectItem, setSelectItem }: CafeMapProps, ref: any) => {
+const CafeMap = forwardRef(({ position, selectItem, setSelectItem, onMarkerSelect }: CafeMapProps, ref: any) => {
   const { bounds, filterCoffeeShops, userLocation } = useCafeShopsStore();
   const [zoom, setZoom] = useState<number>(12);
   const selectId = selectItem?.id;
@@ -87,7 +88,7 @@ const CafeMap = forwardRef(({ position, selectItem, setSelectItem }: CafeMapProp
                 key={nowItem.id}
                 nowItem={nowItem}
                 isActive={selectId === nowItem.id}
-                setSelectItem={setSelectItem}
+                setSelectItem={onMarkerSelect}
               />
             ))}
         </ConditionalRenderer>
