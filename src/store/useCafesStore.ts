@@ -52,6 +52,7 @@ export interface UserLocation {
 
 interface CafeShopsState {
   bounds: Bounds;
+  mapCenter: UserLocation | null;
   coffeeShops: CoffeeShop[];
   filterCoffeeShops: CoffeeShop[];
   filterConditions: Condition[];
@@ -63,6 +64,7 @@ interface CafeShopsState {
 const useCafeShopsStore = create<CafeShopsState>()(
   immer(() => ({
     bounds: defaultBounds,
+    mapCenter: null as UserLocation | null,
     coffeeShops: [],
     filterCoffeeShops: [] as CoffeeShop[],
     filterConditions: defaultFilterConditions,
@@ -208,6 +210,15 @@ export const toggleConditions = async ({
 
   useCafeShopsStore.setState((state) => {
     let filteredCoffeeShops: CoffeeShop[] = coffeeShops.filter((coffeeShop: CoffeeShop) => {
+      const hasAnyRating =
+        coffeeShop.wifi > 0 ||
+        coffeeShop.seat > 0 ||
+        coffeeShop.quiet > 0 ||
+        coffeeShop.tasty > 0 ||
+        coffeeShop.cheap > 0 ||
+        coffeeShop.music > 0;
+      if (!hasAnyRating) return false;
+
       const checkedCities = cityConditions.filter((city) => city.checked);
       const city = checkedCities.find((currentCity) => currentCity.name === coffeeShop.city);
 
@@ -232,7 +243,7 @@ export const toggleConditions = async ({
 
     // 依照當前排序條件進行排序，預設已經在 state 裡
     const currentSortConditions = useCafeShopsStore.getState().sortConditions;
-    const { userLocation } = useCafeShopsStore.getState();
+    const { mapCenter } = useCafeShopsStore.getState();
     const activeSortCondition = currentSortConditions.find((sort) => sort.checked);
 
     const getFallbackLocation = (): UserLocation | null => {
@@ -252,7 +263,7 @@ export const toggleConditions = async ({
       switch (activeSortCondition.name) {
         case 'distance':
           {
-            let loc = userLocation;
+            let loc = mapCenter;
             if (!loc) {
               loc = getFallbackLocation();
             }
@@ -291,7 +302,7 @@ export const toggleSortConditions = (sortConditions: any) => {
   // Get the first active sort condition
   const activeSortCondition = sortConditions.find((sort: Condition) => sort.checked);
   const { filterCoffeeShops } = useCafeShopsStore.getState();
-  const { userLocation } = useCafeShopsStore.getState();
+  const { mapCenter } = useCafeShopsStore.getState();
 
   const getFallbackLocation = (): UserLocation | null => {
     const stored = localStorage.getItem('lastCenter');
@@ -312,7 +323,7 @@ export const toggleSortConditions = (sortConditions: any) => {
     if (activeSortCondition) {
       let sortedShops = [...filterCoffeeShops];
       const { name } = activeSortCondition;
-      let loc = userLocation;
+      let loc = mapCenter;
 
       switch (name) {
         case 'score':
@@ -350,6 +361,17 @@ export const resetConditions = () => {
 export const setBounds = (bounds: Bounds) => {
   useCafeShopsStore.setState((state) => {
     state.bounds = bounds;
+  });
+};
+
+export const setMapCenter = (center: UserLocation) => {
+  useCafeShopsStore.setState((state) => {
+    state.mapCenter = center;
+
+    const activeSortCondition = state.sortConditions.find((sort) => sort.checked);
+    if (activeSortCondition?.name === 'distance') {
+      state.filterCoffeeShops = sortByDistance([...state.filterCoffeeShops], center);
+    }
   });
 };
 

@@ -57,7 +57,7 @@ export default function CafeMaker({ nowItem, isActive, setSelectItem }: Props) {
           <div className="card border-none" style={{ minWidth: isDesktop ? '400px' : '250px' }}>
             <div className="card__title mb-2 d-flex">
               <div className="flex-grow-1">
-                <a className="h6" href={url} target="_blank" rel="noreferrer">
+                <a className="h6 cafe-popup__title" href={url} target="_blank" rel="noreferrer">
                   {name}
                 </a>
               </div>

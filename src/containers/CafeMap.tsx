@@ -8,6 +8,7 @@ import { CoffeeShop } from '../types';
 import useCafeShopsStore, {
   checkBounds,
   setBounds,
+  setMapCenter,
   autoSelectCityByMapCenter,
 } from '../store/useCafesStore.js';
 import CafeMaker from './CafeMaker.js';
@@ -30,10 +31,6 @@ function MyMap({ setZoom, setSelectItem }: MapProps) {
     setSelectItem(null);
   });
 
-  useMapEvent('movestart', () => {
-    setSelectItem(null);
-  });
-
   useMapEvent('moveend', () => {
     if (map) {
       const mapBounds = map.getBounds();
@@ -47,6 +44,7 @@ function MyMap({ setZoom, setSelectItem }: MapProps) {
       // 儲存最後一次中心點位置到 localStorage
       const center = map.getCenter();
       localStorage.setItem('lastCenter', JSON.stringify({ lat: center.lat, lng: center.lng }));
+      setMapCenter({ latitude: center.lat, longitude: center.lng });
       if (zoom > 11) {
         autoSelectCityByMapCenter(center);
       }

@@ -21,8 +21,10 @@ import ErrorBoundary from '../components/ErrorBoundary';
 
 function MapModePage() {
   const mapRef = useRef(null);
+  const hasCenteredOnUserLocation = useRef(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectItem, setSelectItem] = useState<any>(null);
+  const [scrollToItemId, setScrollToItemId] = useState<string | undefined>();
   const { coffeeShops, cityConditions } = useCafeShopsStore();
   const {
     location: userLocation,
@@ -37,6 +39,7 @@ function MapModePage() {
   });
 
   const handleSelect = (item: CoffeeShop) => {
+    setScrollToItemId(undefined);
     const map = mapRef.current as any;
 
     if (!map) {
@@ -44,18 +47,19 @@ function MapModePage() {
     }
 
     if (item) {
+      setSelectItem(item);
       map.setView(
         { lng: parseFloat(item.longitude), lat: parseFloat(item.latitude) },
         map.getZoom() >= DISABLE_CLUSTER_LEVEL ? map.getZoom() : DISABLE_CLUSTER_LEVEL,
       );
+    } else {
+      setSelectItem(null);
     }
-    setTimeout(() => {
-      setSelectItem(item);
-    }, 250);
   };
 
   const handleMarkerSelect = (item: CoffeeShop) => {
     setSelectItem(item);
+    setScrollToItemId(item.id);
   };
 
   // 初始化咖啡店數據
@@ -96,19 +100,21 @@ function MapModePage() {
     setInitialPosition(pos);
   }, [userLocation, geoError, cityConditions]);
 
-  // 當用戶位置改變時更新 store 並自動選擇最近的城市，並移動地圖中心點
+  // 定位首次取得時移到用戶位置；後續 GPS 更新只更新資料，不打斷使用者操作地圖
   useEffect(() => {
     if (userLocation && !isGeoLoading) {
       setUserLocation(userLocation);
       autoSelectCityByLocation(userLocation);
 
-      // 移動地圖中心點到用戶位置
-      const map = mapRef.current as any;
-      if (map) {
-        map.setView(
-          { lng: userLocation.longitude, lat: userLocation.latitude },
-          map.getZoom() >= DISABLE_CLUSTER_LEVEL ? map.getZoom() : 16,
-        );
+      if (!hasCenteredOnUserLocation.current) {
+        const map = mapRef.current as any;
+        if (map) {
+          map.setView(
+            { lng: userLocation.longitude, lat: userLocation.latitude },
+            map.getZoom() >= DISABLE_CLUSTER_LEVEL ? map.getZoom() : 16,
+          );
+        }
+        hasCenteredOnUserLocation.current = true;
       }
     }
   }, [userLocation, isGeoLoading]);
@@ -152,7 +158,13 @@ function MapModePage() {
               <ConditionFilters />
             </div>
             <ErrorBoundary>
-              <SearchElastic onChange={handleSelect} isPermissionDenied={isPermissionDenied} />
+              <SearchElastic
+                onChange={handleSelect}
+                selectedItemId={selectItem?.id}
+                scrollToItemId={scrollToItemId}
+                onScrollToItem={() => setScrollToItemId(undefined)}
+                isPermissionDenied={isPermissionDenied}
+              />
             </ErrorBoundary>
           </div>
           <ConditionalRenderer isShowContent={window.innerWidth > 768}>

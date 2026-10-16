@@ -17,13 +17,15 @@ import { calculateDistance } from '../../util/calculateDistance';
 interface SearchCardProps {
   item: CoffeeShop;
   onSelect: (item: any) => void;
+  isSelected?: boolean;
 }
 
-function SearchCard({ item, onSelect }: SearchCardProps) {
+function SearchCard({ item, onSelect, isSelected = false }: SearchCardProps) {
   const { condition } = useParams();
   const { name, wifi, seat, quiet, tasty, cheap, music, latitude, longitude, address } = item;
   const score = ((cheap + music + quiet + seat + tasty + wifi) / 6).toFixed(1);
-  const { userLocation } = useCafeShopsStore();
+  const { userLocation, mapCenter } = useCafeShopsStore();
+  const distanceOrigin = mapCenter ?? userLocation;
 
   const toast = useRef<Toast | null>(null);
   const [showMapModal, setShowMapModal] = useState(false);
@@ -31,10 +33,10 @@ function SearchCard({ item, onSelect }: SearchCardProps) {
 
   // 計算距離（如果有用戶位置）
   let distance: number | null = null;
-  if (userLocation) {
+  if (distanceOrigin) {
     distance = calculateDistance(
-      userLocation.latitude,
-      userLocation.longitude,
+      distanceOrigin.latitude,
+      distanceOrigin.longitude,
       parseFloat(latitude),
       parseFloat(longitude),
     );
@@ -68,7 +70,12 @@ function SearchCard({ item, onSelect }: SearchCardProps) {
 
   return (
     <>
-      <div role="presentation" className="card pt-3 ps-3" onClick={handleCardClick}>
+      <div
+        role="presentation"
+        data-coffee-shop-id={item.id}
+        className={`card pt-3 ps-3${isSelected ? ' card--selected' : ''}`}
+        onClick={handleCardClick}
+      >
         <div className="card__title d-flex ">
           <div className="flex-grow-1 justify-content-start title">
             <Tooltip target=".a-title" position="bottom" />

@@ -169,7 +169,7 @@
   background: var(--espresso);
   padding: 0.75rem 1rem;
   color: #fff;
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 1.1rem;
 }
 
@@ -341,7 +341,7 @@
 
       /* Shop name in display serif — the editorial pick feeling */
       .h4 {
-        font-family: var(--font-display);
+        font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', sans-serif;
         color: var(--grounds);
         font-size: 1.125rem;
         font-weight: 700;
@@ -390,6 +390,15 @@
   }
 }
 
+.card--selected {
+  background-color: rgba(192, 120, 51, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(192, 120, 51, 0.35);
+
+  &::before {
+    transform: scaleY(1);
+  }
+}
+
 /* Popup card shouldn't have the hover treatment */
 .leaflet-popup-content-wrapper {
   .card {
@@ -403,6 +412,16 @@
       background: none;
     }
   }
+}
+
+.leaflet-popup-content .card__title a.cafe-popup__title {
+  display: inline-block;
+  color: var(--grounds);
+  font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', sans-serif !important;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-decoration: underline;
 }
 
 @media screen and (max-width: 720px) {
